@@ -1,3 +1,5 @@
+#include <array>
+#include <chrono>
 #include <cmath>
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/empty.hpp>
@@ -33,20 +35,57 @@ namespace gazebo_ath
                 std::chrono::milliseconds(100),
                 std::bind(&FsmManager::logic_loop, this));
 
-            RCLCPP_INFO(get_logger(), "FSM pronta: avanzo alla ricerca del marker 1.");
         }
 
     private:
         static constexpr double kDesiredSizeTolerancePx = 5.0;
         static constexpr double kCenterTolerancePx = 5.0;
+        static constexpr int kFirstMarkerId = 1;
+        static constexpr int kLastMarkerId = 4;
+        static constexpr auto kMarkerLostTimeout = std::chrono::milliseconds(1000);
 
         State_t current_state_{STATE_IDLE};
         int expected_marker_{1};
+        std::array<bool, kLastMarkerId + 1> visited_markers_{};
+        std::chrono::steady_clock::time_point last_expected_marker_update_;
 
         rclcpp::Publisher<msg::FsmStatus>::SharedPtr fsm_pub_;
         rclcpp::Subscription<msg::ArucoInfo>::SharedPtr aruco_info_sub_;
         rclcpp::Subscription<std_msgs::msg::Empty>::SharedPtr maneuver_complete_sub_;
         rclcpp::TimerBase::SharedPtr timer_;
+
+        static const char *state_name(State_t state)
+        {
+            switch (state)
+            {
+            case STATE_IDLE:
+                return "idle";
+            case STATE_ROTATE:
+                return "rotate";
+            case STATE_APPROACH:
+                return "approach";
+            case STATE_SEARCH:
+                return "search";
+            case STATE_FINISHED:
+                return "finished";
+            default:
+                return "unknown";
+            }
+        }
+
+        void transition_to(State_t next_state, const char *reason)
+        {
+            if (current_state_ == next_state)
+            {
+                return;
+            }
+
+            const State_t previous_state = current_state_;
+            current_state_ = next_state;
+            RCLCPP_INFO(
+                get_logger(), "FSM state: %s -> %s (target marker %d): %s.",
+                state_name(previous_state), state_name(current_state_), expected_marker_, reason);
+        }
 
         void publish_state()
         {
@@ -58,15 +97,29 @@ namespace gazebo_ath
 
         void aruco_callback(const msg::ArucoInfo::ConstSharedPtr msg)
         {
+            if (msg->marker_id < kFirstMarkerId || msg->marker_id > kLastMarkerId)
+            {
+                return;
+            }
+
+            if (visited_markers_[msg->marker_id])
+            {
+                RCLCPP_DEBUG_THROTTLE(
+                    get_logger(), *get_clock(), 2000,
+                    "Ignoring marker %d: it has already been visited.", msg->marker_id);
+                return;
+            }
+
             if (msg->marker_id != expected_marker_)
             {
                 return;
             }
 
+            last_expected_marker_update_ = std::chrono::steady_clock::now();
+
             if (current_state_ == STATE_SEARCH)
             {
-                current_state_ = STATE_APPROACH;
-                RCLCPP_INFO(get_logger(), "Marker %d rilevato: inizio avvicinamento.", expected_marker_);
+                transition_to(STATE_APPROACH, "expected marker detected; starting approach");
                 publish_state();
                 return;
             }
@@ -84,15 +137,16 @@ namespace gazebo_ath
                 return;
             }
 
+            visited_markers_[expected_marker_] = true;
+            RCLCPP_INFO(get_logger(), "Marker %d reached and marked as visited.", expected_marker_);
+
             if (expected_marker_ == 4)
             {
-                current_state_ = STATE_FINISHED;
-                RCLCPP_INFO(get_logger(), "Marker 4 raggiunto: tesoro trovato.");
+                transition_to(STATE_FINISHED, "final marker reached");
             }
             else
             {
-                current_state_ = STATE_ROTATE;
-                RCLCPP_INFO(get_logger(), "Marker %d raggiunto: eseguo l'istruzione.", expected_marker_);
+                transition_to(STATE_ROTATE, "marker reached; starting maneuver");
             }
             publish_state();
         }
@@ -105,9 +159,7 @@ namespace gazebo_ath
             }
 
             ++expected_marker_;
-            current_state_ = STATE_SEARCH;
-            RCLCPP_INFO(get_logger(), "Rotazione completata: avanzo alla ricerca del marker %d.",
-                        expected_marker_);
+            transition_to(STATE_SEARCH, "maneuver complete; resuming search");
             publish_state();
         }
 
@@ -115,7 +167,16 @@ namespace gazebo_ath
         {
             if (current_state_ == STATE_IDLE)
             {
-                current_state_ = STATE_SEARCH;
+                transition_to(STATE_SEARCH, "starting search");
+            }
+            else if (current_state_ == STATE_APPROACH &&
+                     std::chrono::steady_clock::now() - last_expected_marker_update_ >
+                         kMarkerLostTimeout)
+            {
+                RCLCPP_WARN(
+                    get_logger(), "Lost marker %d during approach; resuming search.",
+                    expected_marker_);
+                transition_to(STATE_SEARCH, "expected marker is no longer visible");
             }
             publish_state();
         }

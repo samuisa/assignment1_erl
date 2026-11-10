@@ -1,36 +1,31 @@
+from pathlib import Path
+
 from launch import LaunchDescription
-from launch_ros.actions import ComposableNodeContainer
-from launch_ros.descriptions import ComposableNode
+from launch_ros.actions import Node
+from ament_index_python.packages import get_package_prefix
 
 
 def generate_launch_description():
+    workspace_root = Path(get_package_prefix('gazebo_ath')).resolve().parents[1]
+    log_dir = workspace_root / 'assignment' / 'gazebo_ath' / 'log'
+    log_dir.mkdir(parents=True, exist_ok=True)
 
-    # Questo container raggruppa la navigazione e il visual servoing
-    navigation_container = ComposableNodeContainer(
-        name='navigation_container',
-        namespace='',
-        package='rclcpp_components',
-        executable='component_container',
-        prefix='xterm -T "Navigation & Control Menu" -e',
-        composable_node_descriptions=[
-            ComposableNode(
-                package='gazebo_ath',
-                plugin='gazebo_ath::NavigationManager',
-                name='navigation_node',
-            ),
-            ComposableNode(
-                package='gazebo_ath',
-                plugin='gazebo_ath::FsmManager',
-                name='fsm_node',
-            ),
-            ComposableNode(
-                package='gazebo_ath',
-                plugin='gazebo_ath::DetectionManager',
-                name='image_detection_node',
-            ),
-        ],
-        output='screen',
-    )
+    nodes = [
+        ('fsm_node', 'fsm.log'),
+        ('navigation_node', 'navigation.log'),
+        ('image_detection_node', 'image_detection.log'),
+    ]
 
-    # Le variabili tornate ora corrispondono a quelle dichiarate sopra
-    return LaunchDescription([navigation_container])
+    return LaunchDescription([
+        Node(
+            package='gazebo_ath',
+            executable=executable,
+            name=executable,
+            prefix=(
+                "bash -c 'exec \"$@\" > "
+                f"\"{log_dir / log_file}\" 2>&1' --"
+            ),
+            output='screen',
+        )
+        for executable, log_file in nodes
+    ])

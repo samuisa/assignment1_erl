@@ -37,7 +37,6 @@ namespace gazebo_ath
                 std::chrono::milliseconds(100),
                 std::bind(&NavigationManager::control_loop, this));
 
-            RCLCPP_INFO(get_logger(), "Navigation pronta: ricerca, visual servoing e rotazioni odometriche.");
         }
 
         ~NavigationManager()
@@ -46,10 +45,10 @@ namespace gazebo_ath
         }
 
     private:
-        static constexpr int kRotate = 1;
-        static constexpr int kApproach = 2;
-        static constexpr int kSearch = 3;
-        static constexpr int kFinished = 4;
+        static constexpr int rotating = 1;
+        static constexpr int approaching = 2;
+        static constexpr int searching = 3;
+        static constexpr int finished = 4;
 
         rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_pub_;
         rclcpp::Publisher<std_msgs::msg::Empty>::SharedPtr maneuver_complete_pub_;
@@ -61,7 +60,7 @@ namespace gazebo_ath
         const float kLinearGain = 0.001F;
         const float kAlignmentGain = 0.003F;
         const float kYawGain = 1.5F;
-        const float kSearchSpeed = 0.1F;
+        const float searchingSpeed = 0.1F;
         const float kMaxLinearSpeed = 0.2F;
         const float kMaxAngularSpeed = 0.8F;
         const float kPixelTolerance = 5.0F;
@@ -101,7 +100,7 @@ namespace gazebo_ath
                 have_marker_data_ = false;
             }
 
-            if (current_state_ == kRotate && previous_state != kRotate)
+            if (current_state_ == rotating && previous_state != rotating)
             {
                 rotation_initialized_ = false;
                 rotation_complete_sent_ = false;
@@ -144,11 +143,11 @@ namespace gazebo_ath
 
             switch (current_state_)
             {
-            case kSearch:
-                velocity.linear.x = kSearchSpeed;
+            case searching:
+                velocity.linear.x = searchingSpeed;
                 break;
 
-            case kRotate:
+            case rotating:
             {
                 if (!have_odometry_)
                 {
@@ -162,7 +161,6 @@ namespace gazebo_ath
                         std::sin(actual_yaw_ + offset),
                         std::cos(actual_yaw_ + offset));
                     rotation_initialized_ = true;
-                    RCLCPP_INFO(get_logger(), "Eseguo la rotazione per il marker %d.", target_id_);
                 }
 
                 const float yaw_error = std::atan2(
@@ -182,7 +180,7 @@ namespace gazebo_ath
                 break;
             }
 
-            case kApproach:
+            case approaching:
                 if (!have_marker_data_ ||
                     std::chrono::steady_clock::now() - last_marker_update_ >
                         std::chrono::milliseconds(500))
@@ -205,7 +203,7 @@ namespace gazebo_ath
                 break;
 
             case 0:
-            case kFinished:
+            case finished:
             default:
                 break;
             }

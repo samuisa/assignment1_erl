@@ -36,7 +36,6 @@ namespace gazebo_ath
 
             aruco_info_pub_ = this->create_publisher<gazebo_ath::msg::ArucoInfo>("/aruco_info", 10);
 
-            RCLCPP_INFO(this->get_logger(), "Nodo DetectionManager avviato.");
         }
 
     private:
@@ -84,6 +83,11 @@ namespace gazebo_ath
                         static_cast<float>(desired_size_sim_px_ * f_ / simulation_focal_length_px_);
 
                     aruco_info_pub_->publish(info_msg);
+                    RCLCPP_INFO_THROTTLE(
+                        get_logger(), *get_clock(), 2000,
+                        "Marker %d detected: u=%.1f px, size=%.1f px (target size=%.1f px).",
+                        static_cast<int>(info_msg.marker_id), info_msg.u, info_msg.s,
+                        info_msg.desired_size);
                 }
             }
         }
