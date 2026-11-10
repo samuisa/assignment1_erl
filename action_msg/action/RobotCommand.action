@@ -1,0 +1,9 @@
+string command
+---
+# Result (Navigation -> FSM)
+bool success
+string message
+---
+# Feedback (Navigation -> FSM)
+string status
+float32 error   
