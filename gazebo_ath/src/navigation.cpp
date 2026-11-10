@@ -35,6 +35,9 @@ namespace gazebo_ath
         }
 
     private:
+        k_v = 0.2; // Velocità lineare costante in avanti
+        k_w = 0.2;
+
         void timer_callback()
         {
             auto vel = geometry_msgs::msg::Twist();
@@ -46,6 +49,92 @@ namespace gazebo_ath
 
         rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_pub_;
         rclcpp::TimerBase::SharedPtr timer_;
+
+        void fsm_status_callback(const std::shared_ptr<YourFsmStatusMessageType> msg)
+        {
+
+            switch (msg->state)
+            {
+            case YourFsmStatusMessageType::State::STOP:
+                // Ferma il robot
+                auto stop_vel = geometry_msgs::msg::Twist();
+                stop_vel.linear.x = 0.0;
+                stop_vel.angular.z = 0.0;
+                cmd_vel_pub_->publish(stop_vel);
+                break;
+
+            case YourFsmStatusMessageType::State::ROTATE:
+                auto rotate_vel = geometry_msgs::msg::Twist();
+                rotate_vel.linear.x = 0.0;
+                if (marker.id == 1)
+                {
+                    target_yaw = 90.0; // Imposta l'angolo target a 90 gradi
+                    while (abs(target_yaw - actual_yaw) > 0.1)
+                    {
+                        rotate_vel.angular.z = k_w * (target_yaw - actual_yaw);
+                        cmd_vel_pub_->publish(rotate_vel);
+                    }
+                    YourFsmStatusMessageType::State::MOVE;
+                }
+                if (marker.id == 2)
+                {
+                    target_yaw = 180.0; // Imposta l'angolo target a 180 gradi
+                    while (abs(target_yaw - actual_yaw) > 0.1)
+                    {
+                        rotate_vel.angular.z = k_w * (target_yaw - actual_yaw);
+                        cmd_vel_pub_->publish(rotate_vel);
+                    }
+                    YourFsmStatusMessageType::State::MOVE;
+                }
+                if (marker.id == 3)
+                {
+                    target_yaw = -90.0; // Imposta l'angolo target a 270 gradi
+                    while (abs(target_yaw - actual_yaw) > 0.1)
+                    {
+                        rotate_vel.angular.z = k_w * (target_yaw - actual_yaw);
+                        cmd_vel_pub_->publish(rotate_vel);
+                    }
+                    YourFsmStatusMessageType::State::MOVE;
+                }
+                rotate_vel.angular.z = 1.0; // Imposta una velocità angolare
+                cmd_vel_pub_->publish(rotate_vel);
+                break;
+
+            case YourFsmStatusMessageType::State::MOVE:
+                auto forward_vel = geometry_msgs::msg::Twist();
+
+                while (abs(sd - s) > 166)
+                {
+
+                    if (abs(u - cx) < 0.1)
+                    {
+                        forward_vel.linear.x = k_v * (sd - s);
+                        forward_vel.angular.z = 0.0;
+                        cmd_vel_pub_->publish(forward_vel);
+                    }
+                    else
+                    {
+                        forward_vel.linear.x = 0.0;
+                        forward_vel.angular.z = k_w * (u - cx);
+                        cmd_vel_pub_->publish(forward_vel);
+                    }
+                }
+                if (marker.id != 4)
+                {
+                    YourFsmStatusMessageType::State::ROTATE;
+                }
+                else
+                {
+                    YourFsmStatusMessageType::State::STOP;
+                }
+
+                break;
+
+            default:
+                // Gestisci altri stati se necessario
+                break;
+            }
+        }
     };
 
 } // namespace gazebo_ath
