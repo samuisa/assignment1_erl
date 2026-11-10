@@ -22,7 +22,7 @@ A ROS 2 project simulating a robot tasked with finding and identifying ArUco mar
 
 Ensure you have the following installed on your system:
 
-    - ROS 2 (Humble / Iron / Jazzy)
+    - ROS 2 
     - Gazebo Simulator (ros_gz / Gazebo Classic depending on your setup)
     - OpenCV & cv_bridge (for ArUco marker detection)
 
