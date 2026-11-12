@@ -38,14 +38,9 @@ To launch the full Gazebo world along with the robot, run:
     ```
 
 ## Launch on a Real Robot
-
 The launch file starts the assignment nodes without Gazebo. Choose a robot
 number that matches the namespace configured for the robot's drivers. For
-example, to use robot 2, run:
-
-```bash
-ros2 launch assignment1_erl spawn_assignment_robot.launch.py robot_number:=2 rviz:=false
-```
+example, the steps below use robot 2.
 
 The number only sets the ROS namespace; it does not select or configure the
 physical robot. With `robot_number:=2`, this project uses topics under
@@ -59,9 +54,22 @@ physical robot. With `robot_number:=2`, this project uses topics under
    driver should receive velocity commands on `/rosbot_2/cmd_vel`. If the
    drivers use different topic names, configure their namespace or remappings
    to match.
-3. Ensure the computer running this launch and the robot can communicate over
-   ROS 2/DDS, then run the launch command above.
-4. Confirm that the sensor topics are publishing with:
+3. Connect the computer running this launch to the same Wi-Fi network as the
+   robot.
+4. Set `ROS_DOMAIN_ID` to the domain ID configured for that robot, replacing
+   `<robot_id>` with its numeric ID:
+
+   ```bash
+   export ROS_DOMAIN_ID=<robot_id>
+   ```
+
+5. Launch the nodes:
+
+   ```bash
+   ros2 launch assignment1_erl spawn_assignment_robot.launch.py robot_number:=2 rviz:=false
+   ```
+
+6. Confirm that the sensor topics are publishing with:
 
    ```bash
    ros2 topic list | grep rosbot_2
@@ -69,4 +77,6 @@ physical robot. With `robot_number:=2`, this project uses topics under
 
 Test in a clear area with the robot's emergency stop accessible; the
 controller may send movement commands while running.
+
+
 
