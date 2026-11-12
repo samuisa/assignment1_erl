@@ -8,8 +8,8 @@
 #include <nav_msgs/msg/odometry.hpp>
 #include <std_msgs/msg/empty.hpp>
 
-#include "assignment1_erl/msg/aruco_info.hpp"
-#include "assignment1_erl/msg/fsm_status.hpp"
+#include "assignment_msg/msg/aruco_info.hpp"
+#include "assignment_msg/msg/fsm_status.hpp"
 
 namespace assignment1_erl
 {
@@ -26,10 +26,10 @@ namespace assignment1_erl
             odom_sub_ = create_subscription<nav_msgs::msg::Odometry>(
                 "/odom", 10,
                 std::bind(&NavigationManager::odom_callback, this, std::placeholders::_1));
-            aruco_info_sub_ = create_subscription<msg::ArucoInfo>(
+            aruco_info_sub_ = create_subscription<assignment_msg::msg::ArucoInfo>(
                 "/aruco_info", 10,
                 std::bind(&NavigationManager::aruco_info_callback, this, std::placeholders::_1));
-            fsm_status_sub_ = create_subscription<msg::FsmStatus>(
+            fsm_status_sub_ = create_subscription<assignment_msg::msg::FsmStatus>(
                 "/fsm_status", 10,
                 std::bind(&NavigationManager::fsm_status_callback, this, std::placeholders::_1));
 
@@ -52,16 +52,16 @@ namespace assignment1_erl
 
         rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_pub_;
         rclcpp::Publisher<std_msgs::msg::Empty>::SharedPtr maneuver_complete_pub_;
-        rclcpp::Subscription<msg::ArucoInfo>::SharedPtr aruco_info_sub_;
+        rclcpp::Subscription<assignment_msg::msg::ArucoInfo>::SharedPtr aruco_info_sub_;
         rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub_;
-        rclcpp::Subscription<msg::FsmStatus>::SharedPtr fsm_status_sub_;
+        rclcpp::Subscription<assignment_msg::msg::FsmStatus>::SharedPtr fsm_status_sub_;
         rclcpp::TimerBase::SharedPtr timer_;
 
-        const float kLinearGain = 0.001F;
+        const float kLinearGain = 0.0012F;
         const float kAlignmentGain = 0.003F;
         const float kYawGain = 1.5F;
-        const float searchingSpeed = 0.1F;
-        const float kMaxLinearSpeed = 0.2F;
+        const float searchingSpeed = 0.15F;
+        const float kMaxLinearSpeed = 0.25F;
         const float kMaxAngularSpeed = 0.8F;
         const float kPixelTolerance = 5.0F;
 
@@ -88,7 +88,7 @@ namespace assignment1_erl
             have_odometry_ = true;
         }
 
-        void fsm_status_callback(const msg::FsmStatus::ConstSharedPtr msg)
+        void fsm_status_callback(const assignment_msg::msg::FsmStatus::ConstSharedPtr msg)
         {
             const int previous_state = current_state_;
             const int previous_target = target_id_;
@@ -107,7 +107,7 @@ namespace assignment1_erl
             }
         }
 
-        void aruco_info_callback(const msg::ArucoInfo::ConstSharedPtr msg)
+        void aruco_info_callback(const assignment_msg::msg::ArucoInfo::ConstSharedPtr msg)
         {
             if (msg->marker_id != target_id_)
             {

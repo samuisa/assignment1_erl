@@ -7,6 +7,7 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 find_package(ament_cmake REQUIRED)
+find_package(assignment_msg REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(geometry_msgs REQUIRED)
@@ -15,21 +16,6 @@ find_package(nav_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(aruco_opencv_msgs REQUIRED)
 find_package(rclcpp_action REQUIRED)
-find_package(rosidl_default_generators REQUIRED)
-
-# Custom messages
-rosidl_generate_interfaces(${PROJECT_NAME}
-  "msg/ArucoInfo.msg"
-  "msg/FsmStatus.msg"
-)
-
-rosidl_get_typesupport_target(
-  cpp_typesupport_target
-  ${PROJECT_NAME}
-  "rosidl_typesupport_cpp"
-)
-
-ament_export_dependencies(rosidl_default_runtime)
 
 # Dependencies
 macro(link_ros2_dependencies target)
@@ -50,12 +36,10 @@ endmacro()
 # Navigation component
 add_library(navigation_comp SHARED src/navigation.cpp)
 
-target_link_libraries(
-  navigation_comp PRIVATE "${cpp_typesupport_target}"
-)
 target_include_directories(navigation_comp PRIVATE include)
 
 link_ros2_dependencies(navigation_comp
+  assignment_msg
   rclcpp
   rclcpp_components
   geometry_msgs
@@ -74,12 +58,10 @@ rclcpp_components_register_node(navigation_comp
 # FSM component
 add_library(fsm_comp SHARED src/fsm.cpp)
 
-target_link_libraries(
-  fsm_comp PRIVATE "${cpp_typesupport_target}"
-)
 target_include_directories(fsm_comp PRIVATE include)
 
 link_ros2_dependencies(fsm_comp
+  assignment_msg
   rclcpp
   rclcpp_components
   geometry_msgs
@@ -98,12 +80,10 @@ rclcpp_components_register_node(fsm_comp
 # Image detection component
 add_library(image_detection_comp SHARED src/image_detection.cpp)
 
-target_link_libraries(
-  image_detection_comp PRIVATE "${cpp_typesupport_target}"
-)
 target_include_directories(image_detection_comp PRIVATE include)
 
 link_ros2_dependencies(image_detection_comp
+  assignment_msg
   rclcpp
   rclcpp_components
   geometry_msgs
@@ -130,7 +110,7 @@ install(TARGETS
 )
 
 install(DIRECTORY
-  launch models worlds urdf rviz config msg
+  launch models worlds urdf rviz config
   DESTINATION share/${PROJECT_NAME}
 )
 

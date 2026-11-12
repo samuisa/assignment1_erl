@@ -4,8 +4,8 @@
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/empty.hpp>
 
-#include "assignment1_erl/msg/aruco_info.hpp"
-#include "assignment1_erl/msg/fsm_status.hpp"
+#include "assignment_msg/msg/aruco_info.hpp"
+#include "assignment_msg/msg/fsm_status.hpp"
 
 namespace assignment1_erl
 {
@@ -24,8 +24,8 @@ namespace assignment1_erl
         explicit FsmManager(const rclcpp::NodeOptions &options)
             : Node("fsm_node", options)
         {
-            fsm_pub_ = create_publisher<msg::FsmStatus>("/fsm_status", 10);
-            aruco_info_sub_ = create_subscription<msg::ArucoInfo>(
+            fsm_pub_ = create_publisher<assignment_msg::msg::FsmStatus>("/fsm_status", 10);
+            aruco_info_sub_ = create_subscription<assignment_msg::msg::ArucoInfo>(
                 "/aruco_info", 10,
                 std::bind(&FsmManager::aruco_callback, this, std::placeholders::_1));
             maneuver_complete_sub_ = create_subscription<std_msgs::msg::Empty>(
@@ -49,8 +49,8 @@ namespace assignment1_erl
         std::array<bool, kLastMarkerId + 1> visited_markers_{};
         std::chrono::steady_clock::time_point last_expected_marker_update_;
 
-        rclcpp::Publisher<msg::FsmStatus>::SharedPtr fsm_pub_;
-        rclcpp::Subscription<msg::ArucoInfo>::SharedPtr aruco_info_sub_;
+        rclcpp::Publisher<assignment_msg::msg::FsmStatus>::SharedPtr fsm_pub_;
+        rclcpp::Subscription<assignment_msg::msg::ArucoInfo>::SharedPtr aruco_info_sub_;
         rclcpp::Subscription<std_msgs::msg::Empty>::SharedPtr maneuver_complete_sub_;
         rclcpp::TimerBase::SharedPtr timer_;
 
@@ -89,13 +89,13 @@ namespace assignment1_erl
 
         void publish_state()
         {
-            msg::FsmStatus status;
+            assignment_msg::msg::FsmStatus status;
             status.current_state = current_state_;
             status.target_id = expected_marker_;
             fsm_pub_->publish(status);
         }
 
-        void aruco_callback(const msg::ArucoInfo::ConstSharedPtr msg)
+        void aruco_callback(const assignment_msg::msg::ArucoInfo::ConstSharedPtr msg)
         {
             if (msg->marker_id < kFirstMarkerId || msg->marker_id > kLastMarkerId)
             {
