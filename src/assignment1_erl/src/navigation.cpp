@@ -13,9 +13,19 @@
 
 namespace assignment1_erl
 {
+    /**
+     * @brief Converts FSM and marker data into velocity commands for the robot.
+     *
+     * The node searches for markers, aligns with the active marker, approaches it,
+     * and performs odometry-based turns between markers.
+     */
     class NavigationManager : public rclcpp::Node
     {
     public:
+        /**
+         * @brief Creates the navigation node, its publishers and subscriptions.
+         * @param options ROS 2 node options supplied by the component container.
+         */
         explicit NavigationManager(const rclcpp::NodeOptions &options)
             : Node("navigation_node", options)
         {
@@ -57,13 +67,13 @@ namespace assignment1_erl
         rclcpp::Subscription<assignment_msg::msg::FsmStatus>::SharedPtr fsm_status_sub_;
         rclcpp::TimerBase::SharedPtr timer_;
 
-        const float kLinearGain = 0.0012F;
-        const float kAlignmentGain = 0.003F;
-        const float kYawGain = 1.5F;
-        const float searchingSpeed = 0.15F;
-        const float kMaxLinearSpeed = 0.25F;
-        const float kMaxAngularSpeed = 0.8F;
-        const float kPixelTolerance = 5.0F;
+        const float kLinearGain = 0.0012F;       ///< Proportional gain for distance correction.
+        const float kAlignmentGain = 0.003F;     ///< Proportional gain for image alignment.
+        const float kYawGain = 1.5F;             ///< Proportional gain for heading correction.
+        const float searchingSpeed = 0.15F;      ///< Forward speed while searching, in m/s.
+        const float kMaxLinearSpeed = 0.25F;     ///< Maximum linear speed, in m/s.
+        const float kMaxAngularSpeed = 0.8F;     ///< Maximum angular speed, in rad/s.
+        const float kPixelTolerance = 5.0F;      ///< Pixel error accepted for alignment/approach.
 
         float s_ = 0.0F;
         float u_ = 0.0F;
@@ -79,6 +89,10 @@ namespace assignment1_erl
         bool rotation_complete_sent_ = false;
         std::chrono::steady_clock::time_point last_marker_update_;
 
+        /**
+         * @brief Updates the robot's current yaw from odometry.
+         * @param msg Odometry message containing the robot orientation quaternion.
+         */
         void odom_callback(const nav_msgs::msg::Odometry::ConstSharedPtr msg)
         {
             const auto &q = msg->pose.pose.orientation;
@@ -88,6 +102,10 @@ namespace assignment1_erl
             have_odometry_ = true;
         }
 
+        /**
+         * @brief Updates the active FSM state and resets state-specific data as needed.
+         * @param msg FSM state and target marker ID.
+         */
         void fsm_status_callback(const assignment_msg::msg::FsmStatus::ConstSharedPtr msg)
         {
             const int previous_state = current_state_;
@@ -107,6 +125,10 @@ namespace assignment1_erl
             }
         }
 
+        /**
+         * @brief Stores measurements when they correspond to the active target marker.
+         * @param msg Marker ID, image position, and apparent marker size.
+         */
         void aruco_info_callback(const assignment_msg::msg::ArucoInfo::ConstSharedPtr msg)
         {
             if (msg->marker_id != target_id_)
@@ -122,6 +144,10 @@ namespace assignment1_erl
             last_marker_update_ = std::chrono::steady_clock::now();
         }
 
+        /**
+         * @brief Returns the route turn angle associated with the active target.
+         * @return Turn offset in radians.
+         */
         float rotation_offset() const
         {
             switch (target_id_)
@@ -137,6 +163,12 @@ namespace assignment1_erl
             }
         }
 
+        /**
+         * @brief Computes and publishes the velocity command for the current FSM state.
+         *
+         * Commands are zero-initialized every cycle, ensuring the robot stops whenever
+         * the active state has no valid movement command.
+         */
         void control_loop()
         {
             geometry_msgs::msg::Twist velocity;

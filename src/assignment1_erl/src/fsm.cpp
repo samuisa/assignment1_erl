@@ -9,6 +9,7 @@
 
 namespace assignment1_erl
 {
+    /** @brief States used by the marker route controller. */
     enum State_t
     {
         STATE_IDLE = 0,
@@ -18,9 +19,19 @@ namespace assignment1_erl
         STATE_FINISHED = 4,
     };
 
+    /**
+     * @brief Coordinates the marker search, approach, and inter-marker maneuvers.
+     *
+     * Publishes the current state and target marker for the navigation node, and
+     * advances the route after each target is reached.
+     */
     class FsmManager : public rclcpp::Node
     {
     public:
+        /**
+         * @brief Creates the FSM node, its communication endpoints, and update timer.
+         * @param options ROS 2 node options supplied by the component container.
+         */
         explicit FsmManager(const rclcpp::NodeOptions &options)
             : Node("fsm_node", options)
         {
@@ -46,7 +57,7 @@ namespace assignment1_erl
 
         State_t current_state_{STATE_IDLE};
         int expected_marker_{1};
-        std::array<bool, kLastMarkerId + 1> visited_markers_{};
+        std::array<bool, kLastMarkerId + 1> visited_markers_{}; ///< Visited flags indexed by marker ID.
         std::chrono::steady_clock::time_point last_expected_marker_update_;
 
         rclcpp::Publisher<assignment_msg::msg::FsmStatus>::SharedPtr fsm_pub_;
@@ -54,6 +65,11 @@ namespace assignment1_erl
         rclcpp::Subscription<std_msgs::msg::Empty>::SharedPtr maneuver_complete_sub_;
         rclcpp::TimerBase::SharedPtr timer_;
 
+        /**
+         * @brief Returns a readable name for a state, for transition logging.
+         * @param state State to name.
+         * @return Null-terminated state name.
+         */
         static const char *state_name(State_t state)
         {
             switch (state)
@@ -73,6 +89,11 @@ namespace assignment1_erl
             }
         }
 
+        /**
+         * @brief Changes state and logs the transition if the state actually changed.
+         * @param next_state State to enter.
+         * @param reason Human-readable reason for the transition.
+         */
         void transition_to(State_t next_state, const char *reason)
         {
             if (current_state_ == next_state)
@@ -87,6 +108,9 @@ namespace assignment1_erl
                 state_name(previous_state), state_name(current_state_), expected_marker_, reason);
         }
 
+        /**
+         * @brief Publishes the current state and expected marker ID.
+         */
         void publish_state()
         {
             assignment_msg::msg::FsmStatus status;
@@ -95,6 +119,10 @@ namespace assignment1_erl
             fsm_pub_->publish(status);
         }
 
+        /**
+         * @brief Processes marker detections for the currently expected marker.
+         * @param msg Marker ID, image position, and apparent marker size.
+         */
         void aruco_callback(const assignment_msg::msg::ArucoInfo::ConstSharedPtr msg)
         {
             if (msg->marker_id < kFirstMarkerId || msg->marker_id > kLastMarkerId)
@@ -151,6 +179,9 @@ namespace assignment1_erl
             publish_state();
         }
 
+        /**
+         * @brief Advances to the next target after navigation reports a completed turn.
+         */
         void maneuver_complete_callback(const std_msgs::msg::Empty::ConstSharedPtr)
         {
             if (current_state_ != STATE_ROTATE)
@@ -163,6 +194,9 @@ namespace assignment1_erl
             publish_state();
         }
 
+        /**
+         * @brief Starts the search and returns to it if the active marker is lost.
+         */
         void logic_loop()
         {
             if (current_state_ == STATE_IDLE)

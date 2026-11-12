@@ -8,9 +8,19 @@
 
 namespace assignment1_erl
 {
+    /**
+     * @brief Converts raw ArUco detections into image-space marker measurements.
+     *
+     * Camera calibration and detected marker poses are used to estimate each
+     * marker's horizontal pixel location and apparent size.
+     */
     class DetectionManager : public rclcpp::Node
     {
     public:
+        /**
+         * @brief Creates the detection node and validates its projection parameters.
+         * @param options ROS 2 node options supplied by the component container.
+         */
         explicit DetectionManager(const rclcpp::NodeOptions &options)
             : Node("detection_node", options)
         {
@@ -43,13 +53,17 @@ namespace assignment1_erl
         rclcpp::Subscription<aruco_opencv_msgs::msg::ArucoDetection>::SharedPtr aruco_sub_;
         rclcpp::Publisher<assignment_msg::msg::ArucoInfo>::SharedPtr aruco_info_pub_;
 
-        double f_ = 0.0;
-        double cx_ = 0.0;
-        double marker_size_m_{};
-        double desired_size_sim_px_{};
-        double simulation_focal_length_px_{};
-        bool camera_info_received_ = false;
+        double f_ = 0.0;                         ///< Camera focal length in pixels.
+        double cx_ = 0.0;                        ///< Horizontal camera principal point in pixels.
+        double marker_size_m_{};                 ///< Physical marker size used for range estimation.
+        double desired_size_sim_px_{};            ///< Target apparent size in the reference simulation.
+        double simulation_focal_length_px_{};     ///< Reference simulation focal length in pixels.
+        bool camera_info_received_ = false;       ///< True once valid camera intrinsics are available.
 
+        /**
+         * @brief Stores valid camera focal length and horizontal principal point.
+         * @param msg Camera calibration data.
+         */
         void camera_info_callback(const sensor_msgs::msg::CameraInfo::ConstSharedPtr msg)
         {
             if (std::isfinite(msg->k[0]) && msg->k[0] > 0.0 &&
@@ -61,6 +75,10 @@ namespace assignment1_erl
             }
         }
 
+        /**
+         * @brief Projects each valid marker pose into image coordinates and publishes it.
+         * @param msg ArUco detections containing marker IDs and camera-relative poses.
+         */
         void aruco_callback(const aruco_opencv_msgs::msg::ArucoDetection::ConstSharedPtr msg)
         {
             if (!camera_info_received_ || msg->markers.empty())
