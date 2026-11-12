@@ -37,6 +37,10 @@ To launch the full Gazebo world along with the robot, run:
     ./script/menu.sh
     ```
 
+The FSM, navigation, and image-detection nodes run together in a ROS 2
+component container. Gazebo, sensor bridges, and robot description nodes remain
+separate.
+
 ## Launch on a Real Robot
 The launch file starts the assignment nodes without Gazebo. Choose a robot
 number that matches the namespace configured for the robot's drivers. For
@@ -49,11 +53,11 @@ physical robot. With `robot_number:=2`, this project uses topics under
 1. Start the robot's base and camera drivers. This launch file does not start
    the drivers or Gazebo.
 2. Configure the drivers to use the same namespace. The robot should publish
-   `/rosbot_2/odom`, `/rosbot_2/imu`, `/rosbot_2/camera/image`,
-   `/rosbot_2/camera/camera_info`, and `/rosbot_2/joint_states`. The base
-   driver should receive velocity commands on `/rosbot_2/cmd_vel`. If the
-   drivers use different topic names, configure their namespace or remappings
-   to match.
+   `/rosbot_2/odom`, `/rosbot_2/camera/image`, `/rosbot_2/camera/camera_info`,
+   and `/rosbot_2/joint_states`. The base driver should receive velocity
+   commands on `/rosbot_2/cmd_vel`. Navigation uses the orientation in the
+   base driver's `/odom` message directly. If the drivers use different topic
+   names, configure their namespace or remappings to match.
 3. Connect the computer running this launch to the same Wi-Fi network as the
    robot.
 4. Set `ROS_DOMAIN_ID` to the domain ID configured for that robot, replacing

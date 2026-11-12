@@ -4,7 +4,8 @@ from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, Command
-from launch_ros.actions import Node
+from launch_ros.actions import ComposableNodeContainer, Node
+from launch_ros.descriptions import ComposableNode
 from ament_index_python.packages import get_package_share_directory
 
 
@@ -165,11 +166,29 @@ def generate_launch_description():
         ],
     )
 
-    # Launch navigation container
-    navigation_container_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(pkg_assignment1_erl, 'launch', 'navigation_container.launch.py'),
-        )
+    assignment_nodes_container = ComposableNodeContainer(
+        name='assignment_nodes_container',
+        namespace='',
+        package='rclcpp_components',
+        executable='component_container_mt',
+        composable_node_descriptions=[
+            ComposableNode(
+                package='assignment1_erl',
+                plugin='assignment1_erl::FsmManager',
+                name='fsm_node',
+            ),
+            ComposableNode(
+                package='assignment1_erl',
+                plugin='assignment1_erl::NavigationManager',
+                name='navigation_node',
+            ),
+            ComposableNode(
+                package='assignment1_erl',
+                plugin='assignment1_erl::DetectionManager',
+                name='image_detection_node',
+            ),
+        ],
+        output='screen',
     )
 
 
@@ -187,6 +206,6 @@ def generate_launch_description():
     launchDescriptionObject.add_action(gz_image_bridge_node)
     launchDescriptionObject.add_action(ekf_node)
     launchDescriptionObject.add_action(aruco_node)
-    launchDescriptionObject.add_action(navigation_container_launch)
+    launchDescriptionObject.add_action(assignment_nodes_container)
 
     return launchDescriptionObject

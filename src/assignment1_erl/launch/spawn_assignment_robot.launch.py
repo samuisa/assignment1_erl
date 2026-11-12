@@ -2,11 +2,11 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, GroupAction
 from launch.conditions import IfCondition
-from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitution, PythonExpression
-from launch_ros.actions import Node, PushRosNamespace, SetRemap
+from launch_ros.actions import ComposableNodeContainer, Node, PushRosNamespace, SetRemap
+from launch_ros.descriptions import ComposableNode
 
 
 def generate_launch_description():
@@ -47,17 +47,6 @@ def generate_launch_description():
         ],
     )
 
-    ekf_node = Node(
-        package='robot_localization',
-        executable='ekf_node',
-        name='ekf_filter_node',
-        output='screen',
-        parameters=[
-            os.path.join(pkg_assignment1_erl, 'config', 'ekf.yaml'),
-            {'use_sim_time': False},
-        ],
-    )
-
     aruco_node = Node(
         package='aruco_opencv',
         executable='aruco_tracker_autostart',
@@ -79,33 +68,69 @@ def generate_launch_description():
         ],
     )
 
-    navigation_container_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(pkg_assignment1_erl, 'launch', 'navigation_container.launch.py'),
-        )
+    topic_remappings = [
+        ('/tf', 'tf'),
+        ('/tf_static', 'tf_static'),
+        ('/cmd_vel', 'cmd_vel'),
+        ('/maneuver_complete', 'maneuver_complete'),
+        ('/odom', 'odom'),
+        ('/aruco_info', 'aruco_info'),
+        ('/fsm_status', 'fsm_status'),
+        ('/camera/camera_info', 'camera/camera_info'),
+        ('/aruco_detections', 'aruco_detections'),
+    ]
+
+    assignment_nodes_container = ComposableNodeContainer(
+        name='assignment_nodes_container',
+        namespace=robot_namespace,
+        package='rclcpp_components',
+        executable='component_container_mt',
+        composable_node_descriptions=[
+            ComposableNode(
+                package='assignment1_erl',
+                plugin='assignment1_erl::FsmManager',
+                name='fsm_node',
+                namespace=robot_namespace,
+                remappings=topic_remappings,
+            ),
+            ComposableNode(
+                package='assignment1_erl',
+                plugin='assignment1_erl::NavigationManager',
+                name='navigation_node',
+                namespace=robot_namespace,
+                remappings=topic_remappings,
+            ),
+            ComposableNode(
+                package='assignment1_erl',
+                plugin='assignment1_erl::DetectionManager',
+                name='image_detection_node',
+                namespace=robot_namespace,
+                remappings=topic_remappings,
+            ),
+        ],
+        output='screen',
     )
 
     robot_nodes = GroupAction(
         actions=[
             PushRosNamespace(robot_namespace),
-            SetRemap(src='/tf', dst='tf'),
-            SetRemap(src='/tf_static', dst='tf_static'),
-            SetRemap(src='/cmd_vel', dst='cmd_vel'),
-            SetRemap(src='/maneuver_complete', dst='maneuver_complete'),
-            SetRemap(src='/odom', dst='odom'),
-            SetRemap(src='/aruco_info', dst='aruco_info'),
-            SetRemap(src='/fsm_status', dst='fsm_status'),
-            SetRemap(src='/camera/camera_info', dst='camera/camera_info'),
-            SetRemap(src='/aruco_detections', dst='aruco_detections'),
+            *[
+                SetRemap(src=source, dst=target)
+                for source, target in topic_remappings
+            ],
             rviz_node,
             robot_state_publisher_node,
-            ekf_node,
             aruco_node,
-            navigation_container_launch,
         ]
     )
 
     return LaunchDescription(
-        [rviz_launch_arg, robot_number_arg, model_arg, robot_nodes]
+        [
+            rviz_launch_arg,
+            robot_number_arg,
+            model_arg,
+            robot_nodes,
+            assignment_nodes_container,
+        ]
     )
     
