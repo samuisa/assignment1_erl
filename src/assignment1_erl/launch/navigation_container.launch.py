@@ -7,7 +7,7 @@ from ament_index_python.packages import get_package_prefix
 
 def generate_launch_description():
     workspace_root = Path(get_package_prefix('assignment1_erl')).resolve().parents[1]
-    log_dir = workspace_root / 'assignment' / 'assignment1_erl' / 'log'
+    log_dir = workspace_root / 'src' / 'assignment1_erl' / 'log'
     log_dir.mkdir(parents=True, exist_ok=True)
 
     nodes = [
@@ -16,16 +16,15 @@ def generate_launch_description():
         ('image_detection_node', 'image_detection.log'),
     ]
 
-    return LaunchDescription([
-        Node(
-            package='assignment1_erl',
-            executable=executable,
-            name=executable,
-            prefix=(
-                "bash -c 'exec \"$@\" > "
-                f"\"{log_dir / log_file}\" 2>&1' --"
-            ),
-            output='screen',
-        )
-        for executable, log_file in nodes
-    ])
+    return LaunchDescription(
+        [
+            Node(
+                package='assignment1_erl',
+                executable=executable,
+                name=executable,
+                prefix=("bash -c 'exec \"$@\" > " f"\"{log_dir / log_file}\" 2>&1' --"),
+                output='screen',
+            )
+            for executable, log_file in nodes
+        ]
+    )
