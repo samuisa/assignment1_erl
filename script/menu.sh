@@ -22,7 +22,7 @@ case $choice in
         source install/local_setup.bash
 
         cd src/ 
-        ros2 launch assignment1_erl spawn_assignment.launch.py  
+        ros2 launch assignment1_erl spawn_assignment_rosbot.launch.py  
         ;;
 
     2)
