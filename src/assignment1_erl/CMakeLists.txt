@@ -9,13 +9,11 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(assignment_msg REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(rclcpp_components REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(aruco_opencv_msgs REQUIRED)
-find_package(rclcpp_action REQUIRED)
 
 # Dependencies
 macro(link_ros2_dependencies target)
@@ -25,6 +23,7 @@ macro(link_ros2_dependencies target)
         ${target} PUBLIC ${${dep}_INCLUDE_DIRS}
       )
     endif()
+
     if(${dep}_LIBRARIES)
       target_link_libraries(
         ${target} PUBLIC ${${dep}_LIBRARIES}
@@ -33,85 +32,71 @@ macro(link_ros2_dependencies target)
   endforeach()
 endmacro()
 
-# Navigation component
-add_library(navigation_comp SHARED src/navigation.cpp)
 
-target_include_directories(navigation_comp PRIVATE include)
+# Navigation standalone node
+add_executable(navigation_node
+  src/navigation.cpp
+)
 
-link_ros2_dependencies(navigation_comp
-  assignment_msg
+target_include_directories(navigation_node PRIVATE include)
+
+ament_target_dependencies(navigation_node
   rclcpp
-  rclcpp_components
   geometry_msgs
-  sensor_msgs
   nav_msgs
   std_msgs
-  aruco_opencv_msgs
-  rclcpp_action
-)
-
-rclcpp_components_register_node(navigation_comp
-  PLUGIN "assignment1_erl::NavigationManager"
-  EXECUTABLE navigation_node
-)
-
-# FSM component
-add_library(fsm_comp SHARED src/fsm.cpp)
-
-target_include_directories(fsm_comp PRIVATE include)
-
-link_ros2_dependencies(fsm_comp
   assignment_msg
+)
+
+
+# FSM standalone node
+add_executable(fsm_node
+  src/fsm.cpp
+)
+
+target_include_directories(fsm_node PRIVATE include)
+
+ament_target_dependencies(fsm_node
   rclcpp
-  rclcpp_components
-  geometry_msgs
-  sensor_msgs
-  nav_msgs
   std_msgs
-  aruco_opencv_msgs
-  rclcpp_action
-)
-
-rclcpp_components_register_node(fsm_comp
-  PLUGIN "assignment1_erl::FsmManager"
-  EXECUTABLE fsm_node
-)
-
-# Image detection component
-add_library(image_detection_comp SHARED src/image_detection.cpp)
-
-target_include_directories(image_detection_comp PRIVATE include)
-
-link_ros2_dependencies(image_detection_comp
   assignment_msg
+)
+
+
+# Image detection standalone node
+add_executable(image_detection_node
+  src/image_detection.cpp
+)
+
+target_include_directories(image_detection_node PRIVATE include)
+
+ament_target_dependencies(image_detection_node
   rclcpp
-  rclcpp_components
-  geometry_msgs
   sensor_msgs
-  nav_msgs
-  std_msgs
   aruco_opencv_msgs
-  rclcpp_action
+  assignment_msg
 )
 
-rclcpp_components_register_node(image_detection_comp
-  PLUGIN "assignment1_erl::DetectionManager"
-  EXECUTABLE image_detection_node
-)
 
-# Install
+# Install executables
 install(TARGETS
-  navigation_comp
-  fsm_comp
-  image_detection_comp
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin
+  navigation_node
+  fsm_node
+  image_detection_node
+  DESTINATION lib/${PROJECT_NAME}
 )
 
+
+# Install project resources
 install(DIRECTORY
-  launch models worlds urdf rviz config
+  launch
+  models
+  worlds
+  urdf
+  rviz
+  config
   DESTINATION share/${PROJECT_NAME}
 )
+
 
 ament_package()
