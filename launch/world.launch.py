@@ -13,12 +13,19 @@ def generate_launch_description():
         description='Name of the Gazebo world file to load'
     )
 
-    pkg_gazebo_ath= get_package_share_directory('gazebo_ath')
+    pkg_assignment1_erl = get_package_share_directory('assignment1_erl')
     pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
 
     # Add your own gazebo library path here
-    # gazebo_models_path = "/home/ubuntu/gazebo_models"
-    # os.environ["GZ_SIM_RESOURCE_PATH"] += os.pathsep + gazebo_models_path
+    gazebo_models_path = os.path.join(pkg_assignment1_erl, "models")
+
+    gz_path = os.environ.get("GZ_SIM_RESOURCE_PATH", "")
+
+    if gazebo_models_path not in gz_path.split(os.pathsep):
+        os.environ["GZ_SIM_RESOURCE_PATH"] = (
+            gz_path + os.pathsep + gazebo_models_path
+            if gz_path else gazebo_models_path
+    )
 
     gazebo_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -26,7 +33,7 @@ def generate_launch_description():
         ),
         launch_arguments={
             'gz_args': [
-                PathJoinSubstitution([pkg_gazebo_ath, 'worlds', LaunchConfiguration('world')]),
+                PathJoinSubstitution([pkg_assignment1_erl, 'worlds', LaunchConfiguration('world')]),
                 # TextSubstitution(text=' -r -v -v1 --render-engine ogre')],
                 # TextSubstitution(text=' -r -v -v1')],
                 TextSubstitution(text=' -r -v1'),

@@ -10,10 +10,10 @@ from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
 
-    pkg_gazebo_ath = get_package_share_directory('gazebo_ath')
+    pkg_assignment1_erl = get_package_share_directory('assignment1_erl')
 
-    gazebo_models_path, ignore_last_dir = os.path.split(pkg_gazebo_ath)
-    # lets Gazebo find package://gazebo_ath/... (e.g. the meshes)
+    gazebo_models_path, ignore_last_dir = os.path.split(pkg_assignment1_erl)
+    # lets Gazebo find package://assignment1_erl            /... (e.g. the meshes)
     gz_path = os.environ.get("GZ_SIM_RESOURCE_PATH", "")
     os.environ["GZ_SIM_RESOURCE_PATH"] = gz_path + os.pathsep + gazebo_models_path
 
@@ -30,7 +30,7 @@ def generate_launch_description():
     # Define the path to your URDF or Xacro file
     urdf_file_path = PathJoinSubstitution(
         [
-            pkg_gazebo_ath,  # Replace with your package name
+            pkg_assignment1_erl,  # Replace with your package name
             "urdf",
             LaunchConfiguration('model'),  # Replace with your URDF or Xacro file
         ]
@@ -38,7 +38,7 @@ def generate_launch_description():
 
     world_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(pkg_gazebo_ath, 'launch', 'world.launch.py'),
+            os.path.join(pkg_assignment1_erl, 'launch', 'world.launch.py'),
         ),
         launch_arguments={
             'world': LaunchConfiguration('world'),
@@ -49,7 +49,7 @@ def generate_launch_description():
     rviz_node = Node(
         package='rviz2',
         executable='rviz2',
-        arguments=['-d', os.path.join(pkg_gazebo_ath, 'rviz', 'urdf.rviz')],
+        arguments=['-d', os.path.join(pkg_assignment1_erl, 'rviz', 'urdf.rviz')],
         condition=IfCondition(LaunchConfiguration('rviz')),
         parameters=[
             {'use_sim_time': True},
@@ -115,7 +115,7 @@ def generate_launch_description():
         name='ekf_filter_node',
         output='screen',
         parameters=[
-            os.path.join(pkg_gazebo_ath, 'config', 'ekf.yaml'),
+            os.path.join(pkg_assignment1_erl, 'config', 'ekf.yaml'),
             {'use_sim_time': True},
         ],
     )
@@ -168,7 +168,7 @@ def generate_launch_description():
     # Launch navigation container
     navigation_container_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(pkg_gazebo_ath, 'launch', 'navigation_container.launch.py'),
+            os.path.join(pkg_assignment1_erl, 'launch', 'navigation_container.launch.py'),
         )
     )
 

@@ -4,9 +4,9 @@
 #include <aruco_opencv_msgs/msg/aruco_detection.hpp>
 #include <cmath>
 #include <stdexcept>
-#include "gazebo_ath/msg/aruco_info.hpp"
+#include "assignment1_erl/msg/aruco_info.hpp"
 
-namespace gazebo_ath
+namespace assignment1_erl
 {
     class DetectionManager : public rclcpp::Node
     {
@@ -34,14 +34,14 @@ namespace gazebo_ath
                 "/aruco_detections", 10,
                 std::bind(&DetectionManager::aruco_callback, this, std::placeholders::_1));
 
-            aruco_info_pub_ = this->create_publisher<gazebo_ath::msg::ArucoInfo>("/aruco_info", 10);
+            aruco_info_pub_ = this->create_publisher<assignment1_erl::msg::ArucoInfo>("/aruco_info", 10);
 
         }
 
     private:
         rclcpp::Subscription<sensor_msgs::msg::CameraInfo>::SharedPtr camera_info_sub_;
         rclcpp::Subscription<aruco_opencv_msgs::msg::ArucoDetection>::SharedPtr aruco_sub_;
-        rclcpp::Publisher<gazebo_ath::msg::ArucoInfo>::SharedPtr aruco_info_pub_;
+        rclcpp::Publisher<assignment1_erl::msg::ArucoInfo>::SharedPtr aruco_info_pub_;
 
         double f_ = 0.0;
         double cx_ = 0.0;
@@ -66,7 +66,7 @@ namespace gazebo_ath
             if (!camera_info_received_ || msg->markers.empty())
                 return;
 
-            gazebo_ath::msg::ArucoInfo info_msg;
+            assignment1_erl::msg::ArucoInfo info_msg;
 
             for (const auto &marker : msg->markers)
             {
@@ -92,6 +92,6 @@ namespace gazebo_ath
             }
         }
     };
-} // namespace gazebo_ath
+} // namespace assignment1_erl
 
-RCLCPP_COMPONENTS_REGISTER_NODE(gazebo_ath::DetectionManager)
+RCLCPP_COMPONENTS_REGISTER_NODE(assignment1_erl::DetectionManager)

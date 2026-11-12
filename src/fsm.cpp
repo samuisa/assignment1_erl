@@ -4,10 +4,10 @@
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/empty.hpp>
 
-#include "gazebo_ath/msg/aruco_info.hpp"
-#include "gazebo_ath/msg/fsm_status.hpp"
+#include "assignment1_erl/msg/aruco_info.hpp"
+#include "assignment1_erl/msg/fsm_status.hpp"
 
-namespace gazebo_ath
+namespace assignment1_erl
 {
     enum State_t
     {
@@ -181,7 +181,7 @@ namespace gazebo_ath
             publish_state();
         }
     };
-} // namespace gazebo_ath
+} // namespace assignment1_erl
 
 #include <rclcpp_components/register_node_macro.hpp>
-RCLCPP_COMPONENTS_REGISTER_NODE(gazebo_ath::FsmManager)
+RCLCPP_COMPONENTS_REGISTER_NODE(assignment1_erl::FsmManager)

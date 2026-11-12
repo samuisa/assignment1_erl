@@ -8,10 +8,10 @@
 #include <nav_msgs/msg/odometry.hpp>
 #include <std_msgs/msg/empty.hpp>
 
-#include "gazebo_ath/msg/aruco_info.hpp"
-#include "gazebo_ath/msg/fsm_status.hpp"
+#include "assignment1_erl/msg/aruco_info.hpp"
+#include "assignment1_erl/msg/fsm_status.hpp"
 
-namespace gazebo_ath
+namespace assignment1_erl
 {
     class NavigationManager : public rclcpp::Node
     {
@@ -211,6 +211,6 @@ namespace gazebo_ath
             cmd_vel_pub_->publish(velocity);
         }
     };
-} // namespace gazebo_ath
+} // namespace assignment1_erl
 
-RCLCPP_COMPONENTS_REGISTER_NODE(gazebo_ath::NavigationManager)
+RCLCPP_COMPONENTS_REGISTER_NODE(assignment1_erl::NavigationManager)

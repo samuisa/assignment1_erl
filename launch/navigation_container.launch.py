@@ -6,8 +6,8 @@ from ament_index_python.packages import get_package_prefix
 
 
 def generate_launch_description():
-    workspace_root = Path(get_package_prefix('gazebo_ath')).resolve().parents[1]
-    log_dir = workspace_root / 'assignment' / 'gazebo_ath' / 'log'
+    workspace_root = Path(get_package_prefix('assignment1_erl')).resolve().parents[1]
+    log_dir = workspace_root / 'assignment' / 'assignment1_erl' / 'log'
     log_dir.mkdir(parents=True, exist_ok=True)
 
     nodes = [
@@ -18,7 +18,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         Node(
-            package='gazebo_ath',
+            package='assignment1_erl',
             executable=executable,
             name=executable,
             prefix=(

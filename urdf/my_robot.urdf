@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 
-<robot name="gazebo_ath" xmlns:xacro="http://www.ros.org/wiki/xacro">
-<xacro:include filename="$(find gazebo_ath)/urdf/my_robot.gazebo" />
+<robot name="assignment1_erl" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<xacro:include filename="$(find assignment1_erl)/urdf/my_robot.gazebo" />
 
 
 
