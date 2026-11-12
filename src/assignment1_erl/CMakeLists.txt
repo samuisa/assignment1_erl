@@ -16,6 +16,9 @@ find_package(nav_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(aruco_opencv_msgs REQUIRED)
 find_package(rclcpp_action REQUIRED)
+find_package(image_transport REQUIRED)
+find_package(cv_bridge REQUIRED)
+find_package(OpenCV REQUIRED)
 
 # Dependencies
 macro(link_ros2_dependencies target)
@@ -92,6 +95,9 @@ link_ros2_dependencies(image_detection_comp
   std_msgs
   aruco_opencv_msgs
   rclcpp_action
+  image_transport
+  cv_bridge
+  OpenCV
 )
 
 rclcpp_components_register_node(image_detection_comp

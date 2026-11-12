@@ -36,6 +36,7 @@ namespace assignment1_erl
             : Node("fsm_node", options)
         {
             fsm_pub_ = create_publisher<assignment_msg::msg::FsmStatus>("/fsm_status", 10);
+            marker_reached_pub = create_publisher<std_msgs::msg::Int32>("/marker_reached", 10)
             aruco_info_sub_ = create_subscription<assignment_msg::msg::ArucoInfo>(
                 "/aruco_info", 10,
                 std::bind(&FsmManager::aruco_callback, this, std::placeholders::_1));
@@ -61,6 +62,7 @@ namespace assignment1_erl
         std::chrono::steady_clock::time_point last_expected_marker_update_;
 
         rclcpp::Publisher<assignment_msg::msg::FsmStatus>::SharedPtr fsm_pub_;
+        rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr marker_reached_pub;
         rclcpp::Subscription<assignment_msg::msg::ArucoInfo>::SharedPtr aruco_info_sub_;
         rclcpp::Subscription<std_msgs::msg::Empty>::SharedPtr maneuver_complete_sub_;
         rclcpp::TimerBase::SharedPtr timer_;
@@ -166,6 +168,7 @@ namespace assignment1_erl
             }
 
             visited_markers_[expected_marker_] = true;
+            marker_reached_pub->publish(expected_marker_);
             RCLCPP_INFO(get_logger(), "Marker %d reached and marked as visited.", expected_marker_);
 
             if (expected_marker_ == 4)
