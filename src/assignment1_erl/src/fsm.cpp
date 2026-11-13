@@ -3,6 +3,7 @@
 #include <cmath>
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/empty.hpp>
+#include <std_msgs/msg/int32.hpp>
 
 #include "assignment_msg/msg/aruco_info.hpp"
 #include "assignment_msg/msg/fsm_status.hpp"
@@ -170,7 +171,7 @@ namespace assignment1_erl
             visited_markers_[expected_marker_] = true;
             std_msgs::msg::Int32 marker_reached_msg;
             marker_reached_msg.data = expected_marker_;
-            marker_reached_pub->publish(marker_reached_msg);
+            marker_reached_pub_->publish(marker_reached_msg);
             RCLCPP_INFO(get_logger(), "Marker %d reached and marked as visited.", expected_marker_);
 
             if (expected_marker_ == 4)

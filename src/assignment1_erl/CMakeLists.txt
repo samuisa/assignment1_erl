@@ -100,6 +100,11 @@ link_ros2_dependencies(image_detection_comp
   OpenCV
 )
 
+target_link_libraries(image_detection_comp PUBLIC
+  image_transport::image_transport
+  cv_bridge::cv_bridge
+)
+
 rclcpp_components_register_node(image_detection_comp
   PLUGIN "assignment1_erl::DetectionManager"
   EXECUTABLE image_detection_node

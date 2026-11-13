@@ -11,9 +11,9 @@ def generate_launch_description():
     log_dir.mkdir(parents=True, exist_ok=True)
 
     nodes = [
-        ('fsm_node', 'fsm.log'),
-        ('navigation_node', 'navigation.log'),
-        ('image_detection_node', 'image_detection.log'),
+        ('fsm_node', 'fsm.log', []),
+        ('navigation_node', 'navigation.log', []),
+        ('image_detection_node', 'image_detection.log', [{'image_topic': '/camera/image'}]),
     ]
 
     return LaunchDescription(
@@ -24,7 +24,8 @@ def generate_launch_description():
                 name=executable,
                 prefix=("bash -c 'exec \"$@\" > " f"\"{log_dir / log_file}\" 2>&1' --"),
                 output='screen',
+                parameters=extra_params,
             )
-            for executable, log_file in nodes
+            for executable, log_file, extra_params in nodes
         ]
     )
