@@ -45,7 +45,7 @@ public:
                           std::placeholders::_1));
 
         timer_ = create_wall_timer(
-            std::chrono::milliseconds(100),
+            std::chrono::milliseconds(1),
             std::bind(&NavigationManager::control_loop, this));
 
         RCLCPP_INFO(get_logger(), "Navigation node started.");
@@ -74,12 +74,15 @@ private:
 
     rclcpp::TimerBase::SharedPtr timer_;
 
-    const float kLinearGain = 0.0012F;
+    //const float kLinearGain = 0.0012F;
     const float kAlignmentGain = 0.003F;
     const float kYawGain = 1.5F;
 
+    const float kLinearGain = 0.0010F;
+    const float kMaxLinearSpeed = 0.07F;
+
     const float searchingSpeed = 0.15F;
-    const float kMaxLinearSpeed = 0.25F;
+    //const float kMaxLinearSpeed = 0.15F;
     const float kMaxAngularSpeed = 0.8F;
     const float kPixelTolerance = 5.0F;
 

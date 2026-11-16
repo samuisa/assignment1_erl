@@ -1,5 +1,5 @@
 """
-Launch file per il ROSbot REALE .
+Launch file per il ROSbot REALE.
 
 Tutto quello che puo' cambiare quando ti connetti al robot e' un argomento:
 
@@ -37,11 +37,11 @@ def generate_launch_description():
 
     domain_id_arg = DeclareLaunchArgument(
         'domain_id', default_value='11',
-        description='ROS_DOMAIN_ID (identificatore del dominio ROS) del robot.')
+        description="ROS_DOMAIN_ID (identificatore del dominio ROS) del robot.")
 
     robot_number_arg = DeclareLaunchArgument(
         'robot_number', default_value='1',
-        description='Numero del robot: il namespace diventa /rosbot_<n>.')
+        description="Numero del robot: il namespace diventa /rosbot_<n>.")
 
     # =====================================================
     # ARGOMENTI: topic del robot (relativi al namespace /rosbot_<n>)
@@ -49,73 +49,74 @@ def generate_launch_description():
 
     image_topic_arg = DeclareLaunchArgument(
         'image_topic', default_value='camera/rgb/image_raw',
-        description='Topic immagine (SENZA /rosbot_n davanti, lo aggiunge il namespace). '
-                    'camera_info deve stare nella stessa cartella.')
+        description="Topic immagine (SENZA /rosbot_n davanti, lo aggiunge il namespace). "
+                    "camera_info deve stare nella stessa cartella.")
 
     camera_info_topic_arg = DeclareLaunchArgument(
         'camera_info_topic', default_value='camera/rgb/camera_info',
-        description='Topic camera_info, letto da detection_node.')
+        description="Topic camera_info, letto da detection_node.")
 
     odom_topic_arg = DeclareLaunchArgument(
         'odom_topic', default_value='odometry/filtered',
-        description='Topic odometria, letto da navigation_node.')
+        description="Topic odometria, letto da navigation_node.")
 
     cmd_vel_topic_arg = DeclareLaunchArgument(
         'cmd_vel_topic', default_value='cmd_vel',
-        description='Topic dei comandi di velocita'' (da verificare con ros2 topic list).')
+        description="Topic dei comandi di velocita' (da verificare con ros2 topic list).")
 
     # =====================================================
     # ARGOMENTI: ArUco tracker
     # =====================================================
 
     image_compressed_arg = DeclareLaunchArgument(
-        'image_compressed', default_value='false',
-        description='true = il tracker si iscrive a <image_topic>/compressed.')
+        'image_compressed', default_value='true',
+        description="true = il tracker si iscrive a <image_topic>/compressed.")
 
     marker_dict_arg = DeclareLaunchArgument(
         'marker_dict', default_value='ARUCO_ORIGINAL',
-        description='Dizionario ArUco dei marker reali.')
+        description="Dizionario ArUco dei marker reali.")
 
     marker_size_arg = DeclareLaunchArgument(
         'marker_size', default_value='0.2',
-        description='Lato REALE del marker in metri (misuralo con un righello).')
+        description="Lato REALE del marker in metri (misuralo con un righello).")
 
     image_rectified_arg = DeclareLaunchArgument(
         'image_is_rectified', default_value='false',
-        description='true se l''immagine e'' gia'' priva di distorsione.')
+        description="true se l'immagine e' gia' priva di distorsione.")
 
     qos_reliability_arg = DeclareLaunchArgument(
         'qos_reliability', default_value='2',
-        description='QoS (Quality of Service) affidabilita'': 1 = reliable, 2 = best effort.')
+        description="QoS (Quality of Service) affidabilita': 1 = reliable, 2 = best effort.")
 
     qos_durability_arg = DeclareLaunchArgument(
         'qos_durability', default_value='2',
-        description='QoS durabilita'': 1 = transient local, 2 = volatile.')
+        description="QoS durabilita': 1 = transient local, 2 = volatile.")
 
     # =====================================================
     # ARGOMENTI: image_detection_node (parametri camera)
     # =====================================================
 
     desired_size_arg = DeclareLaunchArgument(
-        'desired_size_sim_px', default_value='166.0',
-        description='Dimensione in pixel del marker alla distanza voluta, '
-                    'misurata con la camera di riferimento.')
+        'desired_size_sim_px', default_value='140.0',
+        description="Dimensione in pixel del marker alla distanza voluta, "
+                    "misurata con la camera di riferimento.")
 
     reference_focal_arg = DeclareLaunchArgument(
         'simulation_focal_length_px', default_value='381.4',
-        description='Focale (pixel) della camera di riferimento per desired_size_sim_px. '
-                    'Il nodo la scala con la focale reale letta da camera_info.')
+        description="Focale (pixel) della camera di riferimento per desired_size_sim_px. "
+                    "Il nodo la scala con la focale reale letta da camera_info.")
 
     # =====================================================
     # ARGOMENTI: RViz
     # =====================================================
 
     rviz_arg = DeclareLaunchArgument(
-        'rviz', default_value='true', description='Apri RViz (ROS Visualization).')
+        'rviz', default_value='true',
+        description="Apri RViz (ROS Visualization).")
 
     rviz_config_arg = DeclareLaunchArgument(
         'rviz_config', default_value=os.path.join(pkg, 'rviz', 'urdf.rviz'),
-        description='Percorso del file di configurazione di RViz.')
+        description="Percorso del file di configurazione di RViz.")
 
     # =====================================================
     # NODI
@@ -222,9 +223,7 @@ def generate_launch_description():
     ])
 
     return LaunchDescription([
-        # Va impostato prima dei nodi: lo ereditano tutti i processi lanciati qui
-        SetEnvironmentVariable('ROS_DOMAIN_ID', LaunchConfiguration('domain_id')),
-
+        # 1) Prima TUTTE le dichiarazioni degli argomenti
         domain_id_arg,
         robot_number_arg,
         image_topic_arg,
@@ -242,5 +241,10 @@ def generate_launch_description():
         rviz_arg,
         rviz_config_arg,
 
+        # 2) Poi la variabile d'ambiente (usa domain_id, gia' dichiarato).
+        #    Va prima dei nodi: lo ereditano tutti i processi lanciati dopo.
+        SetEnvironmentVariable('ROS_DOMAIN_ID', LaunchConfiguration('domain_id')),
+
+        # 3) Infine i nodi
         robot_group,
     ])
