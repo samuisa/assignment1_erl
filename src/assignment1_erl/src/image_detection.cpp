@@ -24,7 +24,7 @@ public:
             declare_parameter<double>("marker_size_m", 0.2);
 
         desired_size_sim_px_ =
-            declare_parameter<double>("desired_size_sim_px", 140.0);
+            declare_parameter<double>("desired_size_sim_px", 166.0);
 
         simulation_focal_length_px_ =
             declare_parameter<double>("simulation_focal_length_px", 381.4);
