@@ -67,8 +67,10 @@ private:
 
     rclcpp::Publisher<assignment_msg::msg::ArucoInfo>::SharedPtr aruco_info_pub_;
 
-    double f_ = 0.0;
+    double fx_ = 0.0;
+    double fy_ = 0.0;
     double cx_ = 0.0;
+    double cy_ = 0.0;
 
     double marker_size_m_{};
     double desired_size_sim_px_{};
@@ -82,10 +84,15 @@ private:
     {
         if (std::isfinite(msg->k[0]) &&
             msg->k[0] > 0.0 &&
-            std::isfinite(msg->k[2]))
+            std::isfinite(msg->k[4]) &&
+            msg->k[4] > 0.0 &&
+            std::isfinite(msg->k[2]) &&
+            std::isfinite(msg->k[5]))
         {
-            f_ = msg->k[0];
+            fx_ = msg->k[0];
+            fy_ = msg->k[4];
             cx_ = msg->k[2];
+            cy_ = msg->k[5];
 
             camera_info_received_ = true;
         }
@@ -99,40 +106,52 @@ private:
             return;
         }
 
-        assignment_msg::msg::ArucoInfo info_msg;
-
         for (const auto &marker : msg->markers)
         {
             const float aruco_x = marker.pose.position.x;
+            const float aruco_y = marker.pose.position.y;
             const float aruco_z = marker.pose.position.z;
 
-            if (aruco_z > 0.0)
-            {
-                info_msg.marker_id = marker.marker_id;
-
-                info_msg.u = static_cast<float>(
-                    f_ * (aruco_x / aruco_z) + cx_);
-
-                info_msg.s = static_cast<float>(
-                    f_ * marker_size_m_ / aruco_z);
-
-                info_msg.image_center_x =
-                    static_cast<float>(cx_);
-
-                info_msg.desired_size = static_cast<float>(
-                    desired_size_sim_px_ *
-                    f_ / simulation_focal_length_px_);
-
-                aruco_info_pub_->publish(info_msg);
-
-                RCLCPP_INFO_THROTTLE(
-                    get_logger(), *get_clock(), 2000,
-                    "Marker %d detected: u=%.1f px, size=%.1f px (target size=%.1f px).",
-                    static_cast<int>(info_msg.marker_id),
-                    info_msg.u,
-                    info_msg.s,
-                    info_msg.desired_size);
+            if (aruco_z <= 0.0) {
+                continue;
             }
+
+            assignment_msg::msg::ArucoInfo info_msg;
+
+            // Preserve the original image timestamp and frame.
+            info_msg.header = msg->header;
+
+            info_msg.marker_id = marker.marker_id;
+
+            // Horizontal center of the marker in pixels.
+            info_msg.u = static_cast<float>(
+                fx_ * (aruco_x / aruco_z) + cx_);
+
+            // Vertical center of the marker in pixels.
+            info_msg.v = static_cast<float>(
+                fy_ * (aruco_y / aruco_z) + cy_);
+
+            // Marker size in pixels.
+            info_msg.s = static_cast<float>(
+                fx_ * marker_size_m_ / aruco_z);
+
+            info_msg.image_center_x =
+                static_cast<float>(cx_);
+
+            info_msg.desired_size = static_cast<float>(
+                desired_size_sim_px_ *
+                fx_ / simulation_focal_length_px_);
+
+            aruco_info_pub_->publish(info_msg);
+
+            RCLCPP_INFO_THROTTLE(
+                get_logger(), *get_clock(), 2000,
+                "Marker %d detected: u=%.1f, v=%.1f, size=%.1f px (target=%.1f px).",
+                static_cast<int>(info_msg.marker_id),
+                info_msg.u,
+                info_msg.v,
+                info_msg.s,
+                info_msg.desired_size);
         }
     }
 };

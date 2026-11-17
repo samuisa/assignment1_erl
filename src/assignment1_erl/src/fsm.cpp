@@ -15,11 +15,11 @@ namespace assignment1_erl
 
 enum State_t
 {
-    STATE_IDLE = 0,
-    STATE_ROTATE = 1,
-    STATE_APPROACH = 2,
-    STATE_SEARCH = 3,
-    STATE_FINISHED = 4
+    STATE_IDLE = 0,     // initial state, waiting for first marker
+    STATE_ROTATE = 1,   // rotating to next marker
+    STATE_APPROACH = 2, // approaching the expected marker
+    STATE_SEARCH = 3,   // searching for the expected marker
+    STATE_FINISHED = 4  // all markers have been visited
 };
 
 
@@ -46,6 +46,10 @@ public:
                 std::bind(&FsmManager::maneuver_complete_callback,
                           this, std::placeholders::_1));
 
+        marker_reached_pub_ =
+        create_publisher<assignment_msg::msg::ArucoInfo>(
+            "/marker_reached", 10);
+
         timer_ = create_wall_timer(
             std::chrono::milliseconds(100),
             std::bind(&FsmManager::logic_loop, this));
@@ -61,8 +65,9 @@ private:
     static constexpr int kFirstMarkerId = 1;
     static constexpr int kLastMarkerId = 4;
 
+    // Timeout for losing the expected marker during approach (in milliseconds)
     static constexpr auto kMarkerLostTimeout =
-        std::chrono::milliseconds(1000);
+        std::chrono::milliseconds(5000);
 
     State_t current_state_{STATE_IDLE};
 
@@ -77,6 +82,8 @@ private:
     rclcpp::Subscription<assignment_msg::msg::ArucoInfo>::SharedPtr aruco_info_sub_;
 
     rclcpp::Subscription<std_msgs::msg::Empty>::SharedPtr maneuver_complete_sub_;
+
+    rclcpp::Publisher<assignment_msg::msg::ArucoInfo>::SharedPtr marker_reached_pub_;
 
     rclcpp::TimerBase::SharedPtr timer_;
 
@@ -140,12 +147,14 @@ private:
     void aruco_callback(
         const assignment_msg::msg::ArucoInfo::ConstSharedPtr msg)
     {
+        // Ignore markers outside the expected range (1-4)
         if (msg->marker_id < kFirstMarkerId ||
             msg->marker_id > kLastMarkerId)
         {
             return;
         }
 
+        // Ignore markers that have already been visited
         if (visited_markers_[msg->marker_id])
         {
             RCLCPP_DEBUG_THROTTLE(
@@ -156,9 +165,11 @@ private:
             return;
         }
 
+        // Ignore markers that are not the expected one
         if (msg->marker_id != expected_marker_) {
             return;
         }
+
 
         last_expected_marker_update_ =
             std::chrono::steady_clock::now();
@@ -177,6 +188,7 @@ private:
             return;
         }
 
+        // Check if the marker is aligned and at the desired distance
         const bool aligned =
             std::abs(msg->u - msg->image_center_x) <=
             kCenterTolerancePx;
@@ -185,9 +197,11 @@ private:
             std::abs(msg->desired_size - msg->s) <=
             kDesiredSizeTolerancePx;
 
+        // Otherwise, keep going    
         if (!aligned || !at_desired_distance) {
             return;
         }
+        marker_reached_pub_->publish(*msg);
 
         visited_markers_[expected_marker_] = true;
 

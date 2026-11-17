@@ -15,6 +15,12 @@ find_package(nav_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(aruco_opencv_msgs REQUIRED)
 
+find_package(image_transport REQUIRED)
+find_package(cv_bridge REQUIRED)
+find_package(OpenCV REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(assignment_msg REQUIRED)
+
 # Dependencies
 macro(link_ros2_dependencies target)
   foreach(dep ${ARGN})
@@ -77,12 +83,26 @@ ament_target_dependencies(image_detection_node
   assignment_msg
 )
 
+add_executable(image_annotator src/image_annotator.cpp)
+
+ament_target_dependencies(image_annotator
+  rclcpp
+  sensor_msgs
+  image_transport
+  cv_bridge
+  assignment_msg
+)
+
+target_link_libraries(image_annotator
+  ${OpenCV_LIBS}
+)
 
 # Install executables
 install(TARGETS
   navigation_node
   fsm_node
   image_detection_node
+  image_annotator
   DESTINATION lib/${PROJECT_NAME}
 )
 

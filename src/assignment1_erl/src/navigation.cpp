@@ -45,7 +45,7 @@ public:
                           std::placeholders::_1));
 
         timer_ = create_wall_timer(
-            std::chrono::milliseconds(1),
+            std::chrono::milliseconds(10),
             std::bind(&NavigationManager::control_loop, this));
 
         RCLCPP_INFO(get_logger(), "Navigation node started.");
