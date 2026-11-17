@@ -1,4 +1,3 @@
-
 #include <rclcpp/rclcpp.hpp>
 
 #include <sensor_msgs/msg/image.hpp>
@@ -11,9 +10,12 @@
 
 #include "assignment_msg/msg/aruco_info.hpp"
 
+#include <chrono>
+#include <cmath>
 #include <deque>
 #include <functional>
-#include <cmath>
+#include <map>
+#include <string>
 
 namespace assignment1_erl
 {
@@ -26,34 +28,39 @@ public:
     {
         // Camera image subscription
         image_sub_ = create_subscription<sensor_msgs::msg::Image>(
-            "/camera/image_raw", 10,
+            "/camera/image", 10,
             std::bind(&ImageAnnotator::image_callback, this,
                       std::placeholders::_1));
 
-        // Notification from FSM
-        marker_sub_ =
-            create_subscription<assignment_msg::msg::ArucoInfo>(
-                "/marker_reached", 10,
-                std::bind(&ImageAnnotator::marker_callback, this,
-                          std::placeholders::_1));
+        // Notification from the FSM (Finite State Machine)
+        marker_sub_ = create_subscription<assignment_msg::msg::ArucoInfo>(
+            "/marker_reached", 10,
+            std::bind(&ImageAnnotator::marker_callback, this,
+                      std::placeholders::_1));
 
         // Annotated image publisher
-        image_pub_ = image_transport::create_publisher(
-            this, "/marker_image");
+        image_pub_ = image_transport::create_publisher(this, "/marker_image");
 
-        RCLCPP_INFO(get_logger(), "ImageAnnotator started");
+        // Republish the saved annotated images, one per second, in rotation,
+        // so that RViz / rqt show them even if opened after the detection
+        timer_ = create_wall_timer(
+            std::chrono::seconds(1),
+            std::bind(&ImageAnnotator::republish_callback, this));
+
+        RCLCPP_INFO(get_logger(), "ImageAnnotator started, saving to '%s'",
+                    output_dir_.c_str());
     }
 
 private:
 
     // Subscriptions and publisher
     rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_sub_;
-
-    rclcpp::Subscription<
-        assignment_msg::msg::ArucoInfo>::SharedPtr marker_sub_;
-
+    rclcpp::Subscription<assignment_msg::msg::ArucoInfo>::SharedPtr marker_sub_;
     image_transport::Publisher image_pub_;
+    rclcpp::TimerBase::SharedPtr timer_;
 
+    // Fixed output folder (must already exist): change this path as needed
+    const std::string output_dir_ = "/home/marinapedemonte/Desktop/experimental/ws/src/assignment1_erl/marker_images";
 
     // Store recent images and their timestamps
     struct Frame
@@ -64,10 +71,13 @@ private:
 
     std::deque<Frame> frames_;
 
+    // Last annotated image for each marker ID (used for republishing)
+    std::map<int, sensor_msgs::msg::Image::SharedPtr> outputs_;
+    size_t republish_index_ = 0;
+
 
     // Receive and store camera images
-    void image_callback(
-        const sensor_msgs::msg::Image::ConstSharedPtr msg)
+    void image_callback(const sensor_msgs::msg::Image::ConstSharedPtr msg)
     {
         try
         {
@@ -75,9 +85,8 @@ private:
                 msg, sensor_msgs::image_encodings::BGR8);
 
             Frame frame;
-            frame.stamp = rclcpp::Time(
-                msg->header.stamp, get_clock()->get_clock_type());
-
+            frame.stamp = rclcpp::Time(msg->header.stamp,
+                                       get_clock()->get_clock_type());
             frame.image = image->image.clone();
 
             frames_.push_back(frame);
@@ -93,7 +102,7 @@ private:
     }
 
 
-    // Called when FSM reports that a marker was reached
+    // Called when the FSM reports that a marker was reached
     void marker_callback(
         const assignment_msg::msg::ArucoInfo::ConstSharedPtr msg)
     {
@@ -104,8 +113,8 @@ private:
         int best_index = -1;
         double min_difference = 1e9;
 
-        rclcpp::Time target_stamp(
-            msg->header.stamp, get_clock()->get_clock_type());
+        rclcpp::Time target_stamp(msg->header.stamp,
+                                  get_clock()->get_clock_type());
 
         for (int i = 0; i < static_cast<int>(frames_.size()); i++)
         {
@@ -134,8 +143,7 @@ private:
         int radius = static_cast<int>(msg->s / 2.0);
 
         // Draw circle
-        cv::circle(image, center, radius,
-                   cv::Scalar(0, 255, 0), 3);
+        cv::circle(image, center, radius, cv::Scalar(0, 255, 0), 3);
 
         // Draw marker ID
         std::string text = "ID: " + std::to_string(msg->marker_id);
@@ -145,16 +153,45 @@ private:
                     cv::FONT_HERSHEY_SIMPLEX, 0.8,
                     cv::Scalar(0, 255, 0), 2);
 
-        // Convert back to ROS image and publish
+        // Save the annotated image to disk (PNG = Portable Network Graphics)
+        std::string path = output_dir_ + "/marker_" +
+                           std::to_string(msg->marker_id) + ".png";
+
+        if (cv::imwrite(path, image))
+            RCLCPP_INFO(get_logger(), "Saved %s", path.c_str());
+        else
+            RCLCPP_ERROR(get_logger(), "Failed to save %s", path.c_str());
+
+        // Convert back to ROS (Robot Operating System) image and publish
         auto output = cv_bridge::CvImage(
             msg->header,
             sensor_msgs::image_encodings::BGR8,
             image).toImageMsg();
 
+        // Keep it for periodic republishing
+        outputs_[msg->marker_id] = output;
+
         image_pub_.publish(output);
 
         RCLCPP_INFO(get_logger(), "Published image for marker %d",
                     msg->marker_id);
+    }
+
+
+    // Republish stored annotated images in rotation
+    void republish_callback()
+    {
+        if (outputs_.empty())
+            return;
+
+        if (republish_index_ >= outputs_.size())
+            republish_index_ = 0;
+
+        auto it = outputs_.begin();
+        std::advance(it, republish_index_);
+
+        image_pub_.publish(it->second);
+        republish_index_++;
     }
 };
 
@@ -165,8 +202,7 @@ int main(int argc, char **argv)
 {
     rclcpp::init(argc, argv);
 
-    rclcpp::spin(
-        std::make_shared<assignment1_erl::ImageAnnotator>());
+    rclcpp::spin(std::make_shared<assignment1_erl::ImageAnnotator>());
 
     rclcpp::shutdown();
 
