@@ -18,8 +18,6 @@ find_package(aruco_opencv_msgs REQUIRED)
 find_package(image_transport REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
-find_package(sensor_msgs REQUIRED)
-find_package(assignment_msg REQUIRED)
 
 # Dependencies
 macro(link_ros2_dependencies target)

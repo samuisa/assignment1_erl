@@ -26,29 +26,25 @@ public:
 
     ImageAnnotator() : Node("image_annotator")
     {
+    
+        // Output folder (must already exist)
+        declare_parameter<std::string>("output_dir", "marker_images");
+        output_dir_ = get_parameter("output_dir").as_string();
+
+        // ... resto del costruttore invariato
         // Camera image subscription
         image_sub_ = create_subscription<sensor_msgs::msg::Image>(
-            "/camera/image", 10,
+            "/camera/image", rclcpp::SensorDataQoS(),
             std::bind(&ImageAnnotator::image_callback, this,
                       std::placeholders::_1));
 
         // Notification from the FSM (Finite State Machine)
-        marker_sub_ = create_subscription<assignment_msg::msg::ArucoInfo>(
-            "/marker_reached", 10,
-            std::bind(&ImageAnnotator::marker_callback, this,
-                      std::placeholders::_1));
+        marker_sub_ = create_subscription<assignment_msg::msg::ArucoInfo>("/marker_reached", 10,std::bind(&ImageAnnotator::marker_callback, this,std::placeholders::_1));
 
         // Annotated image publisher
         image_pub_ = image_transport::create_publisher(this, "/marker_image");
 
-        // Republish the saved annotated images, one per second, in rotation,
-        // so that RViz / rqt show them even if opened after the detection
-        timer_ = create_wall_timer(
-            std::chrono::seconds(1),
-            std::bind(&ImageAnnotator::republish_callback, this));
-
-        RCLCPP_INFO(get_logger(), "ImageAnnotator started, saving to '%s'",
-                    output_dir_.c_str());
+        RCLCPP_INFO(get_logger(), "ImageAnnotator started, saving to '%s'",output_dir_.c_str());
     }
 
 private:
@@ -60,7 +56,7 @@ private:
     rclcpp::TimerBase::SharedPtr timer_;
 
     // Fixed output folder (must already exist): change this path as needed
-    const std::string output_dir_ = "/home/marinapedemonte/Desktop/experimental/ws/src/assignment1_erl/marker_images";
+    std::string output_dir_ ;
 
     // Store recent images and their timestamps
     struct Frame
@@ -81,12 +77,10 @@ private:
     {
         try
         {
-            auto image = cv_bridge::toCvCopy(
-                msg, sensor_msgs::image_encodings::BGR8);
+            auto image = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
 
             Frame frame;
-            frame.stamp = rclcpp::Time(msg->header.stamp,
-                                       get_clock()->get_clock_type());
+            frame.stamp = rclcpp::Time(msg->header.stamp, get_clock()->get_clock_type());
             frame.image = image->image.clone();
 
             frames_.push_back(frame);
@@ -113,8 +107,7 @@ private:
         int best_index = -1;
         double min_difference = 1e9;
 
-        rclcpp::Time target_stamp(msg->header.stamp,
-                                  get_clock()->get_clock_type());
+        rclcpp::Time target_stamp(msg->header.stamp,get_clock()->get_clock_type());
 
         for (int i = 0; i < static_cast<int>(frames_.size()); i++)
         {
@@ -177,22 +170,6 @@ private:
                     msg->marker_id);
     }
 
-
-    // Republish stored annotated images in rotation
-    void republish_callback()
-    {
-        if (outputs_.empty())
-            return;
-
-        if (republish_index_ >= outputs_.size())
-            republish_index_ = 0;
-
-        auto it = outputs_.begin();
-        std::advance(it, republish_index_);
-
-        image_pub_.publish(it->second);
-        republish_index_++;
-    }
 };
 
 } // namespace assignment1_erl

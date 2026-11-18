@@ -119,6 +119,14 @@ def generate_launch_description():
         description="Percorso del file di configurazione di RViz.")
 
     # =====================================================
+    # ARGOMENTI: image_annotator    
+    # ====================================================
+    output_dir_arg = DeclareLaunchArgument(
+        'output_dir',
+        default_value=os.path.join(os.path.expanduser('~'), 'marker_images_robot'),
+        description="Cartella dove salvare le immagini annotate (deve esistere).")
+
+    # =====================================================
     # NODI
     # =====================================================
 
@@ -214,12 +222,15 @@ def generate_launch_description():
         SetRemap(src='/aruco_info', dst='aruco_info'),
         SetRemap(src='/fsm_status', dst='fsm_status'),
         SetRemap(src='/maneuver_complete', dst='maneuver_complete'),
+        SetRemap(src='/marker_reached', dst='marker_reached'),
+        SetRemap(src='/marker_image', dst='marker_image'),
 
         rviz_node,
         aruco_node,
         image_detection_node,
         fsm_node,
         navigation_node,
+        image_annotator_node,
     ])
 
     return LaunchDescription([

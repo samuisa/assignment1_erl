@@ -225,7 +225,7 @@ private:
 
             if (!have_marker_data_ ||
                 std::chrono::steady_clock::now() - last_marker_update_ >
-                    std::chrono::milliseconds(500))
+                    std::chrono::milliseconds(1000))
             {
                 break;
             }

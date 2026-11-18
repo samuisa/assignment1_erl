@@ -41,6 +41,12 @@ def generate_launch_description():
         description='Name of the URDF description to load'
     )
 
+    output_dir_arg = DeclareLaunchArgument(
+        'output_dir',
+        default_value=os.path.join(os.path.expanduser('~'), 'marker_images'),
+        description='Folder where the annotated marker images are saved (must exist).'
+    )
+
     # Robot description
     urdf_file_path = PathJoinSubstitution(
         [
@@ -234,6 +240,18 @@ def generate_launch_description():
         ],
     )
 
+        # Image annotator node
+    image_annotator_node = Node(
+        package='assignment1_erl',
+        executable='image_annotator',
+        name='image_annotator',
+        output='screen',
+        parameters=[
+            {'use_sim_time': True,
+             'output_dir': LaunchConfiguration('output_dir')},
+        ],
+    )
+
     # =====================================================
     # LAUNCH DESCRIPTION
     # =====================================================
@@ -243,6 +261,7 @@ def generate_launch_description():
     launch_description.add_action(rviz_launch_arg)
     launch_description.add_action(world_arg)
     launch_description.add_action(model_arg)
+    launch_description.add_action(output_dir_arg)
 
     launch_description.add_action(world_launch)
 
@@ -262,5 +281,6 @@ def generate_launch_description():
     launch_description.add_action(fsm_node)
     launch_description.add_action(image_detection_node)
     launch_description.add_action(navigation_node)
+    launch_description.add_action(image_annotator_node)
 
     return launch_description

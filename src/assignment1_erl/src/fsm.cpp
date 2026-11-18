@@ -67,7 +67,7 @@ private:
 
     // Timeout for losing the expected marker during approach (in milliseconds)
     static constexpr auto kMarkerLostTimeout =
-        std::chrono::milliseconds(5000);
+        std::chrono::milliseconds(1000);
 
     State_t current_state_{STATE_IDLE};
 
