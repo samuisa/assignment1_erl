@@ -12,7 +12,7 @@ namespace assignment1_erl
      * @brief Converts raw ArUco detections into image-space marker measurements.
      *
      * Camera calibration and detected marker poses are used to estimate each
-     * marker's horizontal pixel location and apparent size.
+     * marker's pixel location and apparent size.
      */
     class DetectionManager : public rclcpp::Node
     {
@@ -37,15 +37,15 @@ namespace assignment1_erl
             }
 
             camera_info_sub_ = this->create_subscription<sensor_msgs::msg::CameraInfo>(
-                "/camera/camera_info", 10,
+                "/camera/camera_info", rclcpp::SensorDataQoS(),
                 std::bind(&DetectionManager::camera_info_callback, this, std::placeholders::_1));
 
             aruco_sub_ = this->create_subscription<aruco_opencv_msgs::msg::ArucoDetection>(
                 "/aruco_detections", 10,
                 std::bind(&DetectionManager::aruco_callback, this, std::placeholders::_1));
 
-            aruco_info_pub_ = this->create_publisher<assignment_msg::msg::ArucoInfo>("/aruco_info", 10);
-
+            aruco_info_pub_ =
+                this->create_publisher<assignment_msg::msg::ArucoInfo>("/aruco_info", 10);
         }
 
     private:
@@ -53,24 +53,26 @@ namespace assignment1_erl
         rclcpp::Subscription<aruco_opencv_msgs::msg::ArucoDetection>::SharedPtr aruco_sub_;
         rclcpp::Publisher<assignment_msg::msg::ArucoInfo>::SharedPtr aruco_info_pub_;
 
-        double f_ = 0.0;                         ///< Camera focal length in pixels.
-        double cx_ = 0.0;                        ///< Horizontal camera principal point in pixels.
-        double marker_size_m_{};                 ///< Physical marker size used for range estimation.
-        double desired_size_sim_px_{};            ///< Target apparent size in the reference simulation.
-        double simulation_focal_length_px_{};     ///< Reference simulation focal length in pixels.
-        bool camera_info_received_ = false;       ///< True once valid camera intrinsics are available.
+        double f_ = 0.0;                      ///< Camera focal length in pixels.
+        double cx_ = 0.0;                     ///< Horizontal camera principal point in pixels.
+        double cy_ = 0.0;                     ///< Vertical camera principal point in pixels.
+        double marker_size_m_{};              ///< Physical marker size used for range estimation.
+        double desired_size_sim_px_{};        ///< Target apparent size in the reference simulation.
+        double simulation_focal_length_px_{}; ///< Reference simulation focal length in pixels.
+        bool camera_info_received_ = false;   ///< True once valid camera intrinsics are available.
 
         /**
-         * @brief Stores valid camera focal length and horizontal principal point.
+         * @brief Stores valid camera focal length and principal point coordinates.
          * @param msg Camera calibration data.
          */
         void camera_info_callback(const sensor_msgs::msg::CameraInfo::ConstSharedPtr msg)
         {
             if (std::isfinite(msg->k[0]) && msg->k[0] > 0.0 &&
-                std::isfinite(msg->k[2]))
+                std::isfinite(msg->k[2]) && std::isfinite(msg->k[5]))
             {
                 f_ = msg->k[0];
                 cx_ = msg->k[2];
+                cy_ = msg->k[5];
                 camera_info_received_ = true;
             }
         }
@@ -89,12 +91,15 @@ namespace assignment1_erl
             for (const auto &marker : msg->markers)
             {
                 float aruco_x = marker.pose.position.x;
+                float aruco_y = marker.pose.position.y;
                 float aruco_z = marker.pose.position.z;
 
                 if (aruco_z > 0.0)
                 {
+                    info_msg.header = msg->header;
                     info_msg.marker_id = marker.marker_id;
                     info_msg.u = static_cast<float>(f_ * (aruco_x / aruco_z) + cx_);
+                    info_msg.v = static_cast<float>(f_ * (aruco_y / aruco_z) + cy_);
                     info_msg.s = static_cast<float>(f_ * marker_size_m_ / aruco_z);
                     info_msg.image_center_x = static_cast<float>(cx_);
                     info_msg.desired_size =
@@ -103,8 +108,8 @@ namespace assignment1_erl
                     aruco_info_pub_->publish(info_msg);
                     RCLCPP_INFO_THROTTLE(
                         get_logger(), *get_clock(), 2000,
-                        "Marker %d detected: u=%.1f px, size=%.1f px (target size=%.1f px).",
-                        static_cast<int>(info_msg.marker_id), info_msg.u, info_msg.s,
+                        "Marker %d detected: u=%.1f px, v=%.1f px, size=%.1f px (target size=%.1f px).",
+                        static_cast<int>(info_msg.marker_id), info_msg.u, info_msg.v, info_msg.s,
                         info_msg.desired_size);
                 }
             }

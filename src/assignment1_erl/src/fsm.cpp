@@ -36,6 +36,8 @@ namespace assignment1_erl
             : Node("fsm_node", options)
         {
             fsm_pub_ = create_publisher<assignment_msg::msg::FsmStatus>("/fsm_status", 10);
+            marker_reached_pub_ =
+                create_publisher<assignment_msg::msg::ArucoInfo>("/marker_reached", 10);
             aruco_info_sub_ = create_subscription<assignment_msg::msg::ArucoInfo>(
                 "/aruco_info", 10,
                 std::bind(&FsmManager::aruco_callback, this, std::placeholders::_1));
@@ -43,9 +45,8 @@ namespace assignment1_erl
                 "/maneuver_complete", 10,
                 std::bind(&FsmManager::maneuver_complete_callback, this, std::placeholders::_1));
             timer_ = create_wall_timer(
-                std::chrono::milliseconds(100),
+                std::chrono::milliseconds(50),
                 std::bind(&FsmManager::logic_loop, this));
-
         }
 
     private:
@@ -53,14 +54,13 @@ namespace assignment1_erl
         static constexpr double kCenterTolerancePx = 5.0;
         static constexpr int kFirstMarkerId = 1;
         static constexpr int kLastMarkerId = 4;
-        static constexpr auto kMarkerLostTimeout = std::chrono::milliseconds(1000);
 
         State_t current_state_{STATE_IDLE};
         int expected_marker_{1};
         std::array<bool, kLastMarkerId + 1> visited_markers_{}; ///< Visited flags indexed by marker ID.
-        std::chrono::steady_clock::time_point last_expected_marker_update_;
 
         rclcpp::Publisher<assignment_msg::msg::FsmStatus>::SharedPtr fsm_pub_;
+        rclcpp::Publisher<assignment_msg::msg::ArucoInfo>::SharedPtr marker_reached_pub_;
         rclcpp::Subscription<assignment_msg::msg::ArucoInfo>::SharedPtr aruco_info_sub_;
         rclcpp::Subscription<std_msgs::msg::Empty>::SharedPtr maneuver_complete_sub_;
         rclcpp::TimerBase::SharedPtr timer_;
@@ -143,8 +143,6 @@ namespace assignment1_erl
                 return;
             }
 
-            last_expected_marker_update_ = std::chrono::steady_clock::now();
-
             if (current_state_ == STATE_SEARCH)
             {
                 transition_to(STATE_APPROACH, "expected marker detected; starting approach");
@@ -166,6 +164,7 @@ namespace assignment1_erl
             }
 
             visited_markers_[expected_marker_] = true;
+            marker_reached_pub_->publish(*msg);
             RCLCPP_INFO(get_logger(), "Marker %d reached and marked as visited.", expected_marker_);
 
             if (expected_marker_ == 4)
@@ -195,22 +194,13 @@ namespace assignment1_erl
         }
 
         /**
-         * @brief Starts the search and returns to it if the active marker is lost.
+         * @brief Starts the search from idle and periodically publishes FSM state.
          */
         void logic_loop()
         {
             if (current_state_ == STATE_IDLE)
             {
                 transition_to(STATE_SEARCH, "starting search");
-            }
-            else if (current_state_ == STATE_APPROACH &&
-                     std::chrono::steady_clock::now() - last_expected_marker_update_ >
-                         kMarkerLostTimeout)
-            {
-                RCLCPP_WARN(
-                    get_logger(), "Lost marker %d during approach; resuming search.",
-                    expected_marker_);
-                transition_to(STATE_SEARCH, "expected marker is no longer visible");
             }
             publish_state();
         }

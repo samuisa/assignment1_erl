@@ -13,6 +13,7 @@ def generate_launch_description():
     nodes = [
         ('fsm_node', 'fsm.log'),
         ('image_detection_node', 'image_detection.log'),
+        ('navigation_node', 'navigation.log'),
     ]
 
     return LaunchDescription(

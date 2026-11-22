@@ -14,10 +14,10 @@
 namespace assignment1_erl
 {
     /**
-     * @brief Converts FSM and marker data into velocity commands for the robot.
+     * @brief Converts FSM and marker data into smooth velocity commands for the robot.
      *
      * The node searches for markers, aligns with the active marker, approaches it,
-     * and performs odometry-based turns between markers.
+     * and performs relative odometry-based turns between markers.
      */
     class NavigationManager : public rclcpp::Node
     {
@@ -27,7 +27,8 @@ namespace assignment1_erl
          * @param options ROS 2 node options supplied by the component container.
          */
         explicit NavigationManager(const rclcpp::NodeOptions &options)
-            : Node("navigation_node", options)
+            : Node("navigation_node", options),
+              last_marker_update_(0, 0, get_clock()->get_clock_type())
         {
             cmd_vel_pub_ = create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
             maneuver_complete_pub_ =
@@ -44,9 +45,8 @@ namespace assignment1_erl
                 std::bind(&NavigationManager::fsm_status_callback, this, std::placeholders::_1));
 
             timer_ = create_wall_timer(
-                std::chrono::milliseconds(100),
+                std::chrono::milliseconds(25),
                 std::bind(&NavigationManager::control_loop, this));
-
         }
 
         ~NavigationManager()
@@ -60,6 +60,18 @@ namespace assignment1_erl
         static constexpr int searching = 3;
         static constexpr int finished = 4;
 
+        static constexpr float kLinearGain = 0.0014F;      ///< Proportional gain for distance correction.
+        static constexpr float kAlignmentGain = 0.0022F;   ///< Proportional gain for image alignment.
+        static constexpr float kYawGain = 1.4F;            ///< Proportional gain for heading correction.
+        static constexpr float searchingSpeed = 0.18F;     ///< Forward speed while searching, in m/s.
+        static constexpr float kMaxLinearSpeed = 0.25F;    ///< Maximum linear speed, in m/s.
+        static constexpr float kMaxAngularSpeed = 0.75F;   ///< Maximum angular speed, in rad/s.
+        static constexpr float kFarAngularSpeed = 0.35F;   ///< Angular speed cap for distant markers.
+        static constexpr float kFarMarkerSizePx = 25.0F;   ///< Threshold below which marker is far (>3 m).
+        static constexpr float kSmoothingAlpha = 0.20F;    ///< Low-pass filter factor at 40 Hz.
+        static constexpr float kRefDesiredSizePx = 166.0F; ///< Reference desired size in pixels.
+        static constexpr float kRefFocalLengthPx = 381.4F; ///< Reference camera focal length in pixels.
+
         rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_pub_;
         rclcpp::Publisher<std_msgs::msg::Empty>::SharedPtr maneuver_complete_pub_;
         rclcpp::Subscription<assignment_msg::msg::ArucoInfo>::SharedPtr aruco_info_sub_;
@@ -67,27 +79,26 @@ namespace assignment1_erl
         rclcpp::Subscription<assignment_msg::msg::FsmStatus>::SharedPtr fsm_status_sub_;
         rclcpp::TimerBase::SharedPtr timer_;
 
-        const float kLinearGain = 0.0012F;       ///< Proportional gain for distance correction.
-        const float kAlignmentGain = 0.003F;     ///< Proportional gain for image alignment.
-        const float kYawGain = 1.5F;             ///< Proportional gain for heading correction.
-        const float searchingSpeed = 0.15F;      ///< Forward speed while searching, in m/s.
-        const float kMaxLinearSpeed = 0.25F;     ///< Maximum linear speed, in m/s.
-        const float kMaxAngularSpeed = 0.8F;     ///< Maximum angular speed, in rad/s.
-        const float kPixelTolerance = 5.0F;      ///< Pixel error accepted for alignment/approach.
-
         float s_ = 0.0F;
         float u_ = 0.0F;
         float cx_ = 320.0F;
         float desired_size_ = 166.0F;
-        float target_yaw_ = 0.0F;
         float actual_yaw_ = 0.0F;
+        float last_yaw_ = 0.0F;
+        float rotated_angle_ = 0.0F;
+        float target_rotation_ = 0.0F;
+        float estimated_target_yaw_ = 0.0F;
+        float last_linear_cmd_ = 0.0F;
+        float last_angular_cmd_ = 0.0F;
+        float last_seen_dir_ = 1.0F;
         int current_state_ = 0;
         int target_id_ = 1;
         bool have_marker_data_ = false;
         bool have_odometry_ = false;
+        bool have_estimated_yaw_ = false;
         bool rotation_initialized_ = false;
         bool rotation_complete_sent_ = false;
-        std::chrono::steady_clock::time_point last_marker_update_;
+        rclcpp::Time last_marker_update_;
 
         /**
          * @brief Updates the robot's current yaw from odometry.
@@ -116,6 +127,8 @@ namespace assignment1_erl
             if (target_id_ != previous_target)
             {
                 have_marker_data_ = false;
+                have_estimated_yaw_ = false;
+                last_seen_dir_ = 1.0F;
             }
 
             if (current_state_ == rotating && previous_state != rotating)
@@ -126,7 +139,7 @@ namespace assignment1_erl
         }
 
         /**
-         * @brief Stores measurements when they correspond to the active target marker.
+         * @brief Stores measurements and updates the odometry-referenced marker bearing.
          * @param msg Marker ID, image position, and apparent marker size.
          */
         void aruco_info_callback(const assignment_msg::msg::ArucoInfo::ConstSharedPtr msg)
@@ -140,8 +153,21 @@ namespace assignment1_erl
             u_ = msg->u;
             cx_ = msg->image_center_x;
             desired_size_ = msg->desired_size;
+            last_seen_dir_ = (cx_ - u_ >= 0.0F) ? 1.0F : -1.0F;
             have_marker_data_ = true;
-            last_marker_update_ = std::chrono::steady_clock::now();
+            last_marker_update_ = this->now();
+
+            if (have_odometry_)
+            {
+                const float focal_px = (desired_size_ > 0.0F)
+                                           ? (desired_size_ * kRefFocalLengthPx / kRefDesiredSizePx)
+                                           : kRefFocalLengthPx;
+                const float bearing_offset = std::atan2(cx_ - u_, focal_px);
+                estimated_target_yaw_ = std::atan2(
+                    std::sin(actual_yaw_ + bearing_offset),
+                    std::cos(actual_yaw_ + bearing_offset));
+                have_estimated_yaw_ = true;
+            }
         }
 
         /**
@@ -164,19 +190,16 @@ namespace assignment1_erl
         }
 
         /**
-         * @brief Computes and publishes the velocity command for the current FSM state.
-         *
-         * Commands are zero-initialized every cycle, ensuring the robot stops whenever
-         * the active state has no valid movement command.
+         * @brief Computes and publishes smoothed velocity commands.
          */
         void control_loop()
         {
-            geometry_msgs::msg::Twist velocity;
+            geometry_msgs::msg::Twist target_vel;
 
             switch (current_state_)
             {
             case searching:
-                velocity.linear.x = searchingSpeed;
+                target_vel.linear.x = searchingSpeed;
                 break;
 
             case rotating:
@@ -188,20 +211,23 @@ namespace assignment1_erl
 
                 if (!rotation_initialized_)
                 {
-                    const float offset = rotation_offset();
-                    target_yaw_ = std::atan2(
-                        std::sin(actual_yaw_ + offset),
-                        std::cos(actual_yaw_ + offset));
+                    last_yaw_ = actual_yaw_;
+                    rotated_angle_ = 0.0F;
+                    target_rotation_ = rotation_offset();
                     rotation_initialized_ = true;
                 }
 
-                const float yaw_error = std::atan2(
-                    std::sin(target_yaw_ - actual_yaw_),
-                    std::cos(target_yaw_ - actual_yaw_));
+                const float delta_yaw = std::atan2(
+                    std::sin(actual_yaw_ - last_yaw_),
+                    std::cos(actual_yaw_ - last_yaw_));
+                rotated_angle_ += delta_yaw;
+                last_yaw_ = actual_yaw_;
+
+                const float yaw_error = target_rotation_ - rotated_angle_;
 
                 if (std::abs(yaw_error) > 0.05F)
                 {
-                    velocity.angular.z = std::clamp(
+                    target_vel.angular.z = std::clamp(
                         kYawGain * yaw_error, -kMaxAngularSpeed, kMaxAngularSpeed);
                 }
                 else if (!rotation_complete_sent_)
@@ -213,26 +239,57 @@ namespace assignment1_erl
             }
 
             case approaching:
-                if (!have_marker_data_ ||
-                    std::chrono::steady_clock::now() - last_marker_update_ >
-                        std::chrono::milliseconds(500))
+            {
+                if (!have_marker_data_)
                 {
                     break;
                 }
 
-                if (std::abs(u_ - cx_) > kPixelTolerance)
+                const double time_since_seen = (this->now() - last_marker_update_).seconds();
+
+                if (time_since_seen <= 0.50)
                 {
-                    velocity.angular.z = std::clamp(
-                        kAlignmentGain * (cx_ - u_),
-                        -kMaxAngularSpeed, kMaxAngularSpeed);
+                    const float u_error = cx_ - u_;
+                    const float size_error = desired_size_ - s_;
+                    const float angular_limit =
+                        (s_ < kFarMarkerSizePx) ? kFarAngularSpeed : kMaxAngularSpeed;
+
+                    if (std::abs(u_error) > 0.5F)
+                    {
+                        target_vel.angular.z = std::clamp(
+                            kAlignmentGain * u_error,
+                            -angular_limit, angular_limit);
+                    }
+
+                    if (std::abs(size_error) > 1.0F)
+                    {
+                        const float alignment_scale =
+                            std::clamp(1.0F - std::abs(u_error) / 300.0F, 0.15F, 1.0F);
+                        target_vel.linear.x = std::clamp(
+                            kLinearGain * size_error * alignment_scale,
+                            -kMaxLinearSpeed, kMaxLinearSpeed);
+                    }
                 }
-                else if (std::abs(desired_size_ - s_) > kPixelTolerance)
+                else if (time_since_seen <= 4.0 && have_odometry_ && have_estimated_yaw_)
                 {
-                    velocity.linear.x = std::clamp(
-                        kLinearGain * (desired_size_ - s_),
-                        -kMaxLinearSpeed, kMaxLinearSpeed);
+                    const float yaw_error = std::atan2(
+                        std::sin(estimated_target_yaw_ - actual_yaw_),
+                        std::cos(estimated_target_yaw_ - actual_yaw_));
+
+                    target_vel.angular.z = std::clamp(
+                        1.2F * yaw_error, -kFarAngularSpeed, kFarAngularSpeed);
+
+                    if (std::abs(yaw_error) < 0.25F)
+                    {
+                        target_vel.linear.x = 0.18F;
+                    }
+                }
+                else
+                {
+                    target_vel.angular.z = last_seen_dir_ * 0.25F;
                 }
                 break;
+            }
 
             case 0:
             case finished:
@@ -240,7 +297,15 @@ namespace assignment1_erl
                 break;
             }
 
-            cmd_vel_pub_->publish(velocity);
+            last_linear_cmd_ +=
+                kSmoothingAlpha * (static_cast<float>(target_vel.linear.x) - last_linear_cmd_);
+            last_angular_cmd_ +=
+                kSmoothingAlpha * (static_cast<float>(target_vel.angular.z) - last_angular_cmd_);
+
+            geometry_msgs::msg::Twist cmd;
+            cmd.linear.x = last_linear_cmd_;
+            cmd.angular.z = last_angular_cmd_;
+            cmd_vel_pub_->publish(cmd);
         }
     };
 } // namespace assignment1_erl
