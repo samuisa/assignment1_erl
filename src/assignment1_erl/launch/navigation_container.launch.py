@@ -14,6 +14,7 @@ def generate_launch_description():
         ('fsm_node', 'fsm.log'),
         ('image_detection_node', 'image_detection.log'),
         ('navigation_node', 'navigation.log'),
+        ('image_annotator_node', 'image_annotator.log'),
     ]
 
     return LaunchDescription(

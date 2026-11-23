@@ -1,0 +1,2315 @@
+.
+├── build
+│   ├── aruco_opencv
+│   │   ├── ament_cmake_core
+│   │   │   ├── aruco_opencvConfig.cmake
+│   │   │   ├── aruco_opencvConfig-version.cmake
+│   │   │   ├── package.cmake
+│   │   │   └── stamps
+│   │   │       ├── ament_prefix_path.sh.stamp
+│   │   │       ├── nameConfig.cmake.in.stamp
+│   │   │       ├── nameConfig-version.cmake.in.stamp
+│   │   │       ├── package_xml_2_cmake.py.stamp
+│   │   │       ├── package.xml.stamp
+│   │   │       ├── path.sh.stamp
+│   │   │       └── templates_2_cmake.py.stamp
+│   │   ├── ament_cmake_environment_hooks
+│   │   │   ├── ament_prefix_path.dsv
+│   │   │   ├── local_setup.bash
+│   │   │   ├── local_setup.dsv
+│   │   │   ├── local_setup.fish
+│   │   │   ├── local_setup.sh
+│   │   │   ├── local_setup.zsh
+│   │   │   ├── package.dsv
+│   │   │   └── path.dsv
+│   │   ├── ament_cmake_index
+│   │   │   └── share
+│   │   │       └── ament_index
+│   │   │           └── resource_index
+│   │   │               ├── package_run_dependencies
+│   │   │               │   └── aruco_opencv
+│   │   │               ├── packages
+│   │   │               │   └── aruco_opencv
+│   │   │               ├── parent_prefix_path
+│   │   │               │   └── aruco_opencv
+│   │   │               └── rclcpp_components
+│   │   │                   └── aruco_opencv
+│   │   ├── ament_cmake_package_templates
+│   │   │   └── templates.cmake
+│   │   ├── ament_cmake_uninstall_target
+│   │   │   └── ament_cmake_uninstall_target.cmake
+│   │   ├── ament_copyright
+│   │   ├── ament_cpplint
+│   │   ├── AMENT_IGNORE
+│   │   ├── ament_lint_cmake
+│   │   ├── ament_uncrustify
+│   │   ├── ament_xmllint
+│   │   ├── aruco_tracker
+│   │   ├── aruco_tracker_autostart
+│   │   ├── cmake_args.last
+│   │   ├── CMakeCache.txt
+│   │   ├── CMakeFiles
+│   │   │   ├── 4.2.3
+│   │   │   │   ├── CMakeCCompiler.cmake
+│   │   │   │   ├── CMakeCXXCompiler.cmake
+│   │   │   │   ├── CMakeDetermineCompilerABI_C.bin
+│   │   │   │   ├── CMakeDetermineCompilerABI_CXX.bin
+│   │   │   │   ├── CMakeSystem.cmake
+│   │   │   │   ├── CompilerIdC
+│   │   │   │   │   ├── a.out
+│   │   │   │   │   ├── CMakeCCompilerId.c
+│   │   │   │   │   └── tmp
+│   │   │   │   └── CompilerIdCXX
+│   │   │   │       ├── a.out
+│   │   │   │       ├── CMakeCXXCompilerId.cpp
+│   │   │   │       └── tmp
+│   │   │   ├── aruco_opencv.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── src
+│   │   │   │       ├── aruco_tracker.cpp.o
+│   │   │   │       ├── aruco_tracker.cpp.o.d
+│   │   │   │       ├── board_loader.cpp.o
+│   │   │   │       ├── board_loader.cpp.o.d
+│   │   │   │       ├── detector.cpp.o
+│   │   │   │       ├── detector.cpp.o.d
+│   │   │   │       ├── parameters.cpp.o
+│   │   │   │       ├── parameters.cpp.o.d
+│   │   │   │       ├── utils.cpp.o
+│   │   │   │       └── utils.cpp.o.d
+│   │   │   ├── aruco_opencv_uninstall.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   └── progress.make
+│   │   │   ├── aruco_tracker_autostart.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rclcpp_components
+│   │   │   │       ├── node_main_aruco_tracker_autostart.cpp.o
+│   │   │   │       └── node_main_aruco_tracker_autostart.cpp.o.d
+│   │   │   ├── aruco_tracker.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rclcpp_components
+│   │   │   │       ├── node_main_aruco_tracker.cpp.o
+│   │   │   │       └── node_main_aruco_tracker.cpp.o.d
+│   │   │   ├── cmake.check_cache
+│   │   │   ├── CMakeConfigureLog.yaml
+│   │   │   ├── CMakeDirectoryInformation.cmake
+│   │   │   ├── CMakeRuleHashes.txt
+│   │   │   ├── CMakeScratch
+│   │   │   ├── InstallScripts.json
+│   │   │   ├── Makefile2
+│   │   │   ├── Makefile.cmake
+│   │   │   ├── pkgRedirects
+│   │   │   ├── progress.marks
+│   │   │   ├── TargetDirectories.txt
+│   │   │   └── uninstall.dir
+│   │   │       ├── build.make
+│   │   │       ├── cmake_clean.cmake
+│   │   │       ├── compiler_depend.make
+│   │   │       ├── compiler_depend.ts
+│   │   │       ├── DependInfo.cmake
+│   │   │       └── progress.make
+│   │   ├── cmake_install.cmake
+│   │   ├── colcon_build.rc
+│   │   ├── colcon_command_prefix_build.sh
+│   │   ├── colcon_command_prefix_build.sh.env
+│   │   ├── CTestConfiguration.ini
+│   │   ├── CTestCustom.cmake
+│   │   ├── CTestTestfile.cmake
+│   │   ├── install_manifest.txt
+│   │   ├── libaruco_opencv.so
+│   │   ├── Makefile
+│   │   └── rclcpp_components
+│   │       ├── node_main_aruco_tracker_autostart.cpp
+│   │       ├── node_main_aruco_tracker.cpp
+│   │       ├── node_main_configured_aruco_tracker_autostart.cpp.in
+│   │       └── node_main_configured_aruco_tracker.cpp.in
+│   ├── aruco_opencv_msgs
+│   │   ├── ament_cmake_core
+│   │   │   ├── aruco_opencv_msgsConfig.cmake
+│   │   │   ├── aruco_opencv_msgsConfig-version.cmake
+│   │   │   ├── package.cmake
+│   │   │   └── stamps
+│   │   │       ├── ament_cmake_export_dependencies-extras.cmake.stamp
+│   │   │       ├── ament_cmake_export_include_directories-extras.cmake.stamp
+│   │   │       ├── ament_cmake_export_libraries-extras.cmake.stamp
+│   │   │       ├── ament_cmake_export_targets-extras.cmake.stamp
+│   │   │       ├── ament_prefix_path.sh.stamp
+│   │   │       ├── ArucoDetection.msg.stamp
+│   │   │       ├── BoardPose.msg.stamp
+│   │   │       ├── library_path.sh.stamp
+│   │   │       ├── MarkerPose.msg.stamp
+│   │   │       ├── nameConfig.cmake.in.stamp
+│   │   │       ├── nameConfig-version.cmake.in.stamp
+│   │   │       ├── package_xml_2_cmake.py.stamp
+│   │   │       ├── package.xml.stamp
+│   │   │       ├── path.sh.stamp
+│   │   │       ├── pythonpath.sh.in.stamp
+│   │   │       ├── rosidl_cmake_aggregate_target-extras.cmake.stamp
+│   │   │       ├── rosidl_cmake_export_typesupport_libraries-extras.cmake.stamp
+│   │   │       ├── rosidl_cmake_export_typesupport_targets-extras.cmake.stamp
+│   │   │       ├── rosidl_cmake-extras.cmake.stamp
+│   │   │       └── templates_2_cmake.py.stamp
+│   │   ├── ament_cmake_environment_hooks
+│   │   │   ├── ament_prefix_path.dsv
+│   │   │   ├── library_path.dsv
+│   │   │   ├── local_setup.bash
+│   │   │   ├── local_setup.dsv
+│   │   │   ├── local_setup.fish
+│   │   │   ├── local_setup.sh
+│   │   │   ├── local_setup.zsh
+│   │   │   ├── package.dsv
+│   │   │   ├── path.dsv
+│   │   │   ├── pythonpath.dsv
+│   │   │   └── pythonpath.sh
+│   │   ├── ament_cmake_export_dependencies
+│   │   │   └── ament_cmake_export_dependencies-extras.cmake
+│   │   ├── ament_cmake_export_include_directories
+│   │   │   └── ament_cmake_export_include_directories-extras.cmake
+│   │   ├── ament_cmake_export_libraries
+│   │   │   └── ament_cmake_export_libraries-extras.cmake
+│   │   ├── ament_cmake_export_targets
+│   │   │   └── ament_cmake_export_targets-extras.cmake
+│   │   ├── ament_cmake_index
+│   │   │   └── share
+│   │   │       └── ament_index
+│   │   │           └── resource_index
+│   │   │               ├── package_run_dependencies
+│   │   │               │   └── aruco_opencv_msgs
+│   │   │               ├── packages
+│   │   │               │   └── aruco_opencv_msgs
+│   │   │               ├── parent_prefix_path
+│   │   │               │   └── aruco_opencv_msgs
+│   │   │               └── rosidl_interfaces
+│   │   │                   └── aruco_opencv_msgs
+│   │   ├── ament_cmake_package_templates
+│   │   │   └── templates.cmake
+│   │   ├── ament_cmake_python
+│   │   │   └── aruco_opencv_msgs
+│   │   │       ├── aruco_opencv_msgs
+│   │   │       │   ├── _aruco_opencv_msgs_s.ep.rosidl_typesupport_c.c
+│   │   │       │   ├── _aruco_opencv_msgs_s.ep.rosidl_typesupport_fastrtps_c.c
+│   │   │       │   ├── _aruco_opencv_msgs_s.ep.rosidl_typesupport_introspection_c.c
+│   │   │       │   ├── aruco_opencv_msgs_s__rosidl_typesupport_c.so
+│   │   │       │   ├── aruco_opencv_msgs_s__rosidl_typesupport_fastrtps_c.so
+│   │   │       │   ├── aruco_opencv_msgs_s__rosidl_typesupport_introspection_c.so
+│   │   │       │   ├── __init__.py
+│   │   │       │   ├── msg
+│   │   │       │   │   ├── _aruco_detection.py
+│   │   │       │   │   ├── _aruco_detection_s.c
+│   │   │       │   │   ├── _board_pose.py
+│   │   │       │   │   ├── _board_pose_s.c
+│   │   │       │   │   ├── __init__.py
+│   │   │       │   │   ├── _marker_pose.py
+│   │   │       │   │   └── _marker_pose_s.c
+│   │   │       │   └── py.typed
+│   │   │       ├── aruco_opencv_msgs.egg-info
+│   │   │       │   ├── dependency_links.txt
+│   │   │       │   ├── PKG-INFO
+│   │   │       │   ├── SOURCES.txt
+│   │   │       │   └── top_level.txt
+│   │   │       └── setup.py
+│   │   ├── ament_cmake_uninstall_target
+│   │   │   └── ament_cmake_uninstall_target.cmake
+│   │   ├── AMENT_IGNORE
+│   │   ├── ament_lint_cmake
+│   │   ├── aruco_opencv_msgs__py
+│   │   │   ├── CMakeFiles
+│   │   │   │   ├── aruco_opencv_msgs__py.dir
+│   │   │   │   │   ├── build.make
+│   │   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   │   ├── compiler_depend.make
+│   │   │   │   │   ├── compiler_depend.ts
+│   │   │   │   │   ├── DependInfo.cmake
+│   │   │   │   │   └── progress.make
+│   │   │   │   ├── CMakeDirectoryInformation.cmake
+│   │   │   │   └── progress.marks
+│   │   │   ├── cmake_install.cmake
+│   │   │   ├── CMakeLists.txt
+│   │   │   ├── CTestTestfile.cmake
+│   │   │   └── Makefile
+│   │   ├── aruco_opencv_msgs__rs
+│   │   │   ├── CMakeFiles
+│   │   │   │   ├── aruco_opencv_msgs__rs.dir
+│   │   │   │   │   ├── build.make
+│   │   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   │   ├── compiler_depend.make
+│   │   │   │   │   ├── compiler_depend.ts
+│   │   │   │   │   ├── DependInfo.cmake
+│   │   │   │   │   └── progress.make
+│   │   │   │   ├── CMakeDirectoryInformation.cmake
+│   │   │   │   └── progress.marks
+│   │   │   ├── cmake_install.cmake
+│   │   │   ├── CMakeLists.txt
+│   │   │   ├── CTestTestfile.cmake
+│   │   │   └── Makefile
+│   │   ├── cmake_args.last
+│   │   ├── CMakeCache.txt
+│   │   ├── CMakeFiles
+│   │   │   ├── 4.2.3
+│   │   │   │   ├── CMakeCCompiler.cmake
+│   │   │   │   ├── CMakeCXXCompiler.cmake
+│   │   │   │   ├── CMakeDetermineCompilerABI_C.bin
+│   │   │   │   ├── CMakeDetermineCompilerABI_CXX.bin
+│   │   │   │   ├── CMakeSystem.cmake
+│   │   │   │   ├── CompilerIdC
+│   │   │   │   │   ├── a.out
+│   │   │   │   │   ├── CMakeCCompilerId.c
+│   │   │   │   │   └── tmp
+│   │   │   │   └── CompilerIdCXX
+│   │   │   │       ├── a.out
+│   │   │   │       ├── CMakeCXXCompilerId.cpp
+│   │   │   │       └── tmp
+│   │   │   ├── ament_cmake_python_build_aruco_opencv_msgs_egg.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   └── progress.make
+│   │   │   ├── ament_cmake_python_sync_aruco_opencv_msgs.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   └── progress.make
+│   │   │   ├── aruco_opencv_msgs__cpp.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   └── progress.make
+│   │   │   ├── aruco_opencv_msgs.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   └── progress.make
+│   │   │   ├── aruco_opencv_msgs__rosidl_generator_c.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rosidl_generator_c
+│   │   │   │       └── aruco_opencv_msgs
+│   │   │   │           └── msg
+│   │   │   │               └── detail
+│   │   │   │                   ├── aruco_detection__description.c.o
+│   │   │   │                   ├── aruco_detection__description.c.o.d
+│   │   │   │                   ├── aruco_detection__functions.c.o
+│   │   │   │                   ├── aruco_detection__functions.c.o.d
+│   │   │   │                   ├── aruco_detection__type_support.c.o
+│   │   │   │                   ├── aruco_detection__type_support.c.o.d
+│   │   │   │                   ├── board_pose__description.c.o
+│   │   │   │                   ├── board_pose__description.c.o.d
+│   │   │   │                   ├── board_pose__functions.c.o
+│   │   │   │                   ├── board_pose__functions.c.o.d
+│   │   │   │                   ├── board_pose__type_support.c.o
+│   │   │   │                   ├── board_pose__type_support.c.o.d
+│   │   │   │                   ├── marker_pose__description.c.o
+│   │   │   │                   ├── marker_pose__description.c.o.d
+│   │   │   │                   ├── marker_pose__functions.c.o
+│   │   │   │                   ├── marker_pose__functions.c.o.d
+│   │   │   │                   ├── marker_pose__type_support.c.o
+│   │   │   │                   └── marker_pose__type_support.c.o.d
+│   │   │   ├── aruco_opencv_msgs__rosidl_generator_py.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rosidl_generator_py
+│   │   │   │       └── aruco_opencv_msgs
+│   │   │   │           └── msg
+│   │   │   │               ├── _aruco_detection_s.c.o
+│   │   │   │               ├── _aruco_detection_s.c.o.d
+│   │   │   │               ├── _board_pose_s.c.o
+│   │   │   │               ├── _board_pose_s.c.o.d
+│   │   │   │               ├── _marker_pose_s.c.o
+│   │   │   │               └── _marker_pose_s.c.o.d
+│   │   │   ├── aruco_opencv_msgs__rosidl_generator_type_description.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   └── progress.make
+│   │   │   ├── aruco_opencv_msgs__rosidl_typesupport_c.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rosidl_typesupport_c
+│   │   │   │       └── aruco_opencv_msgs
+│   │   │   │           └── msg
+│   │   │   │               ├── aruco_detection__type_support.cpp.o
+│   │   │   │               ├── aruco_detection__type_support.cpp.o.d
+│   │   │   │               ├── board_pose__type_support.cpp.o
+│   │   │   │               ├── board_pose__type_support.cpp.o.d
+│   │   │   │               ├── marker_pose__type_support.cpp.o
+│   │   │   │               └── marker_pose__type_support.cpp.o.d
+│   │   │   ├── aruco_opencv_msgs__rosidl_typesupport_cpp.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rosidl_typesupport_cpp
+│   │   │   │       └── aruco_opencv_msgs
+│   │   │   │           └── msg
+│   │   │   │               ├── aruco_detection__type_support.cpp.o
+│   │   │   │               ├── aruco_detection__type_support.cpp.o.d
+│   │   │   │               ├── board_pose__type_support.cpp.o
+│   │   │   │               ├── board_pose__type_support.cpp.o.d
+│   │   │   │               ├── marker_pose__type_support.cpp.o
+│   │   │   │               └── marker_pose__type_support.cpp.o.d
+│   │   │   ├── aruco_opencv_msgs__rosidl_typesupport_fastrtps_c.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rosidl_typesupport_fastrtps_c
+│   │   │   │       └── aruco_opencv_msgs
+│   │   │   │           └── msg
+│   │   │   │               └── detail
+│   │   │   │                   ├── aruco_detection__type_support_c.cpp.o
+│   │   │   │                   ├── aruco_detection__type_support_c.cpp.o.d
+│   │   │   │                   ├── board_pose__type_support_c.cpp.o
+│   │   │   │                   ├── board_pose__type_support_c.cpp.o.d
+│   │   │   │                   ├── marker_pose__type_support_c.cpp.o
+│   │   │   │                   └── marker_pose__type_support_c.cpp.o.d
+│   │   │   ├── aruco_opencv_msgs__rosidl_typesupport_fastrtps_cpp.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rosidl_typesupport_fastrtps_cpp
+│   │   │   │       └── aruco_opencv_msgs
+│   │   │   │           └── msg
+│   │   │   │               └── detail
+│   │   │   │                   └── dds_fastrtps
+│   │   │   │                       ├── aruco_detection__type_support.cpp.o
+│   │   │   │                       ├── aruco_detection__type_support.cpp.o.d
+│   │   │   │                       ├── board_pose__type_support.cpp.o
+│   │   │   │                       ├── board_pose__type_support.cpp.o.d
+│   │   │   │                       ├── marker_pose__type_support.cpp.o
+│   │   │   │                       └── marker_pose__type_support.cpp.o.d
+│   │   │   ├── aruco_opencv_msgs__rosidl_typesupport_introspection_c.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rosidl_typesupport_introspection_c
+│   │   │   │       └── aruco_opencv_msgs
+│   │   │   │           └── msg
+│   │   │   │               └── detail
+│   │   │   │                   ├── aruco_detection__type_support.c.o
+│   │   │   │                   ├── aruco_detection__type_support.c.o.d
+│   │   │   │                   ├── board_pose__type_support.c.o
+│   │   │   │                   ├── board_pose__type_support.c.o.d
+│   │   │   │                   ├── marker_pose__type_support.c.o
+│   │   │   │                   └── marker_pose__type_support.c.o.d
+│   │   │   ├── aruco_opencv_msgs__rosidl_typesupport_introspection_cpp.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rosidl_typesupport_introspection_cpp
+│   │   │   │       └── aruco_opencv_msgs
+│   │   │   │           └── msg
+│   │   │   │               └── detail
+│   │   │   │                   ├── aruco_detection__type_support.cpp.o
+│   │   │   │                   ├── aruco_detection__type_support.cpp.o.d
+│   │   │   │                   ├── board_pose__type_support.cpp.o
+│   │   │   │                   ├── board_pose__type_support.cpp.o.d
+│   │   │   │                   ├── marker_pose__type_support.cpp.o
+│   │   │   │                   └── marker_pose__type_support.cpp.o.d
+│   │   │   ├── aruco_opencv_msgs_s__rosidl_typesupport_c.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rosidl_generator_py
+│   │   │   │       └── aruco_opencv_msgs
+│   │   │   │           ├── _aruco_opencv_msgs_s.ep.rosidl_typesupport_c.c.o
+│   │   │   │           └── _aruco_opencv_msgs_s.ep.rosidl_typesupport_c.c.o.d
+│   │   │   ├── aruco_opencv_msgs_s__rosidl_typesupport_fastrtps_c.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rosidl_generator_py
+│   │   │   │       └── aruco_opencv_msgs
+│   │   │   │           ├── _aruco_opencv_msgs_s.ep.rosidl_typesupport_fastrtps_c.c.o
+│   │   │   │           └── _aruco_opencv_msgs_s.ep.rosidl_typesupport_fastrtps_c.c.o.d
+│   │   │   ├── aruco_opencv_msgs_s__rosidl_typesupport_introspection_c.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rosidl_generator_py
+│   │   │   │       └── aruco_opencv_msgs
+│   │   │   │           ├── _aruco_opencv_msgs_s.ep.rosidl_typesupport_introspection_c.c.o
+│   │   │   │           └── _aruco_opencv_msgs_s.ep.rosidl_typesupport_introspection_c.c.o.d
+│   │   │   ├── aruco_opencv_msgs_uninstall.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   └── progress.make
+│   │   │   ├── cmake.check_cache
+│   │   │   ├── CMakeConfigureLog.yaml
+│   │   │   ├── CMakeDirectoryInformation.cmake
+│   │   │   ├── CMakeRuleHashes.txt
+│   │   │   ├── CMakeScratch
+│   │   │   ├── Export
+│   │   │   │   └── 0d2d7311b9d2537bcc2f85a1628cd498
+│   │   │   │       ├── aruco_opencv_msgs__rosidl_typesupport_cExport.cmake
+│   │   │   │       ├── aruco_opencv_msgs__rosidl_typesupport_cExport-noconfig.cmake
+│   │   │   │       ├── aruco_opencv_msgs__rosidl_typesupport_cppExport.cmake
+│   │   │   │       ├── aruco_opencv_msgs__rosidl_typesupport_cppExport-noconfig.cmake
+│   │   │   │       ├── aruco_opencv_msgs__rosidl_typesupport_introspection_cExport.cmake
+│   │   │   │       ├── aruco_opencv_msgs__rosidl_typesupport_introspection_cExport-noconfig.cmake
+│   │   │   │       ├── aruco_opencv_msgs__rosidl_typesupport_introspection_cppExport.cmake
+│   │   │   │       ├── aruco_opencv_msgs__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+│   │   │   │       ├── export_aruco_opencv_msgs__rosidl_generator_cExport.cmake
+│   │   │   │       ├── export_aruco_opencv_msgs__rosidl_generator_cExport-noconfig.cmake
+│   │   │   │       ├── export_aruco_opencv_msgs__rosidl_generator_cppExport.cmake
+│   │   │   │       ├── export_aruco_opencv_msgs__rosidl_generator_pyExport.cmake
+│   │   │   │       ├── export_aruco_opencv_msgs__rosidl_generator_pyExport-noconfig.cmake
+│   │   │   │       ├── export_aruco_opencv_msgs__rosidl_typesupport_fastrtps_cExport.cmake
+│   │   │   │       ├── export_aruco_opencv_msgs__rosidl_typesupport_fastrtps_cExport-noconfig.cmake
+│   │   │   │       ├── export_aruco_opencv_msgs__rosidl_typesupport_fastrtps_cppExport.cmake
+│   │   │   │       └── export_aruco_opencv_msgs__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake
+│   │   │   ├── InstallScripts.json
+│   │   │   ├── Makefile2
+│   │   │   ├── Makefile.cmake
+│   │   │   ├── pkgRedirects
+│   │   │   ├── progress.marks
+│   │   │   ├── TargetDirectories.txt
+│   │   │   └── uninstall.dir
+│   │   │       ├── build.make
+│   │   │       ├── cmake_clean.cmake
+│   │   │       ├── compiler_depend.make
+│   │   │       ├── compiler_depend.ts
+│   │   │       ├── DependInfo.cmake
+│   │   │       └── progress.make
+│   │   ├── cmake_install.cmake
+│   │   ├── colcon_build.rc
+│   │   ├── colcon_command_prefix_build.sh
+│   │   ├── colcon_command_prefix_build.sh.env
+│   │   ├── CTestConfiguration.ini
+│   │   ├── CTestCustom.cmake
+│   │   ├── CTestTestfile.cmake
+│   │   ├── install_manifest.txt
+│   │   ├── libaruco_opencv_msgs__rosidl_generator_c.so
+│   │   ├── libaruco_opencv_msgs__rosidl_generator_py.so
+│   │   ├── libaruco_opencv_msgs__rosidl_typesupport_cpp.so
+│   │   ├── libaruco_opencv_msgs__rosidl_typesupport_c.so
+│   │   ├── libaruco_opencv_msgs__rosidl_typesupport_fastrtps_cpp.so
+│   │   ├── libaruco_opencv_msgs__rosidl_typesupport_fastrtps_c.so
+│   │   ├── libaruco_opencv_msgs__rosidl_typesupport_introspection_cpp.so
+│   │   ├── libaruco_opencv_msgs__rosidl_typesupport_introspection_c.so
+│   │   ├── Makefile
+│   │   ├── rosidl_adapter
+│   │   │   ├── aruco_opencv_msgs
+│   │   │   │   └── msg
+│   │   │   │       ├── ArucoDetection.idl
+│   │   │   │       ├── BoardPose.idl
+│   │   │   │       └── MarkerPose.idl
+│   │   │   └── aruco_opencv_msgs.idls
+│   │   ├── rosidl_adapter__arguments__aruco_opencv_msgs.json
+│   │   ├── rosidl_cmake
+│   │   │   ├── rosidl_cmake_aggregate_target-extras.cmake
+│   │   │   ├── rosidl_cmake_export_typesupport_libraries-extras.cmake
+│   │   │   ├── rosidl_cmake_export_typesupport_targets-extras.cmake
+│   │   │   └── rosidl_cmake-extras.cmake
+│   │   ├── rosidl_generator_c
+│   │   │   └── aruco_opencv_msgs
+│   │   │       └── msg
+│   │   │           ├── aruco_detection.h
+│   │   │           ├── board_pose.h
+│   │   │           ├── detail
+│   │   │           │   ├── aruco_detection__description.c
+│   │   │           │   ├── aruco_detection__functions.c
+│   │   │           │   ├── aruco_detection__functions.h
+│   │   │           │   ├── aruco_detection__struct.h
+│   │   │           │   ├── aruco_detection__type_support.c
+│   │   │           │   ├── aruco_detection__type_support.h
+│   │   │           │   ├── board_pose__description.c
+│   │   │           │   ├── board_pose__functions.c
+│   │   │           │   ├── board_pose__functions.h
+│   │   │           │   ├── board_pose__struct.h
+│   │   │           │   ├── board_pose__type_support.c
+│   │   │           │   ├── board_pose__type_support.h
+│   │   │           │   ├── marker_pose__description.c
+│   │   │           │   ├── marker_pose__functions.c
+│   │   │           │   ├── marker_pose__functions.h
+│   │   │           │   ├── marker_pose__struct.h
+│   │   │           │   ├── marker_pose__type_support.c
+│   │   │           │   └── marker_pose__type_support.h
+│   │   │           ├── marker_pose.h
+│   │   │           └── rosidl_generator_c__visibility_control.h
+│   │   ├── rosidl_generator_c__arguments.json
+│   │   ├── rosidl_generator_cpp
+│   │   │   └── aruco_opencv_msgs
+│   │   │       └── msg
+│   │   │           ├── aruco_detection.hpp
+│   │   │           ├── board_pose.hpp
+│   │   │           ├── detail
+│   │   │           │   ├── aruco_detection__builder.hpp
+│   │   │           │   ├── aruco_detection__struct.hpp
+│   │   │           │   ├── aruco_detection__traits.hpp
+│   │   │           │   ├── aruco_detection__type_support.hpp
+│   │   │           │   ├── board_pose__builder.hpp
+│   │   │           │   ├── board_pose__struct.hpp
+│   │   │           │   ├── board_pose__traits.hpp
+│   │   │           │   ├── board_pose__type_support.hpp
+│   │   │           │   ├── marker_pose__builder.hpp
+│   │   │           │   ├── marker_pose__struct.hpp
+│   │   │           │   ├── marker_pose__traits.hpp
+│   │   │           │   └── marker_pose__type_support.hpp
+│   │   │           ├── marker_pose.hpp
+│   │   │           └── rosidl_generator_cpp__visibility_control.hpp
+│   │   ├── rosidl_generator_cpp__arguments.json
+│   │   ├── rosidl_generator_py
+│   │   │   └── aruco_opencv_msgs
+│   │   │       ├── _aruco_opencv_msgs_s.ep.rosidl_typesupport_c.c
+│   │   │       ├── _aruco_opencv_msgs_s.ep.rosidl_typesupport_fastrtps_c.c
+│   │   │       ├── _aruco_opencv_msgs_s.ep.rosidl_typesupport_introspection_c.c
+│   │   │       ├── aruco_opencv_msgs_s__rosidl_typesupport_c.so
+│   │   │       ├── aruco_opencv_msgs_s__rosidl_typesupport_fastrtps_c.so
+│   │   │       ├── aruco_opencv_msgs_s__rosidl_typesupport_introspection_c.so
+│   │   │       ├── __init__.py
+│   │   │       ├── msg
+│   │   │       │   ├── _aruco_detection.py
+│   │   │       │   ├── _aruco_detection_s.c
+│   │   │       │   ├── _board_pose.py
+│   │   │       │   ├── _board_pose_s.c
+│   │   │       │   ├── __init__.py
+│   │   │       │   ├── _marker_pose.py
+│   │   │       │   └── _marker_pose_s.c
+│   │   │       └── py.typed
+│   │   ├── rosidl_generator_py__arguments.json
+│   │   ├── rosidl_generator_rs
+│   │   │   └── aruco_opencv_msgs
+│   │   │       └── rust
+│   │   │           ├── build.rs
+│   │   │           ├── Cargo.toml
+│   │   │           └── src
+│   │   │               ├── lib.rs
+│   │   │               ├── msg
+│   │   │               │   └── rmw.rs
+│   │   │               └── msg.rs
+│   │   ├── rosidl_generator_rs__arguments.json
+│   │   ├── rosidl_generator_type_description
+│   │   │   └── aruco_opencv_msgs
+│   │   │       └── msg
+│   │   │           ├── ArucoDetection.json
+│   │   │           ├── BoardPose.json
+│   │   │           └── MarkerPose.json
+│   │   ├── rosidl_generator_type_description__arguments.json
+│   │   ├── rosidl_typesupport_c
+│   │   │   └── aruco_opencv_msgs
+│   │   │       └── msg
+│   │   │           ├── aruco_detection__type_support.cpp
+│   │   │           ├── board_pose__type_support.cpp
+│   │   │           └── marker_pose__type_support.cpp
+│   │   ├── rosidl_typesupport_c__arguments.json
+│   │   ├── rosidl_typesupport_cpp
+│   │   │   └── aruco_opencv_msgs
+│   │   │       └── msg
+│   │   │           ├── aruco_detection__type_support.cpp
+│   │   │           ├── board_pose__type_support.cpp
+│   │   │           └── marker_pose__type_support.cpp
+│   │   ├── rosidl_typesupport_cpp__arguments.json
+│   │   ├── rosidl_typesupport_fastrtps_c
+│   │   │   └── aruco_opencv_msgs
+│   │   │       └── msg
+│   │   │           ├── detail
+│   │   │           │   ├── aruco_detection__rosidl_typesupport_fastrtps_c.h
+│   │   │           │   ├── aruco_detection__type_support_c.cpp
+│   │   │           │   ├── board_pose__rosidl_typesupport_fastrtps_c.h
+│   │   │           │   ├── board_pose__type_support_c.cpp
+│   │   │           │   ├── marker_pose__rosidl_typesupport_fastrtps_c.h
+│   │   │           │   └── marker_pose__type_support_c.cpp
+│   │   │           └── rosidl_typesupport_fastrtps_c__visibility_control.h
+│   │   ├── rosidl_typesupport_fastrtps_c__arguments.json
+│   │   ├── rosidl_typesupport_fastrtps_cpp
+│   │   │   └── aruco_opencv_msgs
+│   │   │       └── msg
+│   │   │           ├── detail
+│   │   │           │   ├── aruco_detection__rosidl_typesupport_fastrtps_cpp.hpp
+│   │   │           │   ├── board_pose__rosidl_typesupport_fastrtps_cpp.hpp
+│   │   │           │   ├── dds_fastrtps
+│   │   │           │   │   ├── aruco_detection__type_support.cpp
+│   │   │           │   │   ├── board_pose__type_support.cpp
+│   │   │           │   │   └── marker_pose__type_support.cpp
+│   │   │           │   └── marker_pose__rosidl_typesupport_fastrtps_cpp.hpp
+│   │   │           └── rosidl_typesupport_fastrtps_cpp__visibility_control.h
+│   │   ├── rosidl_typesupport_fastrtps_cpp__arguments.json
+│   │   ├── rosidl_typesupport_introspection_c
+│   │   │   └── aruco_opencv_msgs
+│   │   │       └── msg
+│   │   │           ├── detail
+│   │   │           │   ├── aruco_detection__rosidl_typesupport_introspection_c.h
+│   │   │           │   ├── aruco_detection__type_support.c
+│   │   │           │   ├── board_pose__rosidl_typesupport_introspection_c.h
+│   │   │           │   ├── board_pose__type_support.c
+│   │   │           │   ├── marker_pose__rosidl_typesupport_introspection_c.h
+│   │   │           │   └── marker_pose__type_support.c
+│   │   │           └── rosidl_typesupport_introspection_c__visibility_control.h
+│   │   ├── rosidl_typesupport_introspection_c__arguments.json
+│   │   ├── rosidl_typesupport_introspection_cpp
+│   │   │   └── aruco_opencv_msgs
+│   │   │       └── msg
+│   │   │           └── detail
+│   │   │               ├── aruco_detection__rosidl_typesupport_introspection_cpp.hpp
+│   │   │               ├── aruco_detection__type_support.cpp
+│   │   │               ├── board_pose__rosidl_typesupport_introspection_cpp.hpp
+│   │   │               ├── board_pose__type_support.cpp
+│   │   │               ├── marker_pose__rosidl_typesupport_introspection_cpp.hpp
+│   │   │               └── marker_pose__type_support.cpp
+│   │   └── rosidl_typesupport_introspection_cpp__arguments.json
+│   ├── assignment1_erl
+│   │   ├── ament_cmake_core
+│   │   │   ├── assignment1_erlConfig.cmake
+│   │   │   ├── assignment1_erlConfig-version.cmake
+│   │   │   ├── package.cmake
+│   │   │   └── stamps
+│   │   │       ├── ament_prefix_path.sh.stamp
+│   │   │       ├── nameConfig.cmake.in.stamp
+│   │   │       ├── nameConfig-version.cmake.in.stamp
+│   │   │       ├── package_xml_2_cmake.py.stamp
+│   │   │       ├── package.xml.stamp
+│   │   │       ├── path.sh.stamp
+│   │   │       └── templates_2_cmake.py.stamp
+│   │   ├── ament_cmake_environment_hooks
+│   │   │   ├── ament_prefix_path.dsv
+│   │   │   ├── local_setup.bash
+│   │   │   ├── local_setup.dsv
+│   │   │   ├── local_setup.fish
+│   │   │   ├── local_setup.sh
+│   │   │   ├── local_setup.zsh
+│   │   │   ├── package.dsv
+│   │   │   └── path.dsv
+│   │   ├── ament_cmake_index
+│   │   │   └── share
+│   │   │       └── ament_index
+│   │   │           └── resource_index
+│   │   │               ├── package_run_dependencies
+│   │   │               │   └── assignment1_erl
+│   │   │               ├── packages
+│   │   │               │   └── assignment1_erl
+│   │   │               ├── parent_prefix_path
+│   │   │               │   └── assignment1_erl
+│   │   │               └── rclcpp_components
+│   │   │                   └── assignment1_erl
+│   │   ├── ament_cmake_package_templates
+│   │   │   └── templates.cmake
+│   │   ├── ament_cmake_uninstall_target
+│   │   │   └── ament_cmake_uninstall_target.cmake
+│   │   ├── AMENT_IGNORE
+│   │   ├── cmake_args.last
+│   │   ├── CMakeCache.txt
+│   │   ├── CMakeFiles
+│   │   │   ├── 4.2.3
+│   │   │   │   ├── CMakeCCompiler.cmake
+│   │   │   │   ├── CMakeCXXCompiler.cmake
+│   │   │   │   ├── CMakeDetermineCompilerABI_C.bin
+│   │   │   │   ├── CMakeDetermineCompilerABI_CXX.bin
+│   │   │   │   ├── CMakeSystem.cmake
+│   │   │   │   ├── CompilerIdC
+│   │   │   │   │   ├── a.out
+│   │   │   │   │   ├── CMakeCCompilerId.c
+│   │   │   │   │   └── tmp
+│   │   │   │   └── CompilerIdCXX
+│   │   │   │       ├── a.out
+│   │   │   │       ├── CMakeCXXCompilerId.cpp
+│   │   │   │       └── tmp
+│   │   │   ├── assignment1_erl_uninstall.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   └── progress.make
+│   │   │   ├── cmake.check_cache
+│   │   │   ├── CMakeConfigureLog.yaml
+│   │   │   ├── CMakeDirectoryInformation.cmake
+│   │   │   ├── CMakeRuleHashes.txt
+│   │   │   ├── fsm_comp.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── src
+│   │   │   │       ├── fsm.cpp.o
+│   │   │   │       └── fsm.cpp.o.d
+│   │   │   ├── fsm_node.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rclcpp_components
+│   │   │   │       ├── node_main_fsm_node.cpp.o
+│   │   │   │       └── node_main_fsm_node.cpp.o.d
+│   │   │   ├── image_annotator_comp.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── src
+│   │   │   │       ├── image_annotator.cpp.o
+│   │   │   │       └── image_annotator.cpp.o.d
+│   │   │   ├── image_annotator_node.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rclcpp_components
+│   │   │   │       ├── node_main_image_annotator_node.cpp.o
+│   │   │   │       └── node_main_image_annotator_node.cpp.o.d
+│   │   │   ├── image_detection_comp.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── src
+│   │   │   │       ├── image_detection.cpp.o
+│   │   │   │       └── image_detection.cpp.o.d
+│   │   │   ├── image_detection_node.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rclcpp_components
+│   │   │   │       ├── node_main_image_detection_node.cpp.o
+│   │   │   │       └── node_main_image_detection_node.cpp.o.d
+│   │   │   ├── InstallScripts.json
+│   │   │   ├── Makefile2
+│   │   │   ├── Makefile.cmake
+│   │   │   ├── navigation_comp.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── src
+│   │   │   │       ├── navigation.cpp.o
+│   │   │   │       └── navigation.cpp.o.d
+│   │   │   ├── navigation_node.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rclcpp_components
+│   │   │   │       ├── node_main_navigation_node.cpp.o
+│   │   │   │       └── node_main_navigation_node.cpp.o.d
+│   │   │   ├── pkgRedirects
+│   │   │   ├── progress.marks
+│   │   │   ├── TargetDirectories.txt
+│   │   │   └── uninstall.dir
+│   │   │       ├── build.make
+│   │   │       ├── cmake_clean.cmake
+│   │   │       ├── compiler_depend.make
+│   │   │       ├── compiler_depend.ts
+│   │   │       ├── DependInfo.cmake
+│   │   │       └── progress.make
+│   │   ├── cmake_install.cmake
+│   │   ├── colcon_build.rc
+│   │   ├── colcon_command_prefix_build.sh
+│   │   ├── colcon_command_prefix_build.sh.env
+│   │   ├── CTestConfiguration.ini
+│   │   ├── CTestCustom.cmake
+│   │   ├── CTestTestfile.cmake
+│   │   ├── fsm_node
+│   │   ├── image_annotator_node
+│   │   ├── image_detection_node
+│   │   ├── install_manifest.txt
+│   │   ├── libfsm_comp.so
+│   │   ├── libimage_annotator_comp.so
+│   │   ├── libimage_detection_comp.so
+│   │   ├── libnavigation_comp.so
+│   │   ├── Makefile
+│   │   ├── navigation_node
+│   │   └── rclcpp_components
+│   │       ├── node_main_configured_fsm_node.cpp.in
+│   │       ├── node_main_configured_image_annotator_node.cpp.in
+│   │       ├── node_main_configured_image_detection_node.cpp.in
+│   │       ├── node_main_configured_navigation_node.cpp.in
+│   │       ├── node_main_fsm_node.cpp
+│   │       ├── node_main_image_annotator_node.cpp
+│   │       ├── node_main_image_detection_node.cpp
+│   │       └── node_main_navigation_node.cpp
+│   ├── assignment_msg
+│   │   ├── ament_cmake_core
+│   │   │   ├── assignment_msgConfig.cmake
+│   │   │   ├── assignment_msgConfig-version.cmake
+│   │   │   ├── package.cmake
+│   │   │   └── stamps
+│   │   │       ├── ament_cmake_export_dependencies-extras.cmake.stamp
+│   │   │       ├── ament_cmake_export_include_directories-extras.cmake.stamp
+│   │   │       ├── ament_cmake_export_libraries-extras.cmake.stamp
+│   │   │       ├── ament_cmake_export_targets-extras.cmake.stamp
+│   │   │       ├── ament_prefix_path.sh.stamp
+│   │   │       ├── ArucoInfo.msg.stamp
+│   │   │       ├── FsmStatus.msg.stamp
+│   │   │       ├── library_path.sh.stamp
+│   │   │       ├── nameConfig.cmake.in.stamp
+│   │   │       ├── nameConfig-version.cmake.in.stamp
+│   │   │       ├── package_xml_2_cmake.py.stamp
+│   │   │       ├── package.xml.stamp
+│   │   │       ├── path.sh.stamp
+│   │   │       ├── pythonpath.sh.in.stamp
+│   │   │       ├── rosidl_cmake_aggregate_target-extras.cmake.stamp
+│   │   │       ├── rosidl_cmake_export_typesupport_libraries-extras.cmake.stamp
+│   │   │       ├── rosidl_cmake_export_typesupport_targets-extras.cmake.stamp
+│   │   │       ├── rosidl_cmake-extras.cmake.stamp
+│   │   │       └── templates_2_cmake.py.stamp
+│   │   ├── ament_cmake_environment_hooks
+│   │   │   ├── ament_prefix_path.dsv
+│   │   │   ├── library_path.dsv
+│   │   │   ├── local_setup.bash
+│   │   │   ├── local_setup.dsv
+│   │   │   ├── local_setup.fish
+│   │   │   ├── local_setup.sh
+│   │   │   ├── local_setup.zsh
+│   │   │   ├── package.dsv
+│   │   │   ├── path.dsv
+│   │   │   ├── pythonpath.dsv
+│   │   │   └── pythonpath.sh
+│   │   ├── ament_cmake_export_dependencies
+│   │   │   └── ament_cmake_export_dependencies-extras.cmake
+│   │   ├── ament_cmake_export_include_directories
+│   │   │   └── ament_cmake_export_include_directories-extras.cmake
+│   │   ├── ament_cmake_export_libraries
+│   │   │   └── ament_cmake_export_libraries-extras.cmake
+│   │   ├── ament_cmake_export_targets
+│   │   │   └── ament_cmake_export_targets-extras.cmake
+│   │   ├── ament_cmake_index
+│   │   │   └── share
+│   │   │       └── ament_index
+│   │   │           └── resource_index
+│   │   │               ├── package_run_dependencies
+│   │   │               │   └── assignment_msg
+│   │   │               ├── packages
+│   │   │               │   └── assignment_msg
+│   │   │               ├── parent_prefix_path
+│   │   │               │   └── assignment_msg
+│   │   │               └── rosidl_interfaces
+│   │   │                   └── assignment_msg
+│   │   ├── ament_cmake_package_templates
+│   │   │   └── templates.cmake
+│   │   ├── ament_cmake_python
+│   │   │   └── assignment_msg
+│   │   │       ├── assignment_msg
+│   │   │       │   ├── _assignment_msg_s.ep.rosidl_typesupport_c.c
+│   │   │       │   ├── _assignment_msg_s.ep.rosidl_typesupport_fastrtps_c.c
+│   │   │       │   ├── _assignment_msg_s.ep.rosidl_typesupport_introspection_c.c
+│   │   │       │   ├── assignment_msg_s__rosidl_typesupport_c.so
+│   │   │       │   ├── assignment_msg_s__rosidl_typesupport_fastrtps_c.so
+│   │   │       │   ├── assignment_msg_s__rosidl_typesupport_introspection_c.so
+│   │   │       │   ├── __init__.py
+│   │   │       │   ├── msg
+│   │   │       │   │   ├── _aruco_info.py
+│   │   │       │   │   ├── _aruco_info_s.c
+│   │   │       │   │   ├── _fsm_status.py
+│   │   │       │   │   ├── _fsm_status_s.c
+│   │   │       │   │   └── __init__.py
+│   │   │       │   └── py.typed
+│   │   │       ├── assignment_msg.egg-info
+│   │   │       │   ├── dependency_links.txt
+│   │   │       │   ├── PKG-INFO
+│   │   │       │   ├── SOURCES.txt
+│   │   │       │   └── top_level.txt
+│   │   │       └── setup.py
+│   │   ├── ament_cmake_uninstall_target
+│   │   │   └── ament_cmake_uninstall_target.cmake
+│   │   ├── AMENT_IGNORE
+│   │   ├── ament_lint_cmake
+│   │   ├── ament_xmllint
+│   │   ├── assignment_msg__py
+│   │   │   ├── CMakeFiles
+│   │   │   │   ├── assignment_msg__py.dir
+│   │   │   │   │   ├── build.make
+│   │   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   │   ├── compiler_depend.make
+│   │   │   │   │   ├── compiler_depend.ts
+│   │   │   │   │   ├── DependInfo.cmake
+│   │   │   │   │   └── progress.make
+│   │   │   │   ├── CMakeDirectoryInformation.cmake
+│   │   │   │   └── progress.marks
+│   │   │   ├── cmake_install.cmake
+│   │   │   ├── CMakeLists.txt
+│   │   │   ├── CTestTestfile.cmake
+│   │   │   └── Makefile
+│   │   ├── assignment_msg__rs
+│   │   │   ├── CMakeFiles
+│   │   │   │   ├── assignment_msg__rs.dir
+│   │   │   │   │   ├── build.make
+│   │   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   │   ├── compiler_depend.make
+│   │   │   │   │   ├── compiler_depend.ts
+│   │   │   │   │   ├── DependInfo.cmake
+│   │   │   │   │   └── progress.make
+│   │   │   │   ├── CMakeDirectoryInformation.cmake
+│   │   │   │   └── progress.marks
+│   │   │   ├── cmake_install.cmake
+│   │   │   ├── CMakeLists.txt
+│   │   │   ├── CTestTestfile.cmake
+│   │   │   └── Makefile
+│   │   ├── cmake_args.last
+│   │   ├── CMakeCache.txt
+│   │   ├── CMakeFiles
+│   │   │   ├── 4.2.3
+│   │   │   │   ├── CMakeCCompiler.cmake
+│   │   │   │   ├── CMakeCXXCompiler.cmake
+│   │   │   │   ├── CMakeDetermineCompilerABI_C.bin
+│   │   │   │   ├── CMakeDetermineCompilerABI_CXX.bin
+│   │   │   │   ├── CMakeSystem.cmake
+│   │   │   │   ├── CompilerIdC
+│   │   │   │   │   ├── a.out
+│   │   │   │   │   ├── CMakeCCompilerId.c
+│   │   │   │   │   └── tmp
+│   │   │   │   └── CompilerIdCXX
+│   │   │   │       ├── a.out
+│   │   │   │       ├── CMakeCXXCompilerId.cpp
+│   │   │   │       └── tmp
+│   │   │   ├── ament_cmake_python_build_assignment_msg_egg.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   └── progress.make
+│   │   │   ├── ament_cmake_python_sync_assignment_msg.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   └── progress.make
+│   │   │   ├── assignment_msg__cpp.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   └── progress.make
+│   │   │   ├── assignment_msg.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   └── progress.make
+│   │   │   ├── assignment_msg__rosidl_generator_c.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rosidl_generator_c
+│   │   │   │       └── assignment_msg
+│   │   │   │           └── msg
+│   │   │   │               └── detail
+│   │   │   │                   ├── aruco_info__description.c.o
+│   │   │   │                   ├── aruco_info__description.c.o.d
+│   │   │   │                   ├── aruco_info__functions.c.o
+│   │   │   │                   ├── aruco_info__functions.c.o.d
+│   │   │   │                   ├── aruco_info__type_support.c.o
+│   │   │   │                   ├── aruco_info__type_support.c.o.d
+│   │   │   │                   ├── fsm_status__description.c.o
+│   │   │   │                   ├── fsm_status__description.c.o.d
+│   │   │   │                   ├── fsm_status__functions.c.o
+│   │   │   │                   ├── fsm_status__functions.c.o.d
+│   │   │   │                   ├── fsm_status__type_support.c.o
+│   │   │   │                   └── fsm_status__type_support.c.o.d
+│   │   │   ├── assignment_msg__rosidl_generator_py.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rosidl_generator_py
+│   │   │   │       └── assignment_msg
+│   │   │   │           └── msg
+│   │   │   │               ├── _aruco_info_s.c.o
+│   │   │   │               ├── _aruco_info_s.c.o.d
+│   │   │   │               ├── _fsm_status_s.c.o
+│   │   │   │               └── _fsm_status_s.c.o.d
+│   │   │   ├── assignment_msg__rosidl_generator_type_description.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   └── progress.make
+│   │   │   ├── assignment_msg__rosidl_typesupport_c.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rosidl_typesupport_c
+│   │   │   │       └── assignment_msg
+│   │   │   │           └── msg
+│   │   │   │               ├── aruco_info__type_support.cpp.o
+│   │   │   │               ├── aruco_info__type_support.cpp.o.d
+│   │   │   │               ├── fsm_status__type_support.cpp.o
+│   │   │   │               └── fsm_status__type_support.cpp.o.d
+│   │   │   ├── assignment_msg__rosidl_typesupport_cpp.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rosidl_typesupport_cpp
+│   │   │   │       └── assignment_msg
+│   │   │   │           └── msg
+│   │   │   │               ├── aruco_info__type_support.cpp.o
+│   │   │   │               ├── aruco_info__type_support.cpp.o.d
+│   │   │   │               ├── fsm_status__type_support.cpp.o
+│   │   │   │               └── fsm_status__type_support.cpp.o.d
+│   │   │   ├── assignment_msg__rosidl_typesupport_fastrtps_c.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rosidl_typesupport_fastrtps_c
+│   │   │   │       └── assignment_msg
+│   │   │   │           └── msg
+│   │   │   │               └── detail
+│   │   │   │                   ├── aruco_info__type_support_c.cpp.o
+│   │   │   │                   ├── aruco_info__type_support_c.cpp.o.d
+│   │   │   │                   ├── fsm_status__type_support_c.cpp.o
+│   │   │   │                   └── fsm_status__type_support_c.cpp.o.d
+│   │   │   ├── assignment_msg__rosidl_typesupport_fastrtps_cpp.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rosidl_typesupport_fastrtps_cpp
+│   │   │   │       └── assignment_msg
+│   │   │   │           └── msg
+│   │   │   │               └── detail
+│   │   │   │                   └── dds_fastrtps
+│   │   │   │                       ├── aruco_info__type_support.cpp.o
+│   │   │   │                       ├── aruco_info__type_support.cpp.o.d
+│   │   │   │                       ├── fsm_status__type_support.cpp.o
+│   │   │   │                       └── fsm_status__type_support.cpp.o.d
+│   │   │   ├── assignment_msg__rosidl_typesupport_introspection_c.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rosidl_typesupport_introspection_c
+│   │   │   │       └── assignment_msg
+│   │   │   │           └── msg
+│   │   │   │               └── detail
+│   │   │   │                   ├── aruco_info__type_support.c.o
+│   │   │   │                   ├── aruco_info__type_support.c.o.d
+│   │   │   │                   ├── fsm_status__type_support.c.o
+│   │   │   │                   └── fsm_status__type_support.c.o.d
+│   │   │   ├── assignment_msg__rosidl_typesupport_introspection_cpp.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rosidl_typesupport_introspection_cpp
+│   │   │   │       └── assignment_msg
+│   │   │   │           └── msg
+│   │   │   │               └── detail
+│   │   │   │                   ├── aruco_info__type_support.cpp.o
+│   │   │   │                   ├── aruco_info__type_support.cpp.o.d
+│   │   │   │                   ├── fsm_status__type_support.cpp.o
+│   │   │   │                   └── fsm_status__type_support.cpp.o.d
+│   │   │   ├── assignment_msg_s__rosidl_typesupport_c.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rosidl_generator_py
+│   │   │   │       └── assignment_msg
+│   │   │   │           ├── _assignment_msg_s.ep.rosidl_typesupport_c.c.o
+│   │   │   │           └── _assignment_msg_s.ep.rosidl_typesupport_c.c.o.d
+│   │   │   ├── assignment_msg_s__rosidl_typesupport_fastrtps_c.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rosidl_generator_py
+│   │   │   │       └── assignment_msg
+│   │   │   │           ├── _assignment_msg_s.ep.rosidl_typesupport_fastrtps_c.c.o
+│   │   │   │           └── _assignment_msg_s.ep.rosidl_typesupport_fastrtps_c.c.o.d
+│   │   │   ├── assignment_msg_s__rosidl_typesupport_introspection_c.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.internal
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   ├── depend.make
+│   │   │   │   ├── flags.make
+│   │   │   │   ├── link.d
+│   │   │   │   ├── link.txt
+│   │   │   │   ├── progress.make
+│   │   │   │   └── rosidl_generator_py
+│   │   │   │       └── assignment_msg
+│   │   │   │           ├── _assignment_msg_s.ep.rosidl_typesupport_introspection_c.c.o
+│   │   │   │           └── _assignment_msg_s.ep.rosidl_typesupport_introspection_c.c.o.d
+│   │   │   ├── assignment_msg_uninstall.dir
+│   │   │   │   ├── build.make
+│   │   │   │   ├── cmake_clean.cmake
+│   │   │   │   ├── compiler_depend.make
+│   │   │   │   ├── compiler_depend.ts
+│   │   │   │   ├── DependInfo.cmake
+│   │   │   │   └── progress.make
+│   │   │   ├── cmake.check_cache
+│   │   │   ├── CMakeConfigureLog.yaml
+│   │   │   ├── CMakeDirectoryInformation.cmake
+│   │   │   ├── CMakeRuleHashes.txt
+│   │   │   ├── CMakeScratch
+│   │   │   ├── Export
+│   │   │   │   └── a2ee2e96e9e33e6398472052ac7b2384
+│   │   │   │       ├── assignment_msg__rosidl_typesupport_cExport.cmake
+│   │   │   │       ├── assignment_msg__rosidl_typesupport_cExport-noconfig.cmake
+│   │   │   │       ├── assignment_msg__rosidl_typesupport_cppExport.cmake
+│   │   │   │       ├── assignment_msg__rosidl_typesupport_cppExport-noconfig.cmake
+│   │   │   │       ├── assignment_msg__rosidl_typesupport_introspection_cExport.cmake
+│   │   │   │       ├── assignment_msg__rosidl_typesupport_introspection_cExport-noconfig.cmake
+│   │   │   │       ├── assignment_msg__rosidl_typesupport_introspection_cppExport.cmake
+│   │   │   │       ├── assignment_msg__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+│   │   │   │       ├── export_assignment_msg__rosidl_generator_cExport.cmake
+│   │   │   │       ├── export_assignment_msg__rosidl_generator_cExport-noconfig.cmake
+│   │   │   │       ├── export_assignment_msg__rosidl_generator_cppExport.cmake
+│   │   │   │       ├── export_assignment_msg__rosidl_generator_pyExport.cmake
+│   │   │   │       ├── export_assignment_msg__rosidl_generator_pyExport-noconfig.cmake
+│   │   │   │       ├── export_assignment_msg__rosidl_typesupport_fastrtps_cExport.cmake
+│   │   │   │       ├── export_assignment_msg__rosidl_typesupport_fastrtps_cExport-noconfig.cmake
+│   │   │   │       ├── export_assignment_msg__rosidl_typesupport_fastrtps_cppExport.cmake
+│   │   │   │       └── export_assignment_msg__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake
+│   │   │   ├── InstallScripts.json
+│   │   │   ├── Makefile2
+│   │   │   ├── Makefile.cmake
+│   │   │   ├── pkgRedirects
+│   │   │   ├── progress.marks
+│   │   │   ├── TargetDirectories.txt
+│   │   │   └── uninstall.dir
+│   │   │       ├── build.make
+│   │   │       ├── cmake_clean.cmake
+│   │   │       ├── compiler_depend.make
+│   │   │       ├── compiler_depend.ts
+│   │   │       ├── DependInfo.cmake
+│   │   │       └── progress.make
+│   │   ├── cmake_install.cmake
+│   │   ├── colcon_build.rc
+│   │   ├── colcon_command_prefix_build.sh
+│   │   ├── colcon_command_prefix_build.sh.env
+│   │   ├── CTestConfiguration.ini
+│   │   ├── CTestCustom.cmake
+│   │   ├── CTestTestfile.cmake
+│   │   ├── install_manifest.txt
+│   │   ├── libassignment_msg__rosidl_generator_c.so
+│   │   ├── libassignment_msg__rosidl_generator_py.so
+│   │   ├── libassignment_msg__rosidl_typesupport_cpp.so
+│   │   ├── libassignment_msg__rosidl_typesupport_c.so
+│   │   ├── libassignment_msg__rosidl_typesupport_fastrtps_cpp.so
+│   │   ├── libassignment_msg__rosidl_typesupport_fastrtps_c.so
+│   │   ├── libassignment_msg__rosidl_typesupport_introspection_cpp.so
+│   │   ├── libassignment_msg__rosidl_typesupport_introspection_c.so
+│   │   ├── Makefile
+│   │   ├── rosidl_adapter
+│   │   │   ├── assignment_msg
+│   │   │   │   └── msg
+│   │   │   │       ├── ArucoInfo.idl
+│   │   │   │       └── FsmStatus.idl
+│   │   │   └── assignment_msg.idls
+│   │   ├── rosidl_adapter__arguments__assignment_msg.json
+│   │   ├── rosidl_cmake
+│   │   │   ├── rosidl_cmake_aggregate_target-extras.cmake
+│   │   │   ├── rosidl_cmake_export_typesupport_libraries-extras.cmake
+│   │   │   ├── rosidl_cmake_export_typesupport_targets-extras.cmake
+│   │   │   └── rosidl_cmake-extras.cmake
+│   │   ├── rosidl_generator_c
+│   │   │   └── assignment_msg
+│   │   │       └── msg
+│   │   │           ├── aruco_info.h
+│   │   │           ├── detail
+│   │   │           │   ├── aruco_info__description.c
+│   │   │           │   ├── aruco_info__functions.c
+│   │   │           │   ├── aruco_info__functions.h
+│   │   │           │   ├── aruco_info__struct.h
+│   │   │           │   ├── aruco_info__type_support.c
+│   │   │           │   ├── aruco_info__type_support.h
+│   │   │           │   ├── fsm_status__description.c
+│   │   │           │   ├── fsm_status__functions.c
+│   │   │           │   ├── fsm_status__functions.h
+│   │   │           │   ├── fsm_status__struct.h
+│   │   │           │   ├── fsm_status__type_support.c
+│   │   │           │   └── fsm_status__type_support.h
+│   │   │           ├── fsm_status.h
+│   │   │           └── rosidl_generator_c__visibility_control.h
+│   │   ├── rosidl_generator_c__arguments.json
+│   │   ├── rosidl_generator_cpp
+│   │   │   └── assignment_msg
+│   │   │       └── msg
+│   │   │           ├── aruco_info.hpp
+│   │   │           ├── detail
+│   │   │           │   ├── aruco_info__builder.hpp
+│   │   │           │   ├── aruco_info__struct.hpp
+│   │   │           │   ├── aruco_info__traits.hpp
+│   │   │           │   ├── aruco_info__type_support.hpp
+│   │   │           │   ├── fsm_status__builder.hpp
+│   │   │           │   ├── fsm_status__struct.hpp
+│   │   │           │   ├── fsm_status__traits.hpp
+│   │   │           │   └── fsm_status__type_support.hpp
+│   │   │           ├── fsm_status.hpp
+│   │   │           └── rosidl_generator_cpp__visibility_control.hpp
+│   │   ├── rosidl_generator_cpp__arguments.json
+│   │   ├── rosidl_generator_py
+│   │   │   └── assignment_msg
+│   │   │       ├── _assignment_msg_s.ep.rosidl_typesupport_c.c
+│   │   │       ├── _assignment_msg_s.ep.rosidl_typesupport_fastrtps_c.c
+│   │   │       ├── _assignment_msg_s.ep.rosidl_typesupport_introspection_c.c
+│   │   │       ├── assignment_msg_s__rosidl_typesupport_c.so
+│   │   │       ├── assignment_msg_s__rosidl_typesupport_fastrtps_c.so
+│   │   │       ├── assignment_msg_s__rosidl_typesupport_introspection_c.so
+│   │   │       ├── __init__.py
+│   │   │       ├── msg
+│   │   │       │   ├── _aruco_info.py
+│   │   │       │   ├── _aruco_info_s.c
+│   │   │       │   ├── _fsm_status.py
+│   │   │       │   ├── _fsm_status_s.c
+│   │   │       │   └── __init__.py
+│   │   │       └── py.typed
+│   │   ├── rosidl_generator_py__arguments.json
+│   │   ├── rosidl_generator_rs
+│   │   │   └── assignment_msg
+│   │   │       └── rust
+│   │   │           ├── build.rs
+│   │   │           ├── Cargo.toml
+│   │   │           └── src
+│   │   │               ├── lib.rs
+│   │   │               ├── msg
+│   │   │               │   └── rmw.rs
+│   │   │               └── msg.rs
+│   │   ├── rosidl_generator_rs__arguments.json
+│   │   ├── rosidl_generator_type_description
+│   │   │   └── assignment_msg
+│   │   │       └── msg
+│   │   │           ├── ArucoInfo.json
+│   │   │           └── FsmStatus.json
+│   │   ├── rosidl_generator_type_description__arguments.json
+│   │   ├── rosidl_typesupport_c
+│   │   │   └── assignment_msg
+│   │   │       └── msg
+│   │   │           ├── aruco_info__type_support.cpp
+│   │   │           └── fsm_status__type_support.cpp
+│   │   ├── rosidl_typesupport_c__arguments.json
+│   │   ├── rosidl_typesupport_cpp
+│   │   │   └── assignment_msg
+│   │   │       └── msg
+│   │   │           ├── aruco_info__type_support.cpp
+│   │   │           └── fsm_status__type_support.cpp
+│   │   ├── rosidl_typesupport_cpp__arguments.json
+│   │   ├── rosidl_typesupport_fastrtps_c
+│   │   │   └── assignment_msg
+│   │   │       └── msg
+│   │   │           ├── detail
+│   │   │           │   ├── aruco_info__rosidl_typesupport_fastrtps_c.h
+│   │   │           │   ├── aruco_info__type_support_c.cpp
+│   │   │           │   ├── fsm_status__rosidl_typesupport_fastrtps_c.h
+│   │   │           │   └── fsm_status__type_support_c.cpp
+│   │   │           └── rosidl_typesupport_fastrtps_c__visibility_control.h
+│   │   ├── rosidl_typesupport_fastrtps_c__arguments.json
+│   │   ├── rosidl_typesupport_fastrtps_cpp
+│   │   │   └── assignment_msg
+│   │   │       └── msg
+│   │   │           ├── detail
+│   │   │           │   ├── aruco_info__rosidl_typesupport_fastrtps_cpp.hpp
+│   │   │           │   ├── dds_fastrtps
+│   │   │           │   │   ├── aruco_info__type_support.cpp
+│   │   │           │   │   └── fsm_status__type_support.cpp
+│   │   │           │   └── fsm_status__rosidl_typesupport_fastrtps_cpp.hpp
+│   │   │           └── rosidl_typesupport_fastrtps_cpp__visibility_control.h
+│   │   ├── rosidl_typesupport_fastrtps_cpp__arguments.json
+│   │   ├── rosidl_typesupport_introspection_c
+│   │   │   └── assignment_msg
+│   │   │       └── msg
+│   │   │           ├── detail
+│   │   │           │   ├── aruco_info__rosidl_typesupport_introspection_c.h
+│   │   │           │   ├── aruco_info__type_support.c
+│   │   │           │   ├── fsm_status__rosidl_typesupport_introspection_c.h
+│   │   │           │   └── fsm_status__type_support.c
+│   │   │           └── rosidl_typesupport_introspection_c__visibility_control.h
+│   │   ├── rosidl_typesupport_introspection_c__arguments.json
+│   │   ├── rosidl_typesupport_introspection_cpp
+│   │   │   └── assignment_msg
+│   │   │       └── msg
+│   │   │           └── detail
+│   │   │               ├── aruco_info__rosidl_typesupport_introspection_cpp.hpp
+│   │   │               ├── aruco_info__type_support.cpp
+│   │   │               ├── fsm_status__rosidl_typesupport_introspection_cpp.hpp
+│   │   │               └── fsm_status__type_support.cpp
+│   │   └── rosidl_typesupport_introspection_cpp__arguments.json
+│   └── COLCON_IGNORE
+├── install
+│   ├── aruco_opencv
+│   │   ├── lib
+│   │   │   ├── aruco_opencv
+│   │   │   │   ├── aruco_tracker
+│   │   │   │   ├── aruco_tracker_autostart
+│   │   │   │   ├── create_board
+│   │   │   │   └── create_marker
+│   │   │   └── libaruco_opencv.so
+│   │   └── share
+│   │       ├── ament_index
+│   │       │   └── resource_index
+│   │       │       ├── package_run_dependencies
+│   │       │       │   └── aruco_opencv
+│   │       │       ├── packages
+│   │       │       │   └── aruco_opencv
+│   │       │       ├── parent_prefix_path
+│   │       │       │   └── aruco_opencv
+│   │       │       └── rclcpp_components
+│   │       │           └── aruco_opencv
+│   │       ├── aruco_opencv
+│   │       │   ├── cmake
+│   │       │   │   ├── aruco_opencvConfig.cmake
+│   │       │   │   └── aruco_opencvConfig-version.cmake
+│   │       │   ├── config
+│   │       │   │   ├── aruco_tracker.yaml
+│   │       │   │   └── board_descriptions.yaml
+│   │       │   ├── environment
+│   │       │   │   ├── ament_prefix_path.dsv
+│   │       │   │   ├── ament_prefix_path.sh
+│   │       │   │   ├── path.dsv
+│   │       │   │   └── path.sh
+│   │       │   ├── hook
+│   │       │   │   ├── cmake_prefix_path.dsv
+│   │       │   │   ├── cmake_prefix_path.ps1
+│   │       │   │   ├── cmake_prefix_path.sh
+│   │       │   │   ├── ld_library_path_lib.dsv
+│   │       │   │   ├── ld_library_path_lib.ps1
+│   │       │   │   └── ld_library_path_lib.sh
+│   │       │   ├── launch
+│   │       │   │   └── aruco_tracker.launch.xml
+│   │       │   ├── local_setup.bash
+│   │       │   ├── local_setup.dsv
+│   │       │   ├── local_setup.fish
+│   │       │   ├── local_setup.sh
+│   │       │   ├── local_setup.zsh
+│   │       │   ├── package.bash
+│   │       │   ├── package.dsv
+│   │       │   ├── package.ps1
+│   │       │   ├── package.sh
+│   │       │   ├── package.xml
+│   │       │   └── package.zsh
+│   │       └── colcon-core
+│   │           └── packages
+│   │               └── aruco_opencv
+│   ├── aruco_opencv_msgs
+│   │   ├── include
+│   │   │   └── aruco_opencv_msgs
+│   │   │       └── aruco_opencv_msgs
+│   │   │           └── msg
+│   │   │               ├── aruco_detection.h
+│   │   │               ├── aruco_detection.hpp
+│   │   │               ├── board_pose.h
+│   │   │               ├── board_pose.hpp
+│   │   │               ├── detail
+│   │   │               │   ├── aruco_detection__builder.hpp
+│   │   │               │   ├── aruco_detection__description.c
+│   │   │               │   ├── aruco_detection__functions.c
+│   │   │               │   ├── aruco_detection__functions.h
+│   │   │               │   ├── aruco_detection__rosidl_typesupport_fastrtps_c.h
+│   │   │               │   ├── aruco_detection__rosidl_typesupport_fastrtps_cpp.hpp
+│   │   │               │   ├── aruco_detection__rosidl_typesupport_introspection_c.h
+│   │   │               │   ├── aruco_detection__rosidl_typesupport_introspection_cpp.hpp
+│   │   │               │   ├── aruco_detection__struct.h
+│   │   │               │   ├── aruco_detection__struct.hpp
+│   │   │               │   ├── aruco_detection__traits.hpp
+│   │   │               │   ├── aruco_detection__type_support.c
+│   │   │               │   ├── aruco_detection__type_support.cpp
+│   │   │               │   ├── aruco_detection__type_support.h
+│   │   │               │   ├── aruco_detection__type_support.hpp
+│   │   │               │   ├── board_pose__builder.hpp
+│   │   │               │   ├── board_pose__description.c
+│   │   │               │   ├── board_pose__functions.c
+│   │   │               │   ├── board_pose__functions.h
+│   │   │               │   ├── board_pose__rosidl_typesupport_fastrtps_c.h
+│   │   │               │   ├── board_pose__rosidl_typesupport_fastrtps_cpp.hpp
+│   │   │               │   ├── board_pose__rosidl_typesupport_introspection_c.h
+│   │   │               │   ├── board_pose__rosidl_typesupport_introspection_cpp.hpp
+│   │   │               │   ├── board_pose__struct.h
+│   │   │               │   ├── board_pose__struct.hpp
+│   │   │               │   ├── board_pose__traits.hpp
+│   │   │               │   ├── board_pose__type_support.c
+│   │   │               │   ├── board_pose__type_support.cpp
+│   │   │               │   ├── board_pose__type_support.h
+│   │   │               │   ├── board_pose__type_support.hpp
+│   │   │               │   ├── dds_fastrtps
+│   │   │               │   ├── marker_pose__builder.hpp
+│   │   │               │   ├── marker_pose__description.c
+│   │   │               │   ├── marker_pose__functions.c
+│   │   │               │   ├── marker_pose__functions.h
+│   │   │               │   ├── marker_pose__rosidl_typesupport_fastrtps_c.h
+│   │   │               │   ├── marker_pose__rosidl_typesupport_fastrtps_cpp.hpp
+│   │   │               │   ├── marker_pose__rosidl_typesupport_introspection_c.h
+│   │   │               │   ├── marker_pose__rosidl_typesupport_introspection_cpp.hpp
+│   │   │               │   ├── marker_pose__struct.h
+│   │   │               │   ├── marker_pose__struct.hpp
+│   │   │               │   ├── marker_pose__traits.hpp
+│   │   │               │   ├── marker_pose__type_support.c
+│   │   │               │   ├── marker_pose__type_support.cpp
+│   │   │               │   ├── marker_pose__type_support.h
+│   │   │               │   └── marker_pose__type_support.hpp
+│   │   │               ├── marker_pose.h
+│   │   │               ├── marker_pose.hpp
+│   │   │               ├── rosidl_generator_cpp__visibility_control.hpp
+│   │   │               ├── rosidl_generator_c__visibility_control.h
+│   │   │               ├── rosidl_typesupport_fastrtps_cpp__visibility_control.h
+│   │   │               ├── rosidl_typesupport_fastrtps_c__visibility_control.h
+│   │   │               └── rosidl_typesupport_introspection_c__visibility_control.h
+│   │   ├── lib
+│   │   │   ├── libaruco_opencv_msgs__rosidl_generator_c.so
+│   │   │   ├── libaruco_opencv_msgs__rosidl_generator_py.so
+│   │   │   ├── libaruco_opencv_msgs__rosidl_typesupport_cpp.so
+│   │   │   ├── libaruco_opencv_msgs__rosidl_typesupport_c.so
+│   │   │   ├── libaruco_opencv_msgs__rosidl_typesupport_fastrtps_cpp.so
+│   │   │   ├── libaruco_opencv_msgs__rosidl_typesupport_fastrtps_c.so
+│   │   │   ├── libaruco_opencv_msgs__rosidl_typesupport_introspection_cpp.so
+│   │   │   ├── libaruco_opencv_msgs__rosidl_typesupport_introspection_c.so
+│   │   │   └── python3.14
+│   │   │       └── site-packages
+│   │   │           ├── aruco_opencv_msgs
+│   │   │           │   ├── _aruco_opencv_msgs_s.ep.rosidl_typesupport_c.c
+│   │   │           │   ├── _aruco_opencv_msgs_s.ep.rosidl_typesupport_fastrtps_c.c
+│   │   │           │   ├── _aruco_opencv_msgs_s.ep.rosidl_typesupport_introspection_c.c
+│   │   │           │   ├── aruco_opencv_msgs_s__rosidl_typesupport_c.so
+│   │   │           │   ├── aruco_opencv_msgs_s__rosidl_typesupport_fastrtps_c.so
+│   │   │           │   ├── aruco_opencv_msgs_s__rosidl_typesupport_introspection_c.so
+│   │   │           │   ├── __init__.py
+│   │   │           │   ├── msg
+│   │   │           │   │   ├── _aruco_detection.py
+│   │   │           │   │   ├── _aruco_detection_s.c
+│   │   │           │   │   ├── _board_pose.py
+│   │   │           │   │   ├── _board_pose_s.c
+│   │   │           │   │   ├── __init__.py
+│   │   │           │   │   ├── _marker_pose.py
+│   │   │           │   │   ├── _marker_pose_s.c
+│   │   │           │   │   └── __pycache__
+│   │   │           │   │       ├── _aruco_detection.cpython-314.pyc
+│   │   │           │   │       ├── _board_pose.cpython-314.pyc
+│   │   │           │   │       ├── __init__.cpython-314.pyc
+│   │   │           │   │       └── _marker_pose.cpython-314.pyc
+│   │   │           │   ├── __pycache__
+│   │   │           │   │   └── __init__.cpython-314.pyc
+│   │   │           │   └── py.typed
+│   │   │           └── aruco_opencv_msgs-7.0.0-py3.14.egg-info
+│   │   │               ├── dependency_links.txt
+│   │   │               ├── PKG-INFO
+│   │   │               ├── SOURCES.txt
+│   │   │               └── top_level.txt
+│   │   └── share
+│   │       ├── ament_index
+│   │       │   └── resource_index
+│   │       │       ├── package_run_dependencies
+│   │       │       │   └── aruco_opencv_msgs
+│   │       │       ├── packages
+│   │       │       │   └── aruco_opencv_msgs
+│   │       │       ├── parent_prefix_path
+│   │       │       │   └── aruco_opencv_msgs
+│   │       │       └── rosidl_interfaces
+│   │       │           └── aruco_opencv_msgs
+│   │       ├── aruco_opencv_msgs
+│   │       │   ├── cmake
+│   │       │   │   ├── ament_cmake_export_dependencies-extras.cmake
+│   │       │   │   ├── ament_cmake_export_include_directories-extras.cmake
+│   │       │   │   ├── ament_cmake_export_libraries-extras.cmake
+│   │       │   │   ├── ament_cmake_export_targets-extras.cmake
+│   │       │   │   ├── aruco_opencv_msgsConfig.cmake
+│   │       │   │   ├── aruco_opencv_msgsConfig-version.cmake
+│   │       │   │   ├── aruco_opencv_msgs__rosidl_typesupport_cExport.cmake
+│   │       │   │   ├── aruco_opencv_msgs__rosidl_typesupport_cExport-noconfig.cmake
+│   │       │   │   ├── aruco_opencv_msgs__rosidl_typesupport_cppExport.cmake
+│   │       │   │   ├── aruco_opencv_msgs__rosidl_typesupport_cppExport-noconfig.cmake
+│   │       │   │   ├── aruco_opencv_msgs__rosidl_typesupport_introspection_cExport.cmake
+│   │       │   │   ├── aruco_opencv_msgs__rosidl_typesupport_introspection_cExport-noconfig.cmake
+│   │       │   │   ├── aruco_opencv_msgs__rosidl_typesupport_introspection_cppExport.cmake
+│   │       │   │   ├── aruco_opencv_msgs__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+│   │       │   │   ├── export_aruco_opencv_msgs__rosidl_generator_cExport.cmake
+│   │       │   │   ├── export_aruco_opencv_msgs__rosidl_generator_cExport-noconfig.cmake
+│   │       │   │   ├── export_aruco_opencv_msgs__rosidl_generator_cppExport.cmake
+│   │       │   │   ├── export_aruco_opencv_msgs__rosidl_generator_pyExport.cmake
+│   │       │   │   ├── export_aruco_opencv_msgs__rosidl_generator_pyExport-noconfig.cmake
+│   │       │   │   ├── export_aruco_opencv_msgs__rosidl_typesupport_fastrtps_cExport.cmake
+│   │       │   │   ├── export_aruco_opencv_msgs__rosidl_typesupport_fastrtps_cExport-noconfig.cmake
+│   │       │   │   ├── export_aruco_opencv_msgs__rosidl_typesupport_fastrtps_cppExport.cmake
+│   │       │   │   ├── export_aruco_opencv_msgs__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake
+│   │       │   │   ├── rosidl_cmake_aggregate_target-extras.cmake
+│   │       │   │   ├── rosidl_cmake_export_typesupport_libraries-extras.cmake
+│   │       │   │   ├── rosidl_cmake_export_typesupport_targets-extras.cmake
+│   │       │   │   └── rosidl_cmake-extras.cmake
+│   │       │   ├── environment
+│   │       │   │   ├── ament_prefix_path.dsv
+│   │       │   │   ├── ament_prefix_path.sh
+│   │       │   │   ├── library_path.dsv
+│   │       │   │   ├── library_path.sh
+│   │       │   │   ├── path.dsv
+│   │       │   │   ├── path.sh
+│   │       │   │   ├── pythonpath.dsv
+│   │       │   │   └── pythonpath.sh
+│   │       │   ├── hook
+│   │       │   │   ├── cmake_prefix_path.dsv
+│   │       │   │   ├── cmake_prefix_path.ps1
+│   │       │   │   ├── cmake_prefix_path.sh
+│   │       │   │   ├── ld_library_path_lib.dsv
+│   │       │   │   ├── ld_library_path_lib.ps1
+│   │       │   │   ├── ld_library_path_lib.sh
+│   │       │   │   ├── pythonpath.dsv
+│   │       │   │   ├── pythonpath.ps1
+│   │       │   │   └── pythonpath.sh
+│   │       │   ├── local_setup.bash
+│   │       │   ├── local_setup.dsv
+│   │       │   ├── local_setup.fish
+│   │       │   ├── local_setup.sh
+│   │       │   ├── local_setup.zsh
+│   │       │   ├── msg
+│   │       │   │   ├── ArucoDetection.idl
+│   │       │   │   ├── ArucoDetection.json
+│   │       │   │   ├── ArucoDetection.msg
+│   │       │   │   ├── BoardPose.idl
+│   │       │   │   ├── BoardPose.json
+│   │       │   │   ├── BoardPose.msg
+│   │       │   │   ├── MarkerPose.idl
+│   │       │   │   ├── MarkerPose.json
+│   │       │   │   └── MarkerPose.msg
+│   │       │   ├── package.bash
+│   │       │   ├── package.dsv
+│   │       │   ├── package.ps1
+│   │       │   ├── package.sh
+│   │       │   ├── package.xml
+│   │       │   ├── package.zsh
+│   │       │   └── rust
+│   │       │       ├── build.rs
+│   │       │       ├── Cargo.toml
+│   │       │       └── src
+│   │       │           ├── lib.rs
+│   │       │           ├── msg
+│   │       │           │   └── rmw.rs
+│   │       │           └── msg.rs
+│   │       └── colcon-core
+│   │           └── packages
+│   │               └── aruco_opencv_msgs
+│   ├── assignment1_erl
+│   │   ├── lib
+│   │   │   ├── assignment1_erl
+│   │   │   │   ├── fsm_node
+│   │   │   │   ├── image_annotator_node
+│   │   │   │   ├── image_detection_node
+│   │   │   │   └── navigation_node
+│   │   │   ├── libfsm_comp.so
+│   │   │   ├── libimage_annotator_comp.so
+│   │   │   ├── libimage_detection_comp.so
+│   │   │   └── libnavigation_comp.so
+│   │   └── share
+│   │       ├── ament_index
+│   │       │   └── resource_index
+│   │       │       ├── package_run_dependencies
+│   │       │       │   └── assignment1_erl
+│   │       │       ├── packages
+│   │       │       │   └── assignment1_erl
+│   │       │       ├── parent_prefix_path
+│   │       │       │   └── assignment1_erl
+│   │       │       └── rclcpp_components
+│   │       │           └── assignment1_erl
+│   │       ├── assignment1_erl
+│   │       │   ├── cmake
+│   │       │   │   ├── assignment1_erlConfig.cmake
+│   │       │   │   └── assignment1_erlConfig-version.cmake
+│   │       │   ├── config
+│   │       │   │   └── ekf.yaml
+│   │       │   ├── environment
+│   │       │   │   ├── ament_prefix_path.dsv
+│   │       │   │   ├── ament_prefix_path.sh
+│   │       │   │   ├── path.dsv
+│   │       │   │   └── path.sh
+│   │       │   ├── hook
+│   │       │   │   ├── cmake_prefix_path.dsv
+│   │       │   │   ├── cmake_prefix_path.ps1
+│   │       │   │   ├── cmake_prefix_path.sh
+│   │       │   │   ├── ld_library_path_lib.dsv
+│   │       │   │   ├── ld_library_path_lib.ps1
+│   │       │   │   └── ld_library_path_lib.sh
+│   │       │   ├── launch
+│   │       │   │   ├── navigation_container.launch.py
+│   │       │   │   ├── __pycache__
+│   │       │   │   │   ├── navigation_container.launch.cpython-314.pyc
+│   │       │   │   │   ├── spawn_assignment.launch.cpython-314.pyc
+│   │       │   │   │   └── world.launch.cpython-314.pyc
+│   │       │   │   ├── rviz.launch.py
+│   │       │   │   ├── spawn_assignment.launch.py
+│   │       │   │   ├── spawn_assignment_robot.launch.py
+│   │       │   │   ├── spawn_assignment_rosbot.launch.py
+│   │       │   │   ├── spawn.launch.py
+│   │       │   │   └── world.launch.py
+│   │       │   ├── local_setup.bash
+│   │       │   ├── local_setup.dsv
+│   │       │   ├── local_setup.fish
+│   │       │   ├── local_setup.sh
+│   │       │   ├── local_setup.zsh
+│   │       │   ├── models
+│   │       │   │   ├── aruco_box_1
+│   │       │   │   │   ├── aruco_marker.blend
+│   │       │   │   │   ├── materials
+│   │       │   │   │   │   └── textures
+│   │       │   │   │   │       └── marker_tiles_square_01.png
+│   │       │   │   │   ├── model.config
+│   │       │   │   │   ├── model.dae
+│   │       │   │   │   └── model.sdf
+│   │       │   │   ├── aruco_box_2
+│   │       │   │   │   ├── aruco_marker.blend
+│   │       │   │   │   ├── materials
+│   │       │   │   │   │   └── textures
+│   │       │   │   │   │       └── marker_tiles_square_02.png
+│   │       │   │   │   ├── model.config
+│   │       │   │   │   ├── model.dae
+│   │       │   │   │   └── model.sdf
+│   │       │   │   ├── aruco_box_3
+│   │       │   │   │   ├── aruco_marker.blend
+│   │       │   │   │   ├── materials
+│   │       │   │   │   │   └── textures
+│   │       │   │   │   │       └── marker_tiles_square_03.png
+│   │       │   │   │   ├── model.config
+│   │       │   │   │   ├── model.dae
+│   │       │   │   │   └── model.sdf
+│   │       │   │   └── aruco_box_4
+│   │       │   │       ├── aruco_marker.blend
+│   │       │   │       ├── materials
+│   │       │   │       │   └── textures
+│   │       │   │       │       └── marker_tiles_square_04.png
+│   │       │   │       ├── model.config
+│   │       │   │       ├── model.dae
+│   │       │   │       └── model.sdf
+│   │       │   ├── package.bash
+│   │       │   ├── package.dsv
+│   │       │   ├── package.ps1
+│   │       │   ├── package.sh
+│   │       │   ├── package.xml
+│   │       │   ├── package.zsh
+│   │       │   ├── rviz
+│   │       │   │   └── urdf.rviz
+│   │       │   ├── urdf
+│   │       │   │   ├── my_robot.gazebo
+│   │       │   │   └── my_robot.urdf
+│   │       │   └── worlds
+│   │       │       ├── assignment.sdf
+│   │       │       └── my_world.sdf
+│   │       └── colcon-core
+│   │           └── packages
+│   │               └── assignment1_erl
+│   ├── assignment_msg
+│   │   ├── include
+│   │   │   └── assignment_msg
+│   │   │       └── assignment_msg
+│   │   │           └── msg
+│   │   │               ├── aruco_info.h
+│   │   │               ├── aruco_info.hpp
+│   │   │               ├── detail
+│   │   │               │   ├── aruco_info__builder.hpp
+│   │   │               │   ├── aruco_info__description.c
+│   │   │               │   ├── aruco_info__functions.c
+│   │   │               │   ├── aruco_info__functions.h
+│   │   │               │   ├── aruco_info__rosidl_typesupport_fastrtps_c.h
+│   │   │               │   ├── aruco_info__rosidl_typesupport_fastrtps_cpp.hpp
+│   │   │               │   ├── aruco_info__rosidl_typesupport_introspection_c.h
+│   │   │               │   ├── aruco_info__rosidl_typesupport_introspection_cpp.hpp
+│   │   │               │   ├── aruco_info__struct.h
+│   │   │               │   ├── aruco_info__struct.hpp
+│   │   │               │   ├── aruco_info__traits.hpp
+│   │   │               │   ├── aruco_info__type_support.c
+│   │   │               │   ├── aruco_info__type_support.cpp
+│   │   │               │   ├── aruco_info__type_support.h
+│   │   │               │   ├── aruco_info__type_support.hpp
+│   │   │               │   ├── dds_fastrtps
+│   │   │               │   ├── fsm_status__builder.hpp
+│   │   │               │   ├── fsm_status__description.c
+│   │   │               │   ├── fsm_status__functions.c
+│   │   │               │   ├── fsm_status__functions.h
+│   │   │               │   ├── fsm_status__rosidl_typesupport_fastrtps_c.h
+│   │   │               │   ├── fsm_status__rosidl_typesupport_fastrtps_cpp.hpp
+│   │   │               │   ├── fsm_status__rosidl_typesupport_introspection_c.h
+│   │   │               │   ├── fsm_status__rosidl_typesupport_introspection_cpp.hpp
+│   │   │               │   ├── fsm_status__struct.h
+│   │   │               │   ├── fsm_status__struct.hpp
+│   │   │               │   ├── fsm_status__traits.hpp
+│   │   │               │   ├── fsm_status__type_support.c
+│   │   │               │   ├── fsm_status__type_support.cpp
+│   │   │               │   ├── fsm_status__type_support.h
+│   │   │               │   └── fsm_status__type_support.hpp
+│   │   │               ├── fsm_status.h
+│   │   │               ├── fsm_status.hpp
+│   │   │               ├── rosidl_generator_cpp__visibility_control.hpp
+│   │   │               ├── rosidl_generator_c__visibility_control.h
+│   │   │               ├── rosidl_typesupport_fastrtps_cpp__visibility_control.h
+│   │   │               ├── rosidl_typesupport_fastrtps_c__visibility_control.h
+│   │   │               └── rosidl_typesupport_introspection_c__visibility_control.h
+│   │   ├── lib
+│   │   │   ├── libassignment_msg__rosidl_generator_c.so
+│   │   │   ├── libassignment_msg__rosidl_generator_py.so
+│   │   │   ├── libassignment_msg__rosidl_typesupport_cpp.so
+│   │   │   ├── libassignment_msg__rosidl_typesupport_c.so
+│   │   │   ├── libassignment_msg__rosidl_typesupport_fastrtps_cpp.so
+│   │   │   ├── libassignment_msg__rosidl_typesupport_fastrtps_c.so
+│   │   │   ├── libassignment_msg__rosidl_typesupport_introspection_cpp.so
+│   │   │   ├── libassignment_msg__rosidl_typesupport_introspection_c.so
+│   │   │   └── python3.14
+│   │   │       └── site-packages
+│   │   │           ├── assignment_msg
+│   │   │           │   ├── _assignment_msg_s.ep.rosidl_typesupport_c.c
+│   │   │           │   ├── _assignment_msg_s.ep.rosidl_typesupport_fastrtps_c.c
+│   │   │           │   ├── _assignment_msg_s.ep.rosidl_typesupport_introspection_c.c
+│   │   │           │   ├── assignment_msg_s__rosidl_typesupport_c.so
+│   │   │           │   ├── assignment_msg_s__rosidl_typesupport_fastrtps_c.so
+│   │   │           │   ├── assignment_msg_s__rosidl_typesupport_introspection_c.so
+│   │   │           │   ├── __init__.py
+│   │   │           │   ├── msg
+│   │   │           │   │   ├── _aruco_info.py
+│   │   │           │   │   ├── _aruco_info_s.c
+│   │   │           │   │   ├── _fsm_status.py
+│   │   │           │   │   ├── _fsm_status_s.c
+│   │   │           │   │   ├── __init__.py
+│   │   │           │   │   └── __pycache__
+│   │   │           │   │       ├── _aruco_info.cpython-314.pyc
+│   │   │           │   │       ├── _fsm_status.cpython-314.pyc
+│   │   │           │   │       └── __init__.cpython-314.pyc
+│   │   │           │   ├── __pycache__
+│   │   │           │   │   └── __init__.cpython-314.pyc
+│   │   │           │   └── py.typed
+│   │   │           └── assignment_msg-0.0.0-py3.14.egg-info
+│   │   │               ├── dependency_links.txt
+│   │   │               ├── PKG-INFO
+│   │   │               ├── SOURCES.txt
+│   │   │               └── top_level.txt
+│   │   └── share
+│   │       ├── ament_index
+│   │       │   └── resource_index
+│   │       │       ├── package_run_dependencies
+│   │       │       │   └── assignment_msg
+│   │       │       ├── packages
+│   │       │       │   └── assignment_msg
+│   │       │       ├── parent_prefix_path
+│   │       │       │   └── assignment_msg
+│   │       │       └── rosidl_interfaces
+│   │       │           └── assignment_msg
+│   │       ├── assignment_msg
+│   │       │   ├── cmake
+│   │       │   │   ├── ament_cmake_export_dependencies-extras.cmake
+│   │       │   │   ├── ament_cmake_export_include_directories-extras.cmake
+│   │       │   │   ├── ament_cmake_export_libraries-extras.cmake
+│   │       │   │   ├── ament_cmake_export_targets-extras.cmake
+│   │       │   │   ├── assignment_msgConfig.cmake
+│   │       │   │   ├── assignment_msgConfig-version.cmake
+│   │       │   │   ├── assignment_msg__rosidl_typesupport_cExport.cmake
+│   │       │   │   ├── assignment_msg__rosidl_typesupport_cExport-noconfig.cmake
+│   │       │   │   ├── assignment_msg__rosidl_typesupport_cppExport.cmake
+│   │       │   │   ├── assignment_msg__rosidl_typesupport_cppExport-noconfig.cmake
+│   │       │   │   ├── assignment_msg__rosidl_typesupport_introspection_cExport.cmake
+│   │       │   │   ├── assignment_msg__rosidl_typesupport_introspection_cExport-noconfig.cmake
+│   │       │   │   ├── assignment_msg__rosidl_typesupport_introspection_cppExport.cmake
+│   │       │   │   ├── assignment_msg__rosidl_typesupport_introspection_cppExport-noconfig.cmake
+│   │       │   │   ├── export_assignment_msg__rosidl_generator_cExport.cmake
+│   │       │   │   ├── export_assignment_msg__rosidl_generator_cExport-noconfig.cmake
+│   │       │   │   ├── export_assignment_msg__rosidl_generator_cppExport.cmake
+│   │       │   │   ├── export_assignment_msg__rosidl_generator_pyExport.cmake
+│   │       │   │   ├── export_assignment_msg__rosidl_generator_pyExport-noconfig.cmake
+│   │       │   │   ├── export_assignment_msg__rosidl_typesupport_fastrtps_cExport.cmake
+│   │       │   │   ├── export_assignment_msg__rosidl_typesupport_fastrtps_cExport-noconfig.cmake
+│   │       │   │   ├── export_assignment_msg__rosidl_typesupport_fastrtps_cppExport.cmake
+│   │       │   │   ├── export_assignment_msg__rosidl_typesupport_fastrtps_cppExport-noconfig.cmake
+│   │       │   │   ├── rosidl_cmake_aggregate_target-extras.cmake
+│   │       │   │   ├── rosidl_cmake_export_typesupport_libraries-extras.cmake
+│   │       │   │   ├── rosidl_cmake_export_typesupport_targets-extras.cmake
+│   │       │   │   └── rosidl_cmake-extras.cmake
+│   │       │   ├── environment
+│   │       │   │   ├── ament_prefix_path.dsv
+│   │       │   │   ├── ament_prefix_path.sh
+│   │       │   │   ├── library_path.dsv
+│   │       │   │   ├── library_path.sh
+│   │       │   │   ├── path.dsv
+│   │       │   │   ├── path.sh
+│   │       │   │   ├── pythonpath.dsv
+│   │       │   │   └── pythonpath.sh
+│   │       │   ├── hook
+│   │       │   │   ├── cmake_prefix_path.dsv
+│   │       │   │   ├── cmake_prefix_path.ps1
+│   │       │   │   ├── cmake_prefix_path.sh
+│   │       │   │   ├── ld_library_path_lib.dsv
+│   │       │   │   ├── ld_library_path_lib.ps1
+│   │       │   │   ├── ld_library_path_lib.sh
+│   │       │   │   ├── pythonpath.dsv
+│   │       │   │   ├── pythonpath.ps1
+│   │       │   │   └── pythonpath.sh
+│   │       │   ├── local_setup.bash
+│   │       │   ├── local_setup.dsv
+│   │       │   ├── local_setup.fish
+│   │       │   ├── local_setup.sh
+│   │       │   ├── local_setup.zsh
+│   │       │   ├── msg
+│   │       │   │   ├── ArucoInfo.idl
+│   │       │   │   ├── ArucoInfo.json
+│   │       │   │   ├── ArucoInfo.msg
+│   │       │   │   ├── FsmStatus.idl
+│   │       │   │   ├── FsmStatus.json
+│   │       │   │   └── FsmStatus.msg
+│   │       │   ├── package.bash
+│   │       │   ├── package.dsv
+│   │       │   ├── package.ps1
+│   │       │   ├── package.sh
+│   │       │   ├── package.xml
+│   │       │   ├── package.zsh
+│   │       │   └── rust
+│   │       │       ├── build.rs
+│   │       │       ├── Cargo.toml
+│   │       │       └── src
+│   │       │           ├── lib.rs
+│   │       │           ├── msg
+│   │       │           │   └── rmw.rs
+│   │       │           └── msg.rs
+│   │       └── colcon-core
+│   │           └── packages
+│   │               └── assignment_msg
+│   ├── COLCON_IGNORE
+│   ├── local_setup.bash
+│   ├── local_setup.ps1
+│   ├── local_setup.sh
+│   ├── _local_setup_util_ps1.py
+│   ├── _local_setup_util_sh.py
+│   ├── local_setup.zsh
+│   ├── setup.bash
+│   ├── setup.ps1
+│   ├── setup.sh
+│   └── setup.zsh
+├── log
+│   ├── build_2026-11-23_10-59-58
+│   │   ├── assignment1_erl
+│   │   │   ├── command.log
+│   │   │   ├── stderr.log
+│   │   │   ├── stdout.log
+│   │   │   ├── stdout_stderr.log
+│   │   │   └── streams.log
+│   │   ├── assignment_msg
+│   │   │   ├── command.log
+│   │   │   ├── stderr.log
+│   │   │   ├── stdout.log
+│   │   │   ├── stdout_stderr.log
+│   │   │   └── streams.log
+│   │   ├── events.log
+│   │   └── logger_all.log
+│   ├── build_2026-11-23_11-05-00
+│   │   ├── aruco_opencv
+│   │   │   ├── command.log
+│   │   │   ├── stderr.log
+│   │   │   ├── stdout.log
+│   │   │   ├── stdout_stderr.log
+│   │   │   └── streams.log
+│   │   ├── aruco_opencv_msgs
+│   │   │   ├── command.log
+│   │   │   ├── stderr.log
+│   │   │   ├── stdout.log
+│   │   │   ├── stdout_stderr.log
+│   │   │   └── streams.log
+│   │   ├── assignment1_erl
+│   │   │   ├── command.log
+│   │   │   ├── stderr.log
+│   │   │   ├── stdout.log
+│   │   │   ├── stdout_stderr.log
+│   │   │   └── streams.log
+│   │   ├── assignment_msg
+│   │   │   ├── command.log
+│   │   │   ├── stderr.log
+│   │   │   ├── stdout.log
+│   │   │   ├── stdout_stderr.log
+│   │   │   └── streams.log
+│   │   ├── events.log
+│   │   └── logger_all.log
+│   ├── build_2026-11-23_11-08-07
+│   │   ├── aruco_opencv
+│   │   │   ├── command.log
+│   │   │   ├── stderr.log
+│   │   │   ├── stdout.log
+│   │   │   ├── stdout_stderr.log
+│   │   │   └── streams.log
+│   │   ├── aruco_opencv_msgs
+│   │   │   ├── command.log
+│   │   │   ├── stderr.log
+│   │   │   ├── stdout.log
+│   │   │   ├── stdout_stderr.log
+│   │   │   └── streams.log
+│   │   ├── assignment1_erl
+│   │   │   ├── command.log
+│   │   │   ├── stderr.log
+│   │   │   ├── stdout.log
+│   │   │   ├── stdout_stderr.log
+│   │   │   └── streams.log
+│   │   ├── assignment_msg
+│   │   │   ├── command.log
+│   │   │   ├── stderr.log
+│   │   │   ├── stdout.log
+│   │   │   ├── stdout_stderr.log
+│   │   │   └── streams.log
+│   │   ├── events.log
+│   │   └── logger_all.log
+│   ├── COLCON_IGNORE
+│   ├── latest -> latest_build
+│   └── latest_build -> build_2026-11-23_11-08-07
+├── README.md
+├── script
+│   └── menu.sh
+├── src
+│   ├── assignment1_erl
+│   │   ├── CMakeLists.txt
+│   │   ├── config
+│   │   │   └── ekf.yaml
+│   │   ├── launch
+│   │   │   ├── navigation_container.launch.py
+│   │   │   ├── __pycache__
+│   │   │   │   └── navigation_container.launch.cpython-314.pyc
+│   │   │   ├── rviz.launch.py
+│   │   │   ├── spawn_assignment.launch.py
+│   │   │   ├── spawn_assignment_robot.launch.py
+│   │   │   ├── spawn_assignment_rosbot.launch.py
+│   │   │   ├── spawn.launch.py
+│   │   │   └── world.launch.py
+│   │   ├── log
+│   │   │   ├── fsm.log
+│   │   │   ├── image_annotator.log
+│   │   │   ├── image_detection.log
+│   │   │   └── navigation.log
+│   │   ├── models
+│   │   │   ├── aruco_box_1
+│   │   │   │   ├── aruco_marker.blend
+│   │   │   │   ├── materials
+│   │   │   │   │   └── textures
+│   │   │   │   │       └── marker_tiles_square_01.png
+│   │   │   │   ├── model.config
+│   │   │   │   ├── model.dae
+│   │   │   │   └── model.sdf
+│   │   │   ├── aruco_box_2
+│   │   │   │   ├── aruco_marker.blend
+│   │   │   │   ├── materials
+│   │   │   │   │   └── textures
+│   │   │   │   │       └── marker_tiles_square_02.png
+│   │   │   │   ├── model.config
+│   │   │   │   ├── model.dae
+│   │   │   │   └── model.sdf
+│   │   │   ├── aruco_box_3
+│   │   │   │   ├── aruco_marker.blend
+│   │   │   │   ├── materials
+│   │   │   │   │   └── textures
+│   │   │   │   │       └── marker_tiles_square_03.png
+│   │   │   │   ├── model.config
+│   │   │   │   ├── model.dae
+│   │   │   │   └── model.sdf
+│   │   │   └── aruco_box_4
+│   │   │       ├── aruco_marker.blend
+│   │   │       ├── materials
+│   │   │       │   └── textures
+│   │   │       │       └── marker_tiles_square_04.png
+│   │   │       ├── model.config
+│   │   │       ├── model.dae
+│   │   │       └── model.sdf
+│   │   ├── package.xml
+│   │   ├── rviz
+│   │   │   └── urdf.rviz
+│   │   ├── src
+│   │   │   ├── fsm.cpp
+│   │   │   ├── image_annotator.cpp
+│   │   │   ├── image_detection.cpp
+│   │   │   └── navigation.cpp
+│   │   ├── urdf
+│   │   │   ├── my_robot.gazebo
+│   │   │   └── my_robot.urdf
+│   │   └── worlds
+│   │       ├── assignment.sdf
+│   │       └── my_world.sdf
+│   ├── assignment_msg
+│   │   ├── CMakeLists.txt
+│   │   ├── msg
+│   │   │   ├── ArucoInfo.msg
+│   │   │   └── FsmStatus.msg
+│   │   └── package.xml
+│   └── ros_aruco_opencv
+│       ├── aruco_opencv
+│       │   ├── CHANGELOG.rst
+│       │   ├── CMakeLists.txt
+│       │   ├── config
+│       │   │   ├── aruco_tracker.yaml
+│       │   │   └── board_descriptions.yaml
+│       │   ├── include
+│       │   │   └── aruco_opencv
+│       │   │       ├── board_loader.hpp
+│       │   │       ├── detector.hpp
+│       │   │       ├── parameters.hpp
+│       │   │       └── utils.hpp
+│       │   ├── launch
+│       │   │   └── aruco_tracker.launch.xml
+│       │   ├── package.xml
+│       │   ├── README.md
+│       │   ├── scripts
+│       │   │   ├── create_board
+│       │   │   └── create_marker
+│       │   └── src
+│       │       ├── aruco_tracker.cpp
+│       │       ├── board_loader.cpp
+│       │       ├── detector.cpp
+│       │       ├── parameters.cpp
+│       │       └── utils.cpp
+│       ├── aruco_opencv_msgs
+│       │   ├── CHANGELOG.rst
+│       │   ├── CMakeLists.txt
+│       │   ├── msg
+│       │   │   ├── ArucoDetection.msg
+│       │   │   ├── BoardPose.msg
+│       │   │   └── MarkerPose.msg
+│       │   └── package.xml
+│       ├── LICENSE
+│       └── README.md
+└── tree.txt
+
+529 directories, 1784 files

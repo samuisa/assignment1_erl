@@ -3,12 +3,13 @@
 echo ""
 echo "PROJECT MENU:"
 echo "--------------------------------"
-echo "1. Compile, launch assignment and spawn robot"
-echo "2. Check the active topics list"
-echo "3. Display an active topic"
+echo "1. Compile and launch simulation"
+echo "2. Compile and launch rosbot"
+echo "3. Check the active topics list"
+echo "4. Display an active topic"
 echo "--------------------------------"
 
-read -p "Enter your choice (1-3): " choice
+read -p "Enter your choice (1-4): " choice
 
 case $choice in
 
@@ -17,15 +18,37 @@ case $choice in
 
         # rm -rf build/ log/ install/
 
+        rm src/assignment1_erl/marker_images_robot/*
+
         source /opt/ros/lyrical/setup.bash
         colcon build
         source install/local_setup.bash
 
         cd src/ 
-        ros2 launch assignment1_erl spawn_assignment.launch.py  
+        ros2 launch assignment1_erl spawn_assignment_robot.launch.py sim:=true
         ;;
 
     2)
+
+        cd ~
+
+        
+
+        echo "Building workspace and launching Gazebo..."
+
+        # rm -rf build/ log/ install/
+
+        rm src/assignment1_erl/marker_images_robot/*
+
+        source /opt/ros/lyrical/setup.bash
+        colcon build
+        source install/local_setup.bash
+
+        cd src/ 
+        ros2 launch assignment1_erl spawn_assignment_robot.launch.py sim:=false robot_number:=3
+        ;;
+
+    3)
 
         source /opt/ros/lyrical/setup.bash
         source install/local_setup.bash
@@ -38,7 +61,7 @@ case $choice in
         ros2 topic list
         ;;
         
-    3)
+    4)
         
         source /opt/ros/lyrical/setup.bash
         source install/local_setup.bash

@@ -1,17 +1,18 @@
 """
-Launch file unificato per ROSbot (Simulazione Gazebo e Robot Reale).
+Launch file unificato per ROSbot (Robot Reale di default e Simulazione Gazebo) con navigation_container.
 
 Esempi d'uso:
-  # Simulazione (default: sim:=true)
-  ros2 launch assignment1_erl spawn_assignment_rosbot.launch.py
+  # Robot reale (default: sim:=false -> niente Gazebo, RViz sempre attivo, ROS_DOMAIN_ID impostato)
+  ros2 launch assignment1_erl spawn_assignment_robot.launch.py robot_number:=2
 
-  # Robot reale (disabilita Gazebo/EKF/RSP, imposta use_sim_time:=false e ROS_DOMAIN_ID)
-  ros2 launch assignment1_erl spawn_assignment_rosbot.launch.py sim:=false robot_number:=2
+  # Simulazione Gazebo (abilita Gazebo/EKF/RSP, RViz sempre attivo, use_sim_time:=true)
+  ros2 launch assignment1_erl spawn_assignment_robot.launch.py sim:=true
 """
 
 import os
+from pathlib import Path
 
-from ament_index_python.packages import get_package_share_directory
+from ament_index_python.packages import get_package_prefix, get_package_share_directory
 
 from launch import LaunchDescription
 from launch.actions import (
@@ -24,7 +25,7 @@ from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitution
 
-from launch_ros.actions import Node, PushRosNamespace, SetRemap
+from launch_ros.actions import Node, PushRosNamespace, SetParameter, SetRemap
 from launch_ros.parameter_descriptions import ParameterValue
 
 
@@ -43,9 +44,9 @@ def generate_launch_description():
 
     sim_arg = DeclareLaunchArgument(
         'sim',
-        default_value='true',
-        description="true = avviato in simulazione Gazebo (use_sim_time=true); "
-        "false = robot reale (use_sim_time=false).",
+        default_value='false',
+        description="false = robot reale (niente Gazebo, use_sim_time=false); "
+        "true = simulazione Gazebo (use_sim_time=true).",
     )
 
     domain_id_arg = DeclareLaunchArgument(
@@ -61,7 +62,7 @@ def generate_launch_description():
     )
 
     # =====================================================
-    # ARGOMENTI: simulazione Gazebo / URDF
+    # ARGOMENTI: simulazione Gazebo / URDF (usati solo se sim:=true)
     # =====================================================
 
     world_arg = DeclareLaunchArgument(
@@ -164,21 +165,19 @@ def generate_launch_description():
     # ARGOMENTI: RViz e image_annotator
     # =====================================================
 
-    rviz_arg = DeclareLaunchArgument(
-        'rviz',
-        default_value='true',
-        description="Apri RViz.",
-    )
-
     rviz_config_arg = DeclareLaunchArgument(
         'rviz_config',
         default_value=os.path.join(pkg_assignment1_erl, 'rviz', 'urdf.rviz'),
         description="Percorso del file di configurazione di RViz.",
     )
 
+    workspace_root = Path(get_package_prefix('assignment1_erl')).resolve().parents[1]
+    default_output_dir = workspace_root / 'src' / 'assignment1_erl' / 'marker_images_robot'
+    default_output_dir.mkdir(parents=True, exist_ok=True)
+
     output_dir_arg = DeclareLaunchArgument(
         'output_dir',
-        default_value=os.path.join(os.path.expanduser('~'), 'marker_images_robot'),
+        default_value=str(default_output_dir),
         description="Cartella dove salvare le immagini annotate.",
     )
 
@@ -198,7 +197,7 @@ def generate_launch_description():
     )
 
     # =====================================================
-    # NODI DI SIMULAZIONE (attivi solo se sim:=true)
+    # NODI DI SIMULAZIONE (attivi SOLO se sim:=true)
     # =====================================================
 
     world_launch = IncludeLaunchDescription(
@@ -293,7 +292,7 @@ def generate_launch_description():
     )
 
     # =====================================================
-    # NODI COMUNI (Simulazione e Robot Reale)
+    # NODI COMUNI (sempre attivi: Robot Reale e Simulazione)
     # =====================================================
 
     rviz_node = Node(
@@ -301,7 +300,6 @@ def generate_launch_description():
         executable='rviz2',
         name='rviz2',
         arguments=['-d', LaunchConfiguration('rviz_config')],
-        condition=IfCondition(LaunchConfiguration('rviz')),
         output='screen',
         parameters=[{'use_sim_time': use_sim_time}],
     )
@@ -336,7 +334,6 @@ def generate_launch_description():
         ],
     )
 
-    # Launch navigation container
     navigation_container_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(pkg_assignment1_erl, 'launch', 'navigation_container.launch.py'),
@@ -344,12 +341,25 @@ def generate_launch_description():
     )
 
     # =====================================================
-    # NAMESPACE + REMAP UNIFICATI
+    # NAMESPACE + PARAMETRI + REMAP UNIFICATI
     # =====================================================
 
     robot_group = GroupAction(
         actions=[
             PushRosNamespace(['rosbot_', LaunchConfiguration('robot_number')]),
+            # Propaga i parametri anche ai componenti dentro navigation_container
+            SetParameter(name='use_sim_time', value=use_sim_time),
+            SetParameter(name='output_dir', value=LaunchConfiguration('output_dir')),
+            SetParameter(
+                name='desired_size_sim_px',
+                value=ParameterValue(LaunchConfiguration('desired_size_sim_px'), value_type=float),
+            ),
+            SetParameter(
+                name='simulation_focal_length_px',
+                value=ParameterValue(
+                    LaunchConfiguration('simulation_focal_length_px'), value_type=float
+                ),
+            ),
             # Clock e TF nel namespace del robot
             SetRemap(src='/clock', dst='clock'),
             SetRemap(src='/tf', dst='tf'),
@@ -386,15 +396,12 @@ def generate_launch_description():
             gz_bridge_node,
             gz_image_bridge_node,
             ekf_node,
-            # Nodi comuni
+            # Nodi sempre attivi
             rviz_node,
             aruco_node,
+            navigation_container_launch,
         ]
     )
-
-    launchDescriptionObject = LaunchDescription()
-
-    launchDescriptionObject.add_action(navigation_container_launch)
 
     return LaunchDescription(
         [
@@ -416,10 +423,9 @@ def generate_launch_description():
             qos_durability_arg,
             desired_size_arg,
             reference_focal_arg,
-            rviz_arg,
             rviz_config_arg,
             output_dir_arg,
-            # 2) Variabile d'ambiente (applicata solo su robot reale)
+            # 2) Variabile d'ambiente (applicata solo su robot reale, sim:=false)
             SetEnvironmentVariable(
                 'ROS_DOMAIN_ID',
                 LaunchConfiguration('domain_id'),
@@ -428,7 +434,7 @@ def generate_launch_description():
             # 3) Avvio Gazebo e spawn (solo se sim:=true)
             world_launch,
             spawn_urdf_node,
-            # 4) Gruppo nodi nel namespace /rosbot_<n>
+            # 4) Gruppo nodi + RViz + container nel namespace /rosbot_<n>
             robot_group,
         ]
     )
