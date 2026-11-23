@@ -25,14 +25,10 @@ case $choice in
         source install/local_setup.bash
 
         cd src/ 
-        ros2 launch assignment1_erl spawn_assignment_robot.launch.py sim:=true
+        ros2 launch assignment1_erl spawn_assignment_robot.launch.py
         ;;
 
     2)
-
-        cd ~
-
-        
 
         echo "Building workspace and launching Gazebo..."
 

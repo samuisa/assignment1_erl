@@ -1,12 +1,12 @@
 """
-Launch file unificato per ROSbot (Robot Reale di default e Simulazione Gazebo) con navigation_container.
+Launch file unificato per ROSbot (Simulazione Gazebo di default e Robot Reale) con navigation_container.
 
 Esempi d'uso:
-  # Robot reale (default: sim:=false -> niente Gazebo, RViz sempre attivo, ROS_DOMAIN_ID impostato)
-  ros2 launch assignment1_erl spawn_assignment_robot.launch.py robot_number:=2
+  # Simulazione Gazebo (default: sim:=true -> Gazebo e RViz attivi, use_sim_time:=true)
+  ros2 launch assignment1_erl spawn_assignment_rosbot.launch.py
 
-  # Simulazione Gazebo (abilita Gazebo/EKF/RSP, RViz sempre attivo, use_sim_time:=true)
-  ros2 launch assignment1_erl spawn_assignment_robot.launch.py sim:=true
+  # Robot reale (sim:=false -> niente Gazebo, RViz sempre attivo, ROS_DOMAIN_ID impostato)
+  ros2 launch assignment1_erl spawn_assignment_rosbot.launch.py sim:=false robot_number:=2
 """
 
 import os
@@ -44,9 +44,9 @@ def generate_launch_description():
 
     sim_arg = DeclareLaunchArgument(
         'sim',
-        default_value='false',
-        description="false = robot reale (niente Gazebo, use_sim_time=false); "
-        "true = simulazione Gazebo (use_sim_time=true).",
+        default_value='true',
+        description="true = simulazione Gazebo (use_sim_time=true); "
+        "false = robot reale (niente Gazebo, use_sim_time=false).",
     )
 
     domain_id_arg = DeclareLaunchArgument(
@@ -259,7 +259,6 @@ def generate_launch_description():
             '/camera_joint/cmd_pos@std_msgs/msg/Float64]gz.msgs.Double',
             '/imu@sensor_msgs/msg/Imu[gz.msgs.IMU',
         ],
-        # Evita collisione con odometry/filtered: odom grezzo va all'EKF
         remappings=[('/odom', 'odom')],
         output='screen',
         parameters=[{'use_sim_time': use_sim_time}],
@@ -292,7 +291,7 @@ def generate_launch_description():
     )
 
     # =====================================================
-    # NODI COMUNI (sempre attivi: Robot Reale e Simulazione)
+    # NODI COMUNI (sempre attivi: Simulazione e Robot Reale)
     # =====================================================
 
     rviz_node = Node(
