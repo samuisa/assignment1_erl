@@ -1,87 +1,104 @@
-# ArUco Treasure Hunt
 
-A ROS 2 project simulating a robot tasked with finding and identifying ArUco markers within a Gazebo environment.
 
----
+# ROSbot Autonomous Navigation – ROS 2
 
-## Project Structure
+This project implements an autonomous navigation system for a ROSbot using ROS 2 Jazzy. The robot detects ArUco markers through its camera and autonomously approaches them by combining visual information, odometry and a Finite State Machine (FSM).
 
-```bash
-src/assignment1_erl/
-├── config
-├── launch
-├── log
-├── marker_images_robot
-├── models
-├── rviz
-├── src
-├── urdf
-└── worlds
+The system can be tested both in a Gazebo simulation and on the real robot.
 
-src/assignment_msg/
-└── msg
+## Videos
+
+### Simulation
+<!-- Insert simulation video link here -->
+
+### Real Robot
+<!-- Insert real robot video link here -->
+
+## Repository Structure
+
+The repository is organized as follows:
+
+```text
+ros_ws/
+├── marker_images/              # Images of the detected markers
+└── src/
+    ├── assignment1_erl/        # Main ROS 2 package
+    │   ├── launch/
+    │   └── src/
+    │       ├── image_detection.cpp
+    │       ├── fsm.cpp
+    │       ├── navigation.cpp
+    │       └── image_annotator.cpp
+    │
+    └── assignment_msg/         # Custom ROS 2 messages
 ```
 
-## Prerequisites & Dependencies
+### Main Nodes
 
-Ensure you have the following installed on your system:
+The `assignment1_erl` package contains four main nodes:
 
-    - ROS 2 
-    - Gazebo Simulator (ros_gz / Gazebo Classic depending on your setup)
-    - OpenCV & cv_bridge (for ArUco marker detection)
+- **`image_detection.cpp`**: Processes ArUco marker detections and publishes marker information in image coordinates through `/aruco_info`.
+- **`fsm.cpp`**: Implements the Finite State Machine, managing the robot's states and the sequence of target markers.
+- **`navigation.cpp`**: Computes and publishes velocity commands through `/cmd_vel`, using visual feedback and odometry.
+- **`image_annotator.cpp`**: Annotates camera images when a marker is reached, saves the resulting images and publishes them through `/marker_image`.
 
-## Launch the Simulation
+The `assignment_msg` package contains the custom message definitions used for communication between nodes.
 
-To launch the full Gazebo world along with the robot, run:
+## Dependencies
+
+The project requires:
+
+- ROS 2 Jazzy
+- Gazebo
+- RViz
+- `ros_aruco_opencv`
+- OpenCV
+- `cv_bridge`
+
+Additional ROS 2 dependencies are declared in the package files.
+
+## Build Instructions
+
+Clone the repository inside the `src` folder of your ROS 2 workspace:
 
 ```bash
-./script/menu.sh
+cd ~/your_ros2_ws/src
+git clone <repository-url>
 ```
 
-The FSM, navigation, and image-detection nodes run together in a ROS 2
-component container. Gazebo, sensor bridges, and robot description nodes remain
-separate.
+Install the dependencies and build the workspace:
 
-## Launch on a Real Robot
-The launch file starts the assignment nodes without Gazebo. Choose a robot
-number that matches the namespace configured for the robot's drivers. For
-example, the steps below use robot 2.
+```bash
+cd ~/your_ros2_ws
 
-The number only sets the ROS namespace; it does not select or configure the
-physical robot. With `robot_number:=3`, this project uses topics under
-`/rosbot_3/`. Before launching it:
+rosdep install --from-paths src --ignore-src -r -y
 
-1. Start the robot's base and camera drivers. This launch file does not start
-   the drivers or Gazebo.
-2. Configure the drivers to use the same namespace. The robot should publish
-   `/rosbot_3/odom`, `/rosbot_3/camera/image`, `/rosbot_3/camera/camera_info`,
-   and `/rosbot_3/joint_states`. The base driver should receive velocity
-   commands on `/rosbot_3/cmd_vel`. Navigation uses the orientation in the
-   base driver's `/odom` message directly. If the drivers use different topic
-   names, configure their namespace or remappings to match.
-3. Connect the computer running this launch to the same Wi-Fi network as the
-   robot.
-4. Set `ROS_DOMAIN_ID` to the domain ID configured for that robot, replacing
-   `<robot_id>` with its numeric ID:
+colcon build --symlink-install
+```
 
-   ```bash
-   export ROS_DOMAIN_ID=<robot_id>
-   ```
+Source the workspace:
 
-5. Launch the nodes:
+```bash
+source install/setup.bash
+```
 
-   ```bash
-   ros2 launch assignment1_erl spawn_assignment_robot.launch.py robot_number:=3 sim:=false
-   ```
+## Launch Instructions
 
-6. Confirm that the sensor topics are publishing with:
+### Gazebo Simulation
 
-   ```bash
-   ros2 topic list | grep rosbot_2
-   ```
+To launch the Gazebo simulation:
 
-Test in a clear area with the robot's emergency stop accessible; the
-controller may send movement commands while running.
+```bash
+ros2 launch assignment1_erl spawn_assignment.launch.py
+```
 
+### Real Robot
 
+To launch the system on the real robot:
+
+```bash
+ros2 launch assignment1_erl spawn_assignment_robot.launch.py
+```
+
+**Note:** When using the real robot, check the launch file parameters and configure them according to the robot setup before running the system.
 
