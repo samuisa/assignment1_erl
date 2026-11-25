@@ -17,6 +17,7 @@ namespace assignment1_erl
         explicit NavigationManager(const rclcpp::NodeOptions &options)
             : Node("navigation_node", options), last_seen_(0, 0, get_clock()->get_clock_type())
         {
+            RCLCPP_INFO(get_logger(), "Navigation node started");
             cmd_pub_ = create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
             done_pub_ = create_publisher<std_msgs::msg::Empty>("/maneuver_complete", 10);
 
@@ -63,6 +64,9 @@ namespace assignment1_erl
         void control_loop()
         {
             float target_lin = 0.0F, target_ang = 0.0F;
+            float rotation_goal = 0.0F, rotation_error = 0.0F;
+            float u_error = 0.0F, size_error = 0.0F;
+            const double marker_age = has_marker_ ? (now() - last_seen_).seconds() : -1.0;
 
             if (state_ == 3) // SEARCH
             {
@@ -74,19 +78,21 @@ namespace assignment1_erl
                 rot_acc_ += std::atan2(std::sin(yaw_ - last_yaw_), std::cos(yaw_ - last_yaw_));
                 last_yaw_ = yaw_;
 
-                float goal = (target_ == 1) ? -M_PI / 2.0 : (target_ == 2) ? M_PI : (target_ == 3) ? M_PI / 2.0 : 0.0;
-                float err = static_cast<float>(goal) - rot_acc_;
+                rotation_goal = static_cast<float>((target_ == 1) ? -M_PI / 2.0 : (target_ == 2) ? M_PI : (target_ == 3) ? M_PI / 2.0 : 0.0);
+                rotation_error = rotation_goal - rot_acc_;
 
-                if (std::abs(err) > 0.05F && !rot_sent_)
+                if (std::abs(rotation_error) > 0.05F && !rot_sent_)
                 {
-                    target_ang = std::clamp(1.4F * err, -0.75F, 0.75F);
+                    target_ang = std::clamp(1.4F * rotation_error, -0.75F, 0.75F);
                 }
                 else
                 {
                     target_ang = 0.0F;
-                    ang_cmd_ = 0.0F; // Azzera il filtro per fermare subito la rotazione
+                    ang_cmd_ = 0.0F;
                     if (!rot_sent_)
                     {
+                        RCLCPP_INFO(get_logger(), "Rotation completed for target %d (acc=%.2f/%.2f rad)",
+                                    target_, rot_acc_, rotation_goal);
                         done_pub_->publish(std_msgs::msg::Empty());
                         rot_sent_ = true;
                     }
@@ -94,27 +100,46 @@ namespace assignment1_erl
             }
             else if (state_ == 2 && has_marker_) // APPROACH
             {
-                double dt = (now() - last_seen_).seconds();
-                if (dt <= 0.5)
+                if (marker_age <= 0.5)
                 {
-                    float u_err = cx_ - u_;
-                    float s_err = desired_ - s_;
+                    u_error = cx_ - u_;
+                    size_error = desired_ - s_;
 
-                    if (std::abs(u_err) > 8.0F)
-                        target_ang = std::clamp(0.012F * u_err, -0.40F, 0.40F);
+                    if (std::abs(u_error) > 8.0F)
+                        target_ang = std::clamp(0.012F * u_error, -0.40F, 0.40F);
 
-                    if (s_err > 10.0F) // Avanza SOLO se è ancora più piccolo del target
-                        target_lin = std::clamp(0.004F * s_err, 0.05F, 0.15F); // Rallenta man mano che si avvicina
+                    if (size_error > 10.0F)
+                        target_lin = std::clamp(0.004F * size_error, 0.05F, 0.15F);
                 }
                 else
                 {
-                    target_lin = 0.0F; // Se perde il marker durante l'approach, si ferma invece di schiantarsi
+                    target_lin = 0.05F;
                     target_ang = 0.0F;
                 }
             }
 
             lin_cmd_ += 0.20F * (target_lin - lin_cmd_);
             ang_cmd_ += 0.20F * (target_ang - ang_cmd_);
+
+            if (state_ == 3)
+            {
+                RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 1000,
+                                     "[SEARCH] target=%d | cmd=(lin=%.2f, ang=%.2f)",
+                                     target_, lin_cmd_, ang_cmd_);
+            }
+            else if (state_ == 2)
+            {
+                RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 1000,
+                                     "[APPROACH] target=%d | u_err=%.1f px, size_err=%.1f px, age=%.2fs | cmd=(lin=%.2f, ang=%.2f)",
+                                     target_, u_error, size_error, marker_age, lin_cmd_, ang_cmd_);
+            }
+            else if (state_ == 1)
+            {
+                RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 1000,
+                                     "[ROTATE] target=%d | odom=%s, rot=%.2f/%.2f rad (err=%.2f) | cmd=(lin=%.2f, ang=%.2f)",
+                                     target_, has_odom_ ? "ok" : "missing", rot_acc_, rotation_goal,
+                                     rotation_error, lin_cmd_, ang_cmd_);
+            }
 
             geometry_msgs::msg::Twist cmd;
             cmd.linear.x = lin_cmd_;

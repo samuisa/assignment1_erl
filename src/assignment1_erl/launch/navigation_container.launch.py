@@ -17,13 +17,16 @@ def generate_launch_description():
         ('image_annotator_node', 'image_annotator.log'),
     ]
 
+    for _, log_file in nodes:
+        (log_dir / log_file).write_text('')
+
     return LaunchDescription(
         [
             Node(
                 package='assignment1_erl',
                 executable=executable,
                 name=executable,
-                prefix=("bash -c 'exec \"$@\" >> " f"\"{log_dir / log_file}\" 2>&1' --"),
+                prefix=f'bash -c \'exec "$@" > "{log_dir / log_file}" 2>&1\' --',
                 output='screen',
             )
             for executable, log_file in nodes

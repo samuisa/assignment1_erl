@@ -21,6 +21,7 @@ namespace assignment1_erl
         {
             out_dir_ = declare_parameter<std::string>("output_dir", "marker_images");
             std::filesystem::create_directories(out_dir_);
+            RCLCPP_INFO(get_logger(), "Image annotator started (output_dir='%s')", out_dir_.c_str());
             img_pub_ = image_transport::create_publisher(this, "/marker_image");
 
             img_sub_ = create_subscription<sensor_msgs::msg::CompressedImage>(
@@ -31,7 +32,8 @@ namespace assignment1_erl
                         frames_.push_back({rclcpp::Time(msg->header.stamp, get_clock()->get_clock_type()), cv_ptr->image});
                         if (frames_.size() > 30) frames_.pop_front();
                     } catch (const cv_bridge::Exception &e) {
-                        RCLCPP_ERROR(get_logger(), "Could not decode camera image: %s", e.what());
+                        RCLCPP_ERROR_THROTTLE(get_logger(), *get_clock(), 5000,
+                                              "Could not decode camera image: %s", e.what());
                     }
                 });
 
@@ -48,14 +50,24 @@ namespace assignment1_erl
 
         void marker_cb(const assignment_msg::msg::ArucoInfo::ConstSharedPtr msg)
         {
-            if (frames_.empty()) return;
+            if (frames_.empty())
+            {
+                RCLCPP_WARN(get_logger(), "Cannot annotate marker %d: frame buffer empty", msg->marker_id);
+                return;
+            }
 
             rclcpp::Time stamp(msg->header.stamp, get_clock()->get_clock_type());
             auto best = std::min_element(frames_.begin(), frames_.end(), [&](const auto &a, const auto &b) {
                 return std::abs((a.first - stamp).seconds()) < std::abs((b.first - stamp).seconds());
             });
 
-            if (std::abs((best->first - stamp).seconds()) > 0.1) return;
+            const double time_difference = std::abs((best->first - stamp).seconds());
+            if (time_difference > 0.1)
+            {
+                RCLCPP_WARN(get_logger(), "Cannot annotate marker %d: frame time delta %.3fs > 0.100s",
+                            msg->marker_id, time_difference);
+                return;
+            }
 
             cv::Mat img = best->second.clone();
             cv::Point c(static_cast<int>(msg->u), static_cast<int>(msg->v));
@@ -71,17 +83,19 @@ namespace assignment1_erl
             {
                 if (!cv::imwrite(path.string(), img))
                 {
-                    RCLCPP_ERROR(get_logger(), "Could not write annotated image to '%s'", path.c_str());
+                    RCLCPP_ERROR(get_logger(), "Failed to save image '%s'", path.c_str());
                     return;
                 }
             }
             catch (const cv::Exception &e)
             {
-                RCLCPP_ERROR(get_logger(), "Could not write annotated image to '%s': %s",
-                             path.c_str(), e.what());
+                RCLCPP_ERROR(get_logger(), "Failed to save image '%s': %s", path.c_str(), e.what());
                 return;
             }
+
             img_pub_.publish(cv_bridge::CvImage(msg->header, sensor_msgs::image_encodings::BGR8, img).toImageMsg());
+            RCLCPP_INFO(get_logger(), "Annotated & published marker %d (dt=%.3fs) -> '%s'",
+                        msg->marker_id, time_difference, path.c_str());
         }
     };
 } // namespace assignment1_erl

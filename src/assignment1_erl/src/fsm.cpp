@@ -14,6 +14,7 @@ namespace assignment1_erl
     public:
         explicit FsmManager(const rclcpp::NodeOptions &options) : Node("fsm_node", options)
         {
+            RCLCPP_INFO(get_logger(), "FSM started: state=IDLE (0), target=%d", target_);
             fsm_pub_ = create_publisher<assignment_msg::msg::FsmStatus>("/fsm_status", 10);
             reached_pub_ = create_publisher<assignment_msg::msg::ArucoInfo>("/marker_reached", 10);
             aruco_sub_ = create_subscription<assignment_msg::msg::ArucoInfo>(
@@ -24,13 +25,17 @@ namespace assignment1_erl
                     if (target_ >= 4)
                     {
                         state_ = 4;
-                        RCLCPP_INFO(get_logger(), "Maneuver complete for marker %d; mission finished", target_);
+                        RCLCPP_INFO(get_logger(),
+                                    "Transition: ROTATE (1) -> FINISHED (4) | visited=[%d,%d,%d,%d]",
+                                    visited_[1], visited_[2], visited_[3], visited_[4]);
                     }
                     else
                     {
                         ++target_;
                         state_ = 3;
-                        RCLCPP_INFO(get_logger(), "Maneuver complete; searching for marker %d", target_);
+                        RCLCPP_INFO(get_logger(),
+                                    "Transition: ROTATE (1) -> SEARCH (3) | next_target=%d, visited=[%d,%d,%d,%d]",
+                                    target_, visited_[1], visited_[2], visited_[3], visited_[4]);
                     }
                     publish_state();
                 });
@@ -38,7 +43,7 @@ namespace assignment1_erl
                 if (state_ == 0)
                 {
                     state_ = 3;
-                    RCLCPP_INFO(get_logger(), "Starting search for marker %d", target_);
+                    RCLCPP_INFO(get_logger(), "Transition: IDLE (0) -> SEARCH (3) | target=%d", target_);
                 }
                 publish_state();
             });
@@ -70,7 +75,7 @@ namespace assignment1_erl
             if (state_ == 3)
             {
                 state_ = 2;
-                RCLCPP_INFO(get_logger(), "Marker %d detected; starting approach", target_);
+                RCLCPP_INFO(get_logger(), "Transition: SEARCH (3) -> APPROACH (2) | target=%d", target_);
                 publish_state();
             }
             else if (state_ == 2 &&
@@ -80,8 +85,10 @@ namespace assignment1_erl
                 visited_[target_] = true;
                 reached_pub_->publish(*msg);
                 state_ = (target_ == 4) ? 4 : 1;
-                RCLCPP_INFO(get_logger(), "Marker %d reached at %.1f px; %s",
-                            target_, msg->s, state_ == 4 ? "mission finished" : "rotating");
+                RCLCPP_INFO(get_logger(),
+                            "Target %d reached -> Transition: APPROACH (2) -> %s (%d) | visited=[%d,%d,%d,%d]",
+                            target_, state_ == 4 ? "FINISHED" : "ROTATE", state_,
+                            visited_[1], visited_[2], visited_[3], visited_[4]);
                 publish_state();
             }
         }
