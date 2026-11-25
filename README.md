@@ -1,5 +1,3 @@
-
-
 # ROSbot Autonomous Navigation – ROS 2
 
 This project implements an autonomous navigation system for a ROSbot using ROS 2 Jazzy. The robot detects ArUco markers through its camera and autonomously approaches them by combining visual information, odometry and a Finite State Machine (FSM).
@@ -9,10 +7,14 @@ The system can be tested both in a Gazebo simulation and on the real robot.
 ## Videos
 
 ### Simulation
-<!-- Insert simulation video link here -->
+https://github.com/user-attachments/assets/908c32d3-581b-4d59-819a-f13303b7dfec
 
 ### Real Robot
-<!-- Insert real robot video link here -->
+
+https://github.com/user-attachments/assets/1bec609b-c7fa-463e-bacb-87fa25771580
+
+
+
 
 ## Repository Structure
 
