@@ -23,7 +23,7 @@ def generate_launch_description():
                 package='assignment1_erl',
                 executable=executable,
                 name=executable,
-                prefix=("bash -c 'exec \"$@\" > " f"\"{log_dir / log_file}\" 2>&1' --"),
+                prefix=("bash -c 'exec \"$@\" >> " f"\"{log_dir / log_file}\" 2>&1' --"),
                 output='screen',
             )
             for executable, log_file in nodes

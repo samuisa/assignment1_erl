@@ -29,13 +29,12 @@ namespace assignment1_erl
             aruco_sub_ = create_subscription<assignment_msg::msg::ArucoInfo>("/aruco_info", 10, [this](const assignment_msg::msg::ArucoInfo::ConstSharedPtr msg) {
                 if (msg->marker_id != target_) return;
                 s_ = msg->s; u_ = msg->u; cx_ = msg->image_center_x; desired_ = msg->desired_size;
-                dir_ = (cx_ >= u_) ? 1.0F : -1.0F;
                 has_marker_ = true;
                 last_seen_ = now();
             });
 
             fsm_sub_ = create_subscription<assignment_msg::msg::FsmStatus>("/fsm_status", 10, [this](const assignment_msg::msg::FsmStatus::ConstSharedPtr msg) {
-                if (msg->target_id != target_) { has_marker_ = false; dir_ = 1.0F; }
+                if (msg->target_id != target_) { has_marker_ = false; }
                 if (msg->current_state == 1 && state_ != 1) { rot_init_ = false; rot_sent_ = false; }
                 state_ = msg->current_state;
                 target_ = msg->target_id;
@@ -54,8 +53,8 @@ namespace assignment1_erl
         rclcpp::Subscription<assignment_msg::msg::FsmStatus>::SharedPtr fsm_sub_;
         rclcpp::TimerBase::SharedPtr timer_;
 
-        float s_ = 0.0F, u_ = 0.0F, cx_ = 320.0F, desired_ = 153.0F;
-        float yaw_ = 0.0F, last_yaw_ = 0.0F, rot_acc_ = 0.0F, dir_ = 1.0F;
+        float s_ = 0.0F, u_ = 0.0F, cx_ = 320.0F, desired_ = 120.0F;
+        float yaw_ = 0.0F, last_yaw_ = 0.0F, rot_acc_ = 0.0F;
         float lin_cmd_ = 0.0F, ang_cmd_ = 0.0F;
         int state_ = 0, target_ = 1;
         bool has_marker_ = false, has_odom_ = false, rot_init_ = false, rot_sent_ = false;
@@ -101,18 +100,15 @@ namespace assignment1_erl
                     float u_err = cx_ - u_;
                     float s_err = desired_ - s_;
 
-                    // Correzione angolare dolce per evitare pendolamenti
-                    if (std::abs(u_err) > 5.0F)
-                        target_ang = std::clamp(0.015F * u_err, -0.45F, 0.45F);
+                    if (std::abs(u_err) > 8.0F)
+                        target_ang = std::clamp(0.012F * u_err, -0.40F, 0.40F);
 
-                    // Avanza sempre finché non entra nel range [130, 150] (140 +- 10)
-                    if (std::abs(s_err) > 10.0F)
-                        target_lin = std::clamp(0.05F * s_err, -0.22F, 0.22F);
+                    if (s_err > 10.0F) // Avanza SOLO se è ancora più piccolo del target
+                        target_lin = std::clamp(0.004F * s_err, 0.05F, 0.15F); // Rallenta man mano che si avvicina
                 }
                 else
                 {
-                    // Se perde il marker durante l'approccio, continua dritto senza fermarsi né oscillare
-                    target_lin = 0.16F;
+                    target_lin = 0.0F; // Se perde il marker durante l'approach, si ferma invece di schiantarsi
                     target_ang = 0.0F;
                 }
             }

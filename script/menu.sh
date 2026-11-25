@@ -41,7 +41,7 @@ case $choice in
         source install/local_setup.bash
 
         cd src/ 
-        ros2 launch assignment1_erl spawn_assignment_robot.launch.py sim:=false robot_number:=3
+        ros2 launch assignment1_erl spawn_assignment_robot.launch.py sim:=false robot_number:=1
         ;;
 
     3)

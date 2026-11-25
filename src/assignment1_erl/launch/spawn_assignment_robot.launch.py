@@ -51,13 +51,13 @@ def generate_launch_description():
 
     domain_id_arg = DeclareLaunchArgument(
         'domain_id',
-        default_value='13',
+        default_value='11',
         description="ROS_DOMAIN_ID del robot reale (applicato quando sim:=false).",
     )
 
     robot_number_arg = DeclareLaunchArgument(
         'robot_number',
-        default_value='3',
+        default_value='1',
         description="Numero del robot: il namespace diventa /rosbot_<n>.",
     )
 
@@ -151,14 +151,8 @@ def generate_launch_description():
 
     desired_size_arg = DeclareLaunchArgument(
         'desired_size_sim_px',
-        default_value='140.0',
-        description="Dimensione in pixel del marker alla distanza voluta.",
-    )
-
-    reference_focal_arg = DeclareLaunchArgument(
-        'simulation_focal_length_px',
-        default_value='381.4',
-        description="Focale (pixel) della camera di riferimento per desired_size_sim_px.",
+        default_value='120.0',
+        description="Dimensione desiderata del marker in pixel (140 px; range FSM predefinito 130-150).",
     )
 
     # =====================================================
@@ -350,14 +344,12 @@ def generate_launch_description():
             SetParameter(name='use_sim_time', value=use_sim_time),
             SetParameter(name='output_dir', value=LaunchConfiguration('output_dir')),
             SetParameter(
-                name='desired_size_sim_px',
+                name='desired_size_px',
                 value=ParameterValue(LaunchConfiguration('desired_size_sim_px'), value_type=float),
             ),
             SetParameter(
-                name='simulation_focal_length_px',
-                value=ParameterValue(
-                    LaunchConfiguration('simulation_focal_length_px'), value_type=float
-                ),
+                name='marker_size',
+                value=ParameterValue(LaunchConfiguration('marker_size'), value_type=float),
             ),
             # Clock e TF nel namespace del robot
             SetRemap(src='/clock', dst='clock'),
@@ -425,7 +417,6 @@ def generate_launch_description():
             qos_reliability_arg,
             qos_durability_arg,
             desired_size_arg,
-            reference_focal_arg,
             rviz_config_arg,
             output_dir_arg,
             # 2) Variabile d'ambiente (applicata solo su robot reale, sim:=false)

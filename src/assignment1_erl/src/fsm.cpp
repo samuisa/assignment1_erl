@@ -20,10 +20,26 @@ namespace assignment1_erl
                 "/aruco_info", 10, [this](const assignment_msg::msg::ArucoInfo::ConstSharedPtr msg) { aruco_cb(msg); });
             maneuver_sub_ = create_subscription<std_msgs::msg::Empty>(
                 "/maneuver_complete", 10, [this](const std_msgs::msg::Empty::ConstSharedPtr) {
-                    if (state_ == 1) { ++target_; state_ = 3; publish_state(); }
+                    if (state_ != 1) return;
+                    if (target_ >= 4)
+                    {
+                        state_ = 4;
+                        RCLCPP_INFO(get_logger(), "Maneuver complete for marker %d; mission finished", target_);
+                    }
+                    else
+                    {
+                        ++target_;
+                        state_ = 3;
+                        RCLCPP_INFO(get_logger(), "Maneuver complete; searching for marker %d", target_);
+                    }
+                    publish_state();
                 });
             timer_ = create_wall_timer(std::chrono::milliseconds(50), [this]() {
-                if (state_ == 0) state_ = 3;
+                if (state_ == 0)
+                {
+                    state_ = 3;
+                    RCLCPP_INFO(get_logger(), "Starting search for marker %d", target_);
+                }
                 publish_state();
             });
         }
@@ -49,20 +65,23 @@ namespace assignment1_erl
 
         void aruco_cb(const assignment_msg::msg::ArucoInfo::ConstSharedPtr msg)
         {
-            if (msg->marker_id != target_ || visited_[target_]) return;
+            if (target_ < 1 || target_ > 4 || msg->marker_id != target_ || visited_[target_]) return;
 
             if (state_ == 3)
             {
                 state_ = 2;
+                RCLCPP_INFO(get_logger(), "Marker %d detected; starting approach", target_);
                 publish_state();
             }
             else if (state_ == 2 &&
                      std::abs(msg->u - msg->image_center_x) <= 10.0 &&
-                     std::abs(msg->desired_size - msg->s) <= 10.0) // Range [140, 166]
+                     msg->s >= msg->desired_size - 10.0F)
             {
                 visited_[target_] = true;
                 reached_pub_->publish(*msg);
                 state_ = (target_ == 4) ? 4 : 1;
+                RCLCPP_INFO(get_logger(), "Marker %d reached at %.1f px; %s",
+                            target_, msg->s, state_ == 4 ? "mission finished" : "rotating");
                 publish_state();
             }
         }
