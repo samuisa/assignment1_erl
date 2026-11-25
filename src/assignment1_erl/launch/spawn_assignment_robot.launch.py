@@ -6,7 +6,10 @@ Esempi d'uso:
   ros2 launch assignment1_erl spawn_assignment_rosbot.launch.py
 
   # Robot reale (sim:=false -> niente Gazebo, RViz sempre attivo, ROS_DOMAIN_ID impostato)
-  ros2 launch assignment1_erl spawn_assignment_rosbot.launch.py sim:=false robot_number:=2
+  ros2 launch assignment1_erl spawn_assignment_rosbot.launch.py sim:=false robot_number:=2 domain_id:=<dominio>
+
+  # Robot reale che pubblica SOLO l'immagine raw (niente topic /compressed)
+  ros2 launch assignment1_erl spawn_assignment_rosbot.launch.py sim:=false robot_number:=2 image_compressed:=false
 """
 
 import os
@@ -44,20 +47,20 @@ def generate_launch_description():
 
     sim_arg = DeclareLaunchArgument(
         'sim',
-        default_value='true',
+        default_value='false',
         description="true = simulazione Gazebo (use_sim_time=true); "
         "false = robot reale (niente Gazebo, use_sim_time=false).",
     )
 
     domain_id_arg = DeclareLaunchArgument(
         'domain_id',
-        default_value='13',
+        default_value='11',
         description="ROS_DOMAIN_ID del robot reale (applicato quando sim:=false).",
     )
 
     robot_number_arg = DeclareLaunchArgument(
         'robot_number',
-        default_value='3',
+        default_value='1',
         description="Numero del robot: il namespace diventa /rosbot_<n>.",
     )
 
@@ -112,7 +115,8 @@ def generate_launch_description():
     image_compressed_arg = DeclareLaunchArgument(
         'image_compressed',
         default_value='true',
-        description="true = il tracker si iscrive a <image_topic>/compressed.",
+        description="true = tracker e image_annotator si iscrivono a <image_topic>/compressed; "
+        "false = si iscrivono al topic raw <image_topic>.",
     )
 
     marker_dict_arg = DeclareLaunchArgument(
@@ -124,7 +128,7 @@ def generate_launch_description():
     marker_size_arg = DeclareLaunchArgument(
         'marker_size',
         default_value='0.2',
-        description="Lato reale del marker in metri.",
+        description="Lato reale del marker in metri (tracker e detection_node).",
     )
 
     image_rectified_arg = DeclareLaunchArgument(
@@ -152,13 +156,14 @@ def generate_launch_description():
     desired_size_arg = DeclareLaunchArgument(
         'desired_size_sim_px',
         default_value='140.0',
-        description="Dimensione in pixel del marker alla distanza voluta.",
+        description="Dimensione in pixel del marker alla distanza voluta, con la focale di riferimento.",
     )
 
     reference_focal_arg = DeclareLaunchArgument(
         'simulation_focal_length_px',
         default_value='381.4',
-        description="Focale (pixel) della camera di riferimento per desired_size_sim_px.",
+        description="Focale (pixel) della camera di riferimento per desired_size_sim_px. "
+        "La dimensione voluta sul robot e' desired_size_sim_px * f_reale / questo valore.",
     )
 
     # =====================================================
@@ -359,6 +364,17 @@ def generate_launch_description():
                     LaunchConfiguration('simulation_focal_length_px'), value_type=float
                 ),
             ),
+            # Lato del marker: letto da detection_node (stesso valore del tracker)
+            SetParameter(
+                name='marker_size',
+                value=ParameterValue(LaunchConfiguration('marker_size'), value_type=float),
+            ),
+            # Topic immagine di image_annotator (stessa scelta raw/compressed del tracker)
+            SetParameter(name='image_topic', value=LaunchConfiguration('image_topic')),
+            SetParameter(
+                name='image_compressed',
+                value=ParameterValue(LaunchConfiguration('image_compressed'), value_type=bool),
+            ),
             # Clock e TF nel namespace del robot
             SetRemap(src='/clock', dst='clock'),
             SetRemap(src='/tf', dst='tf'),
@@ -374,7 +390,7 @@ def generate_launch_description():
             SetRemap(src='/scan', dst='scan'),
             SetRemap(src='/scan/points', dst='scan/points'),
             SetRemap(src='/camera_joint/cmd_pos', dst='camera_joint/cmd_pos'),
-            # Topic camera (raw + compressed)
+            # Topic camera (raw + compressed) del bridge Gazebo
             SetRemap(src='/camera/image', dst=LaunchConfiguration('image_topic')),
             SetRemap(
                 src='/camera/image/compressed',
@@ -390,10 +406,6 @@ def generate_launch_description():
             SetRemap(src='/maneuver_complete', dst='maneuver_complete'),
             SetRemap(src='/marker_reached', dst='marker_reached'),
             SetRemap(src='/marker_image', dst='marker_image'),
-            SetRemap(
-                src='/camera/rgb/image_raw/compressed',
-                dst=[LaunchConfiguration('image_topic'), '/compressed'],
-            ),
             # Nodi di simulazione (condizionati a sim:=true)
             robot_state_publisher_node,
             gz_bridge_node,
