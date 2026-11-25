@@ -20,7 +20,7 @@ case $choice in
 
         rm src/assignment1_erl/marker_images_robot/*
 
-        source /opt/ros/lyrical/setup.bash
+        source /opt/ros/jazzy/setup.bash
         colcon build
         source install/local_setup.bash
 
@@ -36,7 +36,7 @@ case $choice in
 
         rm src/assignment1_erl/marker_images_robot/*
 
-        source /opt/ros/lyrical/setup.bash
+        source /opt/ros/jazzy/setup.bash
         colcon build
         source install/local_setup.bash
 
@@ -46,7 +46,7 @@ case $choice in
 
     3)
 
-        source /opt/ros/lyrical/setup.bash
+        source /opt/ros/jazzy/setup.bash
         source install/local_setup.bash
 
         echo "--------------------------------"
@@ -59,7 +59,7 @@ case $choice in
         
     4)
         
-        source /opt/ros/lyrical/setup.bash
+        source /opt/ros/jazzy/setup.bash
         source install/local_setup.bash
 
         echo "--------------------------------"

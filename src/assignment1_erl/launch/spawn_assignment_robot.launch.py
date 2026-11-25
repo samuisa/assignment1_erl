@@ -390,6 +390,10 @@ def generate_launch_description():
             SetRemap(src='/maneuver_complete', dst='maneuver_complete'),
             SetRemap(src='/marker_reached', dst='marker_reached'),
             SetRemap(src='/marker_image', dst='marker_image'),
+            SetRemap(
+                src='/camera/rgb/image_raw/compressed',
+                dst=[LaunchConfiguration('image_topic'), '/compressed'],
+            ),
             # Nodi di simulazione (condizionati a sim:=true)
             robot_state_publisher_node,
             gz_bridge_node,
